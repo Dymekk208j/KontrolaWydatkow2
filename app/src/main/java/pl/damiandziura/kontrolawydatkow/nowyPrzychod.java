@@ -147,7 +147,6 @@ public class nowyPrzychod extends AppCompatActivity {
 
     public void WybierzDateGodzine(View view) {
         intent = new Intent(this, dataPicker.class);
-        Intent intent2 = new Intent(this, nowyPrzychod.class);
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
         intent.putExtra("Klasa", "nowyPrzychod");
