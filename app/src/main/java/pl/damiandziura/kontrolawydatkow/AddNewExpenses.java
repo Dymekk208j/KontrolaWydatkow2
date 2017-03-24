@@ -33,6 +33,7 @@ public class AddNewExpenses extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expenses);
         Bundle extras = getIntent().getExtras();
@@ -125,7 +126,7 @@ public class AddNewExpenses extends AppCompatActivity {
                if (KWOTA > 0.0) {
                    BazaDanych.DodajWydatek(NAZWA, KWOTA, 0, 0, GODZINA, DATA);
                } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
-           } else Toast.makeText(this, "Musisz wpisać kwote!", Toast.LENGTH_SHORT).show();
+           } else Toast.makeText(this, "Musisz podać kwote!", Toast.LENGTH_SHORT).show();
 
         }else{Toast.makeText(this, "Musisz wpisać nazwe!", Toast.LENGTH_SHORT).show();}
 
