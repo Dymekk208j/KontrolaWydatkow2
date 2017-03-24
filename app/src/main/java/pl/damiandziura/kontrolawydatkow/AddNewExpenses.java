@@ -33,6 +33,7 @@ public class AddNewExpenses extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 int tetstuje_laptopa_zgitem= 2;
+        int testuje_PC_gita = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expenses);
         Bundle extras = getIntent().getExtras();
