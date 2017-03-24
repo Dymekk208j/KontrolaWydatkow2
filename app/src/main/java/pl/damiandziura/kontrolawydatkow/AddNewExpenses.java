@@ -33,7 +33,7 @@ public class AddNewExpenses extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+//testuje git
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expenses);
         Bundle extras = getIntent().getExtras();
