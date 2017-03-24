@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="pl.damiandziura.kontrolawydatkow.dodajStalydochod">
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/str_czestotliwosc_dochodu"
+        app:layout_constraintRight_toLeftOf="@+id/ListViewCzestotliwosc"
+        app:layout_constraintTop_toTopOf="@+id/ListViewCzestotliwosc" />
+
+    <TextView
+        android:id="@+id/lblDo"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:text="@string/str_do"
+        app:layout_constraintRight_toLeftOf="@+id/txtDo"
+        app:layout_constraintTop_toTopOf="@+id/txtDo" />
+
+    <TextView
+        android:id="@+id/lblDatapierwszego"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:text="@string/str_pierwszy_dochod"
+        app:layout_constraintRight_toLeftOf="@+id/txtDatapierwszego"
+        app:layout_constraintTop_toTopOf="@+id/txtDatapierwszego" />
+
+    <TextView
+        android:id="@+id/lblOd"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:text="@string/str_od"
+        app:layout_constraintRight_toLeftOf="@+id/txtOd"
+        app:layout_constraintTop_toTopOf="@+id/txtOd" />
+
+    <EditText
+        android:id="@+id/txtDatapierwszego"
+        android:layout_width="114dp"
+        android:layout_height="23dp"
+        android:ems="10"
+        android:inputType="date"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/ListViewPodkategoria"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtDo"
+        android:layout_marginEnd="8dp" />
+
+    <EditText
+        android:id="@+id/txtDo"
+        android:layout_width="114dp"
+        android:layout_height="23dp"
+        android:ems="10"
+        android:inputType="date"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/ListViewPodkategoria"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtOd"
+        android:layout_marginEnd="8dp" />
+
+    <EditText
+        android:id="@+id/txtOd"
+        android:layout_width="114dp"
+        android:layout_height="23dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintTop_toBottomOf="@+id/ListViewPodkategoria"
+        android:layout_marginRight="7dp"
+        app:layout_constraintRight_toRightOf="@+id/ListViewPodkategoria"
+        android:layout_marginEnd="7dp" />
+
+    <EditText
+        android:id="@+id/txtKwota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@+id/lblKwota"
+        app:layout_constraintLeft_toLeftOf="@+id/lblKwota" />
+
+    <TextView
+        android:id="@+id/lblKwota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/str_kwota"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/btDodaj"
+        android:layout_width="322dp"
+        android:layout_height="83dp"
+        android:onClick="dodaj"
+        android:text="@string/str_add"
+        app:layout_constraintBottom_toTopOf="@+id/btCofnij"
+        app:layout_constraintRight_toRightOf="@+id/btWyczysc" />
+
+    <Button
+        android:id="@+id/btWyczysc"
+        android:layout_width="157dp"
+        android:layout_height="83dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="8dp"
+        android:onClick="wyczysc"
+        android:text="@string/str_clear"
+        app:layout_constraintBottom_toBottomOf="@+id/btCofnij"
+        app:layout_constraintLeft_toRightOf="@+id/btCofnij" />
+
+    <Button
+        android:id="@+id/btCofnij"
+        android:layout_width="157dp"
+        android:layout_height="83dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:onClick="cofnij"
+        android:text="@string/stre_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ExpandableListView
+        android:id="@+id/ListViewPodkategoria"
+        android:layout_width="165dp"
+        android:layout_height="190dp"
+        app:layout_constraintLeft_toRightOf="@+id/ListViewKategoria"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@+id/ListViewKategoria"
+        android:layout_marginStart="8dp" />
+
+    <ExpandableListView
+        android:id="@+id/ListViewKategoria"
+        android:layout_width="165dp"
+        android:layout_height="190dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/txtKwota"
+        app:layout_constraintTop_toBottomOf="@+id/txtKwota"
+        android:layout_marginStart="8dp" />
+
+    <ExpandableListView
+        android:id="@+id/ListViewCzestotliwosc"
+        android:layout_width="189dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtDatapierwszego"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

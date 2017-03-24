@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.damiandziura.kontrolawydatkow.dataPicker">
+
+    <DatePicker
+        android:id="@+id/datePicker2"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="38dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:spinnersShown="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp" />
+
+    <TimePicker
+        android:id="@+id/timePicker3"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:hapticFeedbackEnabled="true"
+        android:timePickerMode="spinner"
+        android:layout_marginLeft="64dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="64dp" />
+
+    <Button
+        android:id="@+id/btCofnij"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="btCofnij"
+        android:text="@string/stre_back"
+        app:layout_constraintBottom_toBottomOf="@+id/btZatwierdz"
+        app:layout_constraintRight_toLeftOf="@+id/btTeraz"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp" />
+
+    <Button
+        android:id="@+id/btZatwierdz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="btZatwierdz"
+        android:text="@string/str_zatwierdz"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker3"
+        android:layout_marginRight="32dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_godzina"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/timePicker3"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/timePicker3" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="58dp"
+        android:layout_height="15dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="0dp"
+        android:text="@string/str_data"
+        app:layout_constraintBottom_toTopOf="@+id/datePicker2"
+        app:layout_constraintLeft_toLeftOf="@+id/textView7" />
+
+    <Button
+        android:id="@+id/btTeraz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:onClick="btTeraz"
+        android:text="@string/strTeraz"
+        app:layout_constraintTop_toTopOf="@+id/btCofnij"
+        app:layout_constraintRight_toLeftOf="@+id/btZatwierdz"
+        android:layout_marginRight="16dp" />
+</android.support.constraint.ConstraintLayout>

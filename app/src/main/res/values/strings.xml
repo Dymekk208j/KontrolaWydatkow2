@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">KontrolaWydatkow</string>
+    <string name="stre_back">Cofnij</string>
+    <string name="str_data">Data:</string>
+    <string name="str_add">Dodaj</string>
+    <string name="str_add2">Dodaj stały wydatek</string>
+    <string name="str_clear">Wyczyść</string>
+    <string name="str_dodaj_wydatek">Dodaj wydatek</string>
+    <string name="str_dodaj_dochod">Dodaj dochód</string>
+    <string name="str_kategorie">Kategorie</string>
+    <string name="str_informacje">Informacje</string>
+    <string name="str_posSrodki">Posiadane środki</string>
+    <string name="str_srwydatkinadzien">Srednie wydatki na dzień</string>
+    <string name="str_sredniewydatkinamiesiac">Srednie wydatki na miesiac</string>
+    <string name="str_ostatnie_wydatki">Ostatnie wydatki</string>
+    <string name="str_kwota">Kwota:</string>
+    <string name="str_od">Od:</string>
+    <string name="str_do">Do:</string>
+    <string name="str_data_pobrania">Data pierwszego pobrania</string>
+    <string name="str_pierwszy_dochod">Data pierwszego dochodu:</string>
+    <string name="str_czestotliwosc_dochodu">Częstotliwość dochodu</string>
+    <string name="str_staly_dochod">Dodaj stały dochód:</string>
+    <string name="str_staly_wydatek">Częstotliwość stałego wydatku</string>
+    <string name="str_edytuj">Edytuj</string>
+    <string name="str_nazwa">Nazwa kategorii:</string>
+    <string name="str_usun">Usuń</string>
+    <string name="str_zmien_nazwe">Zmień nazwę</string>
+    <string name="str_dodaj_podk">Dodaj podkategorie</string>
+    <string name="str_zatwierdz">Zatwierdź</string>
+    <string name="str_nazwa_pod">Nazwa podkategorii</string>
+    <string name="str_ostatniwydatek">x. Ostatni wydatek</string>
+    <string name="str_godzina">Godzina:</string>
+    <string name="str_nazwaa">Nazwa:</string>
+    <string name="strTeraz">Teraz</string>
+</resources>
