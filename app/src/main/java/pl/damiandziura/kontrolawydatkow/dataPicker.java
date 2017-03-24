@@ -15,7 +15,7 @@ public class dataPicker extends AppCompatActivity {
 
     private String buforNazwa = "", buforKwota = "";
 
-
+    private String Powrot;
     private String DATA, GODZINA;
     private Intent intent;
     private TimePicker czas;
@@ -32,6 +32,15 @@ public class dataPicker extends AppCompatActivity {
         {
             buforNazwa = extras.getString("Nazwa");
             buforKwota = extras.getString("Kwota");
+            Powrot = extras.getString("Klasa");
+
+            if(Powrot.equals("nowyPrzychod"))
+            {
+                intent = new Intent(this, nowyPrzychod.class);
+            }else if(Powrot.equals("nowyWydatek"))
+            {
+                intent = new Intent(this, AddNewExpenses.class);
+            }
         }
 
 
@@ -41,7 +50,6 @@ public class dataPicker extends AppCompatActivity {
     }
 
     public void btCofnij(View view) {
-        intent = new Intent(this, AddNewExpenses.class);
         startActivity(intent);
     }
 
@@ -54,8 +62,16 @@ public class dataPicker extends AppCompatActivity {
            data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH))
         {
             DATA = Integer.toString(data.getDayOfMonth()) + "-" + Integer.toString(data.getMonth()+1) + "-" + Integer.toString(data.getYear());
-            GODZINA = Integer.toString(czas.getCurrentHour()) + ":" + Integer.toString(czas.getCurrentMinute());
-            intent = new Intent(this, AddNewExpenses.class);
+            String minuty, godziny;
+
+            if(czas.getCurrentMinute() <= 9) {
+                minuty = "0" + Integer.toString(czas.getCurrentMinute());
+            }else minuty = Integer.toString(czas.getCurrentMinute());
+            if(czas.getCurrentHour() <= 9) {
+                godziny = "0" + Integer.toString(czas.getCurrentHour());
+            }else godziny = Integer.toString(czas.getCurrentHour());
+
+            GODZINA = godziny + ":" + minuty;
             intent.putExtra("Data", DATA);
             intent.putExtra("Godzina", GODZINA);
             intent.putExtra("Kwota", buforKwota);

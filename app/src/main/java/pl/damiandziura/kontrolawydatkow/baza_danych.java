@@ -117,6 +117,24 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
+    void DodajDochod(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
+    {
+        //Open connection to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,Nazwa);
+        values.put(KEY_kwota,Double.toString(kwota));
+        values.put(KEY_kategoria,Integer.toString(kategoria));
+        values.put(KEY_podkategoria,Integer.toString(podkategoria));
+        values.put(KEY_godzina,Godzina);
+        values.put(KEY_data,Data);
+
+        // Inserting Row
+        db.insert(TABLE_dochody, null, values);
+        db.close(); // Closing database connection
+
+    }
+
     public void update(String Nazwa, Double kwota, int kategoria, int podkategoria, String Data)
     {
         SQLiteDatabase db = this.getWritableDatabase();

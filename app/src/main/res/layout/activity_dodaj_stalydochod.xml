@@ -104,7 +104,9 @@
         android:onClick="dodaj"
         android:text="@string/str_add"
         app:layout_constraintBottom_toTopOf="@+id/btCofnij"
-        app:layout_constraintRight_toRightOf="@+id/btWyczysc" />
+        app:layout_constraintRight_toRightOf="@+id/btWyczysc"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="3dp" />
 
     <Button
         android:id="@+id/btWyczysc"

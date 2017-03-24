@@ -5,16 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class AddNewExpenses extends AppCompatActivity {
 
@@ -32,16 +27,16 @@ public class AddNewExpenses extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-int tetstuje_laptopa_zgitem= 2;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expenses);
         Bundle extras = getIntent().getExtras();
         BazaDanych = new baza_danych(this);
 
         txtData = (TextView) findViewById(R.id.txtDate2);
-        txtNazwa = (EditText) findViewById(R.id.txtNazwa);
+        txtNazwa = (EditText) findViewById(R.id.txtNazwa2);
         txtNazwa.setText(NAZWA);
-        txtKwota = (EditText) findViewById(R.id.txtEditAmount);
+        txtKwota = (EditText) findViewById(R.id.txtEditAmount2);
         txtKwota.setText("");
         setDataAndHour();
 
@@ -124,13 +119,15 @@ int tetstuje_laptopa_zgitem= 2;
                KWOTA = Double.parseDouble(txtKwota.getText().toString());
                if (KWOTA > 0.0) {
                    BazaDanych.DodajWydatek(NAZWA, KWOTA, 0, 0, GODZINA, DATA);
+                   intent = new Intent(this, MainActivity.class);
+                   Toast.makeText(this, "Dodano nowy wydatek " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                   startActivity(intent);
                } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
            } else Toast.makeText(this, "Musisz wpisać kwote!", Toast.LENGTH_SHORT).show();
 
         }else{Toast.makeText(this, "Musisz wpisać nazwe!", Toast.LENGTH_SHORT).show();}
 
-        intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
 
 
       //  Toast.makeText(this, NAZWA+" / "+Double.parseDouble(txtKwota.getText().toString())+" / "+"0"+" / "+"0"+" / "+GODZINA+" / "+DATA, Toast.LENGTH_SHORT).show();
@@ -151,6 +148,7 @@ int tetstuje_laptopa_zgitem= 2;
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
+        intent.putExtra("Klasa", "nowyWydatek");
         startActivity(intent);
     }
 
