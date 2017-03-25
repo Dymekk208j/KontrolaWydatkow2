@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     TextView OstatniWydatek[] = new TextView[10];
     String sOstatniWydatek[] = new String[10];
     TextView PosiadaneSrodki;
-    private int  dasaa = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
