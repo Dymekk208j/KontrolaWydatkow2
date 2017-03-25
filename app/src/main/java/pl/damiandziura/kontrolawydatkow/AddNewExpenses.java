@@ -110,8 +110,10 @@ public class AddNewExpenses extends AppCompatActivity {
     }
 
     public void DodajStalyWydatek(View view) {
-        intent = new Intent(this, dodajStalyWydatek.class);
-        startActivity(intent);
+      /*  intent = new Intent(this, dodajStalyWydatek.class);
+        startActivity(intent);*/
+        BazaDanych.DodajWydatek("Najnowsze", 12.0, 0, 0, "10:00", "25-3-2017");
+        BazaDanych.DodajWydatek("troche starsze", 12.0, 0, 0, "09:00", "25-3-2017");
     }
 
     public void dodaj(View view) {
@@ -124,8 +126,10 @@ public class AddNewExpenses extends AppCompatActivity {
                KWOTA = Double.parseDouble(txtKwota.getText().toString());
                if (KWOTA > 0.0) {
                    BazaDanych.DodajWydatek(NAZWA, KWOTA, 0, 0, GODZINA, DATA);
-                   Toast.makeText(this, "Dodano nowy wydatek " + NAZWA + " " + Double.toHexString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(this, "Dodano nowy wydatek " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                   BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
                    intent = new Intent(this, MainActivity.class);
+
                    startActivity(intent);
                } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
            } else Toast.makeText(this, "Musisz wpisać kwote!", Toast.LENGTH_SHORT).show();
@@ -140,12 +144,16 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-        NAZWA="";
+      /*  NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
         txtNazwa.setText(NAZWA);
-        txtKwota.setText("");
+        txtKwota.setText("");*/
+
+      //BazaDanych.PobierzWydatek();
+     //  Toast.makeText(this, Double.toString(BazaDanych.PortfelPrzelicz()), Toast.LENGTH_SHORT).show();
+       BazaDanych.delete(1);
     }
 
     public void WybierzDateGodzine(View view) {

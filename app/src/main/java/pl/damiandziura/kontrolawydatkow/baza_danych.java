@@ -2,8 +2,11 @@ package pl.damiandziura.kontrolawydatkow;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.app.INotificationSideChannel;
+import android.widget.Toast;
 
 /**
  * Created by Dymek on 23.03.2017.
@@ -11,7 +14,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class baza_danych extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 4;
+    private Cursor c;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "baza.db";
 
     // Nazwy tabeli
@@ -52,8 +56,8 @@ public class baza_danych extends SQLiteOpenHelper
                 + KEY_kwota + " DOUBLE, "
                 + KEY_kategoria + " INTEGER, "
                 + KEY_podkategoria + " INTEGER, "
-                + KEY_godzina + " TIME, "
-                + KEY_data + " DATE )";
+                + KEY_godzina + " TEXT, "
+                + KEY_data + " TEXT )";
 
         db.execSQL(CREATE_TABLE_STUDENT);
 
@@ -63,8 +67,8 @@ public class baza_danych extends SQLiteOpenHelper
                 + KEY_kwota + " DOUBLE, "
                 + KEY_kategoria + " INTEGER, "
                 + KEY_podkategoria + " INTEGER, "
-                + KEY_godzina + " TIME, "
-                + KEY_data + " DATE )";
+                + KEY_godzina + " TEXT, "
+                + KEY_data + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
         CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_portfel  + "("
@@ -117,6 +121,109 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
+    String getNazwa(int aID)
+    {
+        String aNazwa = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                aNazwa = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return aNazwa;
+    }
+
+    double getKwota(int aID)
+    {
+        double kwota = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                kwota = c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kwota;
+    }
+
+    int getKategoria(int aID)
+    {
+        int kategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kategoria FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                kategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kategoria;
+    }
+
+    int getPodKategoria(int aID)
+    {
+        int PodKategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT podkategoria FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                PodKategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return PodKategoria;
+    }
+
+    String getGodzina(int aID)
+    {
+        String godzina = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT godzina FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                godzina = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return godzina;
+    }
+
+    String getData(int aID)
+    {
+        String data2 = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT data FROM "+ TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                data2 = c.getString(0);
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return data2;
+    }
+
     void DodajDochod(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
     {
         //Open connection to write data
@@ -135,19 +242,122 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void update(String Nazwa, Double kwota, int kategoria, int podkategoria, String Data)
+
+
+    int getWydatkiMaxId()
+    {
+        int maxID = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_wydatki + " ORDER BY id DESC LIMIT 1", null);
+
+        if(c.moveToFirst()){
+            do{
+                maxID = c.getInt(0);
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return maxID;
+    }
+
+    void delete(int _ID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_wydatki,"id=?",new String[]{Integer.toString(_ID)});
+        db.close(); // Closing database connection
+    }
+
+    String[] getOstatnieWydatki()
+    {
+        String OstatnieWydatki[] = new String[10];
+        double KwotaOstatnieWydatki[] = new double[10];
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa, kwota FROM " + TABLE_wydatki + " ORDER BY data DESC, godzina DESC LIMIT 10", null);
+int a = 0;
+
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                KwotaOstatnieWydatki[a] = c.getDouble(1);
+
+                OstatnieWydatki[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(KwotaOstatnieWydatki[a]) + "zł";
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+
+        return OstatnieWydatki;
+
+    }
+
+
+    double PortfelPrzeliczSaldo()
+    {
+        double dochody =0, wydatki=0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki, null);
+
+
+        if(c.moveToFirst()){
+            do{
+                wydatki += c.getDouble(0);
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM " + TABLE_dochody, null);
+
+
+        if(c.moveToFirst()){
+            do{
+                dochody += c.getDouble(0);
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return dochody-wydatki;
+
+    }
+
+    public void PortfelUstawSaldo(Double kwota)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,Nazwa);
-        values.put(KEY_kwota,Double.toString(kwota));
-        values.put(KEY_kategoria,Integer.toString(kategoria));
-        values.put(KEY_podkategoria,Integer.toString(podkategoria));
-        values.put(KEY_data,Data);
+        values.put("id", 1);
+        values.put("kwota", kwota);
 
-        // It's a good practice to use parameter ?, instead of concatenate string
-        db.update(TABLE_wydatki, values, KEY_ID + "= ?", new String[] { String.valueOf(wydatki_id) });
+        db.replaceOrThrow(TABLE_portfel, null, values);
+
         db.close(); // Closing database connection
+    }
+
+    public double getPortfelSaldo()
+    {
+        double kwota = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM "+TABLE_portfel + " WHERE id = " + Integer.toString(1), null);
+
+        if(c.moveToFirst()){
+            do{
+                kwota = c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kwota;
     }
 
 }

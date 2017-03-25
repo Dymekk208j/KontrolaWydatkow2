@@ -121,7 +121,8 @@ public class nowyPrzychod extends AppCompatActivity {
                 if (KWOTA > 0.0) {
                     BazaDanych.DodajDochod(NAZWA, KWOTA, 0, 0, GODZINA, DATA);
                     intent = new Intent(this, MainActivity.class);
-                    Toast.makeText(this, "Dodano nowy przychod " + NAZWA + " " + Double.toHexString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Dodano nowy przychod " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                    BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
                     startActivity(intent);
 
                 } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
