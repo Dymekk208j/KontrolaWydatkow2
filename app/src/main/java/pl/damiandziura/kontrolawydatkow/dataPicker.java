@@ -58,10 +58,11 @@ public class dataPicker extends AppCompatActivity {
         c = Calendar.getInstance();
 
         if(data.getYear() <= c.get(Calendar.YEAR) &&
-           data.getMonth() <= c.get(Calendar.MONTH)+1 &&
-           data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH) &&
-            czas.getCurrentHour() <= c.get(Calendar.HOUR)  &&
-            czas.getCurrentMinute() <= c.get(Calendar.MINUTE))
+                data.getMonth() <= c.get(Calendar.MONTH) &&
+                data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH) &&
+                czas.getCurrentHour() <= c.get(Calendar.HOUR_OF_DAY) &&
+                czas.getCurrentMinute() <= c.get(Calendar.MINUTE)
+                )
         {
             DATA = Integer.toString(data.getDayOfMonth()) + "-" + Integer.toString(data.getMonth()+1) + "-" + Integer.toString(data.getYear());
             String minuty, godziny;

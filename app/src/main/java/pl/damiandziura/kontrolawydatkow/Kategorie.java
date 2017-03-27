@@ -54,9 +54,13 @@ public class Kategorie extends AppCompatActivity
         });
     }
 
-    private void Cofnij(View view)
-    {
+    public void cofnij(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void dodaj(View view) {
+        Intent intent = new Intent(this, DodajKategorie.class);
         startActivity(intent);
     }
 

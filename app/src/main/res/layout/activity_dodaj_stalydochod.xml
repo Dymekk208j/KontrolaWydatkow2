@@ -103,7 +103,7 @@
         android:layout_height="83dp"
         android:onClick="dodaj"
         android:text="@string/str_add"
-        app:layout_constraintBottom_toTopOf="@+id/btCofnij"
+        app:layout_constraintBottom_toTopOf="@+id/btDodajKategorie"
         app:layout_constraintRight_toRightOf="@+id/btWyczysc"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="3dp" />
@@ -117,11 +117,11 @@
         android:layout_marginStart="8dp"
         android:onClick="wyczysc"
         android:text="@string/str_clear"
-        app:layout_constraintBottom_toBottomOf="@+id/btCofnij"
-        app:layout_constraintLeft_toRightOf="@+id/btCofnij" />
+        app:layout_constraintBottom_toBottomOf="@+id/btDodajKategorie"
+        app:layout_constraintLeft_toRightOf="@+id/btDodajKategorie" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btDodajKategorie"
         android:layout_width="157dp"
         android:layout_height="83dp"
         android:layout_marginBottom="16dp"

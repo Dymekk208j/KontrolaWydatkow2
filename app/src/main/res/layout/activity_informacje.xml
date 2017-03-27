@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btDodajKategorie"
         android:layout_width="129dp"
         android:layout_height="79dp"
         android:layout_marginBottom="8dp"

@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:onClick="wyczysc"
         android:text="@string/str_clear"
-        app:layout_constraintLeft_toRightOf="@+id/btCofnij"
+        app:layout_constraintLeft_toRightOf="@+id/btDodajKategorie"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/btAdd" />
 
@@ -44,7 +44,7 @@
         android:layout_marginTop="0dp" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btDodajKategorie"
         android:layout_width="157dp"
         android:layout_height="83dp"
         android:layout_marginLeft="16dp"

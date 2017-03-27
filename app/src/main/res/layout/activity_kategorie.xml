@@ -18,13 +18,22 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="189dp"
-        android:layout_weight="0.88"></ListView>
+        android:layout_weight="0.86"></ListView>
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btDodajKategorie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.04"
+        android:onClick="dodaj"
+        android:text="@string/str_add" />
+
+    <Button
+        android:id="@+id/btDodajKategorie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04"
+        android:onClick="cofnij"
         android:text="@string/stre_back" />
 
 </LinearLayout>

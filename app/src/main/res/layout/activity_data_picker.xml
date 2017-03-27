@@ -32,7 +32,7 @@
         android:layout_marginStart="64dp" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btDodajKategorie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="btCofnij"
@@ -80,7 +80,7 @@
         android:layout_marginTop="0dp"
         android:onClick="btTeraz"
         android:text="@string/strTeraz"
-        app:layout_constraintTop_toTopOf="@+id/btCofnij"
+        app:layout_constraintTop_toTopOf="@+id/btDodajKategorie"
         app:layout_constraintRight_toLeftOf="@+id/btZatwierdz"
         android:layout_marginRight="16dp" />
 </android.support.constraint.ConstraintLayout>
