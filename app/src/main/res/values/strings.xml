@@ -33,4 +33,5 @@
     <string name="str_nazwaa">Nazwa:</string>
     <string name="strTeraz">Teraz</string>
     <string name="strWpiszKwote">Musisz wpisać kwote!</string>
+    <string name="strListaKategorii">Lista Kategorii:</string>
 </resources>

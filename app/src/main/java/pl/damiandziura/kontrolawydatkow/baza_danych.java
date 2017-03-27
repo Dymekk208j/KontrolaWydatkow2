@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.INotificationSideChannel;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dymek on 23.03.2017.
@@ -15,7 +19,7 @@ import android.widget.Toast;
 public class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "baza.db";
 
     // Nazwy tabeli
@@ -83,7 +87,7 @@ public class baza_danych extends SQLiteOpenHelper
 
         CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + "Kategoria"  + " INTEGER, "
+                + KEY_kategoria  + " INTEGER, "
                 + KEY_nazwa + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
@@ -358,6 +362,88 @@ int a = 0;
         db.close();
 
         return kwota;
+    }
+
+    ArrayList getKategorie()
+    {
+        ArrayList<String> ListaKategorii = new ArrayList<String>();
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria, null);
+
+        int a = 0;
+        ListaKategorii.add("0. (Domyślna kategoria)");
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                ListaKategorii.add(Integer.toString(a+1)+". " + c.getString(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListaKategorii;
+    }
+
+    void AddKategoria(String Nazwa)
+    {
+        //Open connection to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,Nazwa);
+
+        // Inserting Row
+        db.insert(TABLE_kategoria, null, values);
+        db.close(); // Closing database connection
+
+    }
+
+    ArrayList getpodKategorie(int idKategoria)
+    {
+        ArrayList<String> Listapodkategorii = new ArrayList<String>();
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT " + KEY_nazwa + " FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+
+        int a = 0;
+        Listapodkategorii.add("0. (Domyślna podkategoria)");
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                Listapodkategorii.add(Integer.toString(a+1)+". " + c.getString(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  Listapodkategorii;
+    }
+
+    void AddPodKategoria(String Nazwa, int idKategorii)
+    {
+        /*
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
+                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_kategoria  + " INTEGER, "
+                + KEY_nazwa + " TEXT )";
+        db.execSQL(CREATE_TABLE_STUDENT);
+        */
+
+        //Open connection to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_kategoria, idKategorii);
+        values.put(KEY_nazwa,Nazwa);
+
+        // Inserting Row
+        db.insert(TABLE_podkategoria, null, values);
+        db.close(); // Closing database connection
+
     }
 
 }

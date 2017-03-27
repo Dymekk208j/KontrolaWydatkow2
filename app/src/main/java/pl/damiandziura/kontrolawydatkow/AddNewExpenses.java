@@ -1,5 +1,6 @@
 package pl.damiandziura.kontrolawydatkow;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,11 +8,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -28,6 +35,8 @@ public class AddNewExpenses extends AppCompatActivity {
     private Calendar c;
     TextView txtData;
     EditText txtNazwa, txtKwota;
+    Spinner SpinnerListaKategorii, SpinnerListaPodKategorii;
+
 
 
     @Override
@@ -36,6 +45,7 @@ public class AddNewExpenses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expenses);
         Bundle extras = getIntent().getExtras();
+
         BazaDanych = new baza_danych(this);
 
         txtData = (TextView) findViewById(R.id.txtDate2);
@@ -43,7 +53,13 @@ public class AddNewExpenses extends AppCompatActivity {
         txtNazwa.setText(NAZWA);
         txtKwota = (EditText) findViewById(R.id.txtEditAmount2);
         txtKwota.setText("");
+        SpinnerListaKategorii = (Spinner) findViewById(R.id.SpinnerKategoriaWydatki);
+        SpinnerListaPodKategorii = (Spinner) findViewById(R.id.SpinnerPodKategoriaWydatki);
+
         setDataAndHour();
+        kategoria();
+       // podkategoria();
+
 
         if(extras != null)
         {
@@ -61,8 +77,6 @@ public class AddNewExpenses extends AppCompatActivity {
         txtNazwa.setText(NAZWA);
 
         txtData.setText(DATA + " " + GODZINA);
-
-
 
 
         txtKwota.addTextChangedListener(new TextWatcher()
@@ -104,16 +118,54 @@ public class AddNewExpenses extends AppCompatActivity {
 
     }
 
+    private void kategoria()    {
+        ArrayList<String> lista = BazaDanych.getKategorie();
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        SpinnerListaKategorii.setAdapter(adapter);
+
+        SpinnerListaKategorii.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                podkategoria(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
+
+       // Toast.makeText(this, lista.get(1), Toast.LENGTH_SHORT).show();
+        //podkategoria();
+    }
+
+
+
+    public void podkategoria(int numer)
+    {
+        ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        SpinnerListaPodKategorii.setAdapter(adapter);
+
+
+    }
+
+
     public void cofnij(View view) {
         intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     public void DodajStalyWydatek(View view) {
-      /*  intent = new Intent(this, dodajStalyWydatek.class);
-        startActivity(intent);*/
-        BazaDanych.DodajWydatek("Najnowsze", 12.0, 0, 0, "10:00", "25-3-2017");
-        BazaDanych.DodajWydatek("troche starsze", 12.0, 0, 0, "09:00", "25-3-2017");
+        intent = new Intent(this, dodajStalyWydatek.class);
+        startActivity(intent);
     }
 
     public void dodaj(View view) {
@@ -144,16 +196,26 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-      /*  NAZWA="";
+       /* NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
         txtNazwa.setText(NAZWA);
-        txtKwota.setText("");*/
+        txtKwota.setText("");
+        */
+        BazaDanych.AddKategoria("Pierwsza Kategoria");
+        BazaDanych.AddKategoria("Druga Kategoria");
+        BazaDanych.AddKategoria("Trzecia Kategoria");
+        BazaDanych.AddKategoria("Czwarta Kategoria");
+        BazaDanych.AddKategoria("Piąta");
 
-      //BazaDanych.PobierzWydatek();
-     //  Toast.makeText(this, Double.toString(BazaDanych.PortfelPrzelicz()), Toast.LENGTH_SHORT).show();
-       BazaDanych.delete(1);
+        BazaDanych.AddPodKategoria("Kat1. PierwszPodKat", 1);
+        BazaDanych.AddPodKategoria("Kat1. DrugaPodKat", 1);
+        BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
+        BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
+
+
+
     }
 
     public void WybierzDateGodzine(View view) {
