@@ -18,22 +18,42 @@ public class DodajKategorie extends AppCompatActivity
 {
     private Intent intent;
     private baza_danych BazaDanych;
-    EditText editName;
-    ListView listView ;
-    ArrayList<String> listaPodKat;
+    private EditText editName;
+    private ListView listView ;
+    private ArrayList<String> listaPodKat;
+    private int IdKategorii = 0;
+    private int IdPodKategorii = 0;
+    ArrayList<Integer> PodkategoriaIdList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dodaj_kategorie);
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null)
+        {
+            IdKategorii = extras.getInt("IdKategorii");
+        }
+
         editName = (EditText) findViewById(R.id.editText);
         BazaDanych = new baza_danych(this);
 
 
         listView = (ListView) findViewById(R.id.LVlistaPodkategorii);
 
-        listaPodKat = new ArrayList<String>();
+        if(IdKategorii > 0)
+        {
+            listaPodKat = BazaDanych.getpodKategorie(IdKategorii);
+            listaPodKat.remove(0);
+            PodkategoriaIdList = BazaDanych.getINTpodKategorie(IdKategorii);
+        }else
+        {
+            listaPodKat = new ArrayList<String>();
+        }
+
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listaPodKat);
@@ -44,16 +64,11 @@ public class DodajKategorie extends AppCompatActivity
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-
-                int itemPosition    = position;
-                String  itemValue    = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
+                                    int position, long id)
+            {
+                IdPodKategorii = PodkategoriaIdList.get(position+1);
+                edytujPodKat(IdPodKategorii);
+               // Toast.makeText(getApplicationContext(), "IdPodKategorii " + IdPodKategorii, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -88,7 +103,20 @@ public class DodajKategorie extends AppCompatActivity
 
     public void dodajPodKat(View view)
     {
+        Intent intent = new Intent(this, Dodajpodkategorie.class);
+        intent.putExtra("NumerKategorii", IdKategorii);
+        intent.putExtra("NumerPodKategorii", 0);
+        intent.putExtra("Nazwa_okna", getResources().getString(R.string.str_dodaj_podk));
+        startActivity(intent);
+    }
 
+    public void edytujPodKat(int IdPodkategorii)
+    {
+        Intent intent = new Intent(this, Dodajpodkategorie.class);
+        intent.putExtra("NumerKategorii", 0);
+        intent.putExtra("NumerPodKategorii", IdPodkategorii);
+        intent.putExtra("Nazwa_okna", getResources().getString(R.string.strEdycjaPodKategorii));
+        startActivity(intent);
     }
 
     public void zatwierdz(View view)

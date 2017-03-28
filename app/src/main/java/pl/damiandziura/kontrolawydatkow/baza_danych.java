@@ -246,8 +246,6 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-
-
     int getWydatkiMaxId()
     {
         int maxID = 0;
@@ -423,6 +421,28 @@ int a = 0;
         return  Listapodkategorii;
     }
 
+    ArrayList getINTpodKategorie(int idKategoria)
+    {
+        ArrayList<Integer> idPodkategorii = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+
+        int a = 0;
+        idPodkategorii.add(0);
+        if(c.moveToFirst()){
+            do{
+              //  bufor = c.getInt(0);
+                idPodkategorii.add(c.getInt(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  idPodkategorii;
+    }
+
     void AddPodKategoria(String Nazwa, int idKategorii)
     {
         /*
@@ -443,6 +463,57 @@ int a = 0;
         // Inserting Row
         db.insert(TABLE_podkategoria, null, values);
         db.close(); // Closing database connection
+
+    }
+
+    void EditPodKategoria(String Nazwa, int idKategorii, int idPodKategorii)
+    {
+        /*
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
+                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_kategoria  + " INTEGER, "
+                + KEY_nazwa + " TEXT )";
+        db.execSQL(CREATE_TABLE_STUDENT);
+        */
+
+        //Open connection to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_kategoria, idKategorii);
+        values.put(KEY_nazwa,Nazwa);
+
+        // Inserting Row
+        db.insert(TABLE_podkategoria, null, values);
+        db.close(); // Closing database connection
+
+    }
+
+    void RemovePodKategoria(String Nazwa, int idKategorii, int idPodKategorii)
+    {
+        /*
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
+                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_kategoria  + " INTEGER, "
+                + KEY_nazwa + " TEXT )";
+        db.execSQL(CREATE_TABLE_STUDENT);
+        */
+
+        //Open connection to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_kategoria, idKategorii);
+        values.put(KEY_nazwa,Nazwa);
+
+        // Inserting Row
+        db.insert(TABLE_podkategoria, null, values);
+        db.close(); // Closing database connection
+
+    }
+
+    void getPodKategoriaName(int id)
+    {
 
     }
 

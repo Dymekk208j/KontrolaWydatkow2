@@ -34,4 +34,7 @@
     <string name="strTeraz">Teraz</string>
     <string name="strWpiszKwote">Musisz wpisać kwote!</string>
     <string name="strListaKategorii">Lista Kategorii:</string>
+    <string name="strEdycjaKategorii">Edycja kategorii</string>
+    <string name="strEdycjaPodKategorii">Edycja Podkategorii</string>
+    <string name="strPodkat">Podkategorie:</string>
 </resources>

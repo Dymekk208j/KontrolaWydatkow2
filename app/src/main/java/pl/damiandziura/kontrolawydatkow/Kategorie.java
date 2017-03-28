@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class Kategorie extends AppCompatActivity
-{
+public class Kategorie extends AppCompatActivity {
     baza_danych BazaDanych;
-    ListView listView ;
+    ListView listView;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +39,17 @@ public class Kategorie extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-
-                int itemPosition    = position;
-                String  itemValue    = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
-
+                edytujKat(position);
             }
 
         });
+    }
+
+    private void edytujKat(int pozycja)
+    {
+        intent = new Intent(this, DodajKategorie.class);
+        intent.putExtra("IdKategorii", pozycja+1);
+        startActivity(intent);
     }
 
     public void cofnij(View view) {
@@ -63,6 +61,8 @@ public class Kategorie extends AppCompatActivity
         Intent intent = new Intent(this, DodajKategorie.class);
         startActivity(intent);
     }
+
+
 
 
 }
