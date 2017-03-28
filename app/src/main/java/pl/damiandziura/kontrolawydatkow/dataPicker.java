@@ -1,6 +1,8 @@
 package pl.damiandziura.kontrolawydatkow;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -53,46 +55,79 @@ public class dataPicker extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @TargetApi(23)
     public void btZatwierdz(View view)
     {
         c = Calendar.getInstance();
 
-        if(data.getYear() <= c.get(Calendar.YEAR) &&
-                data.getMonth() <= c.get(Calendar.MONTH) &&
-                data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH) &&
-                czas.getCurrentHour() <= c.get(Calendar.HOUR_OF_DAY) &&
-                czas.getCurrentMinute() <= c.get(Calendar.MINUTE)
-                )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
         {
-            DATA = Integer.toString(data.getDayOfMonth()) + "-" + Integer.toString(data.getMonth()+1) + "-" + Integer.toString(data.getYear());
-            String minuty, godziny;
+            if (data.getYear() <= c.get(Calendar.YEAR) &&
+                    data.getMonth() <= c.get(Calendar.MONTH) &&
+                    data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH) &&
+                    czas.getHour() <= c.get(Calendar.HOUR_OF_DAY) &&
+                    czas.getMinute() <= c.get(Calendar.MINUTE)
+                    )
+            {
+                DATA = Integer.toString(data.getDayOfMonth()) + "-" + Integer.toString(data.getMonth()+1) + "-" + Integer.toString(data.getYear());
+                String minuty, godziny;
 
-            if(czas.getCurrentMinute() <= 9) {
-                minuty = "0" + Integer.toString(czas.getCurrentMinute());
-            }else minuty = Integer.toString(czas.getCurrentMinute());
-            if(czas.getCurrentHour() <= 9) {
-                godziny = "0" + Integer.toString(czas.getCurrentHour());
-            }else godziny = Integer.toString(czas.getCurrentHour());
+                if(czas.getMinute() <= 9) {
+                    minuty = "0" + Integer.toString(czas.getMinute());
+                }else minuty = Integer.toString(czas.getMinute());
+                if(czas.getHour() <= 9) {
+                    godziny = "0" + Integer.toString(czas.getHour());
+                }else godziny = Integer.toString(czas.getHour());
 
-            GODZINA = godziny + ":" + minuty;
-            intent.putExtra("Data", DATA);
-            intent.putExtra("Godzina", GODZINA);
-            intent.putExtra("Kwota", buforKwota);
-            intent.putExtra("Nazwa", buforNazwa);
+                GODZINA = godziny + ":" + minuty;
+                intent.putExtra("Data", DATA);
+                intent.putExtra("Godzina", GODZINA);
+                intent.putExtra("Kwota", buforKwota);
+                intent.putExtra("Nazwa", buforNazwa);
 
-            startActivity(intent);
+                startActivity(intent);
+            }
+            else
+            {
+                Toast.makeText(this, "Data nie może być z przyszłości!", Toast.LENGTH_SHORT).show();
+            }
         }
-        else
+        else //Metoda sprawdzajaca dla api <23
         {
-            Toast.makeText(this, "Data nie może być z przyszłości!", Toast.LENGTH_SHORT).show();
+            if(data.getYear() <= c.get(Calendar.YEAR) &&
+                    data.getMonth() <= c.get(Calendar.MONTH) &&
+                    data.getDayOfMonth() <= c.get(Calendar.DAY_OF_MONTH) &&
+                    czas.getCurrentHour() <= c.get(Calendar.HOUR_OF_DAY) &&
+                    czas.getCurrentMinute() <= c.get(Calendar.MINUTE)
+                    )
+            {
+                DATA = Integer.toString(data.getDayOfMonth()) + "-" + Integer.toString(data.getMonth()+1) + "-" + Integer.toString(data.getYear());
+                String minuty, godziny;
+
+                if(czas.getCurrentMinute() <= 9) {
+                    minuty = "0" + Integer.toString(czas.getCurrentMinute());
+                }else minuty = Integer.toString(czas.getCurrentMinute());
+                if(czas.getCurrentHour() <= 9) {
+                    godziny = "0" + Integer.toString(czas.getCurrentHour());
+                }else godziny = Integer.toString(czas.getCurrentHour());
+
+                GODZINA = godziny + ":" + minuty;
+                intent.putExtra("Data", DATA);
+                intent.putExtra("Godzina", GODZINA);
+                intent.putExtra("Kwota", buforKwota);
+                intent.putExtra("Nazwa", buforNazwa);
+
+                startActivity(intent);
+            }
+            else
+            {
+                Toast.makeText(this, "Data nie może być z przyszłości!", Toast.LENGTH_SHORT).show();
+            }
         }
-      //  data.setMaxDate(c.getTimeInMillis());
-
-       // if(data.getMaxDate() < data.getDrawingTime())
-
-       // Toast.makeText(this, DATA+"/"+GODZINA, Toast.LENGTH_SHORT).show();
-
     }
+
+
+
 
     public void btTeraz(View view)
     {
