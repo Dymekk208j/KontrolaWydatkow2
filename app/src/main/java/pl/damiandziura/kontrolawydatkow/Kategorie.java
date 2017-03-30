@@ -55,7 +55,7 @@ public class Kategorie extends AppCompatActivity {
     {
         intent = new Intent(this, DodajKategorie.class);
         intent.putExtra("IdKategorii", idKategorii);
-
+        intent.putExtra("edycja", true);
         intent.putExtra("nazwa_okna", "Edycja kategorii:");
         startActivity(intent);
     }
@@ -68,6 +68,8 @@ public class Kategorie extends AppCompatActivity {
     public void dodaj(View view) {
         Intent intent = new Intent(this, DodajKategorie.class);
         intent.putExtra("nazwa_okna", "Dodaj nową kategorie:");
+        intent.putExtra("edycja", false);
+        intent.putExtra("nazwa_okna", "Dodaj kategorie:");
         startActivity(intent);
     }
 

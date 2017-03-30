@@ -202,7 +202,7 @@ public class AddNewExpenses extends AppCompatActivity {
         txtData.setText(DATA + " " + GODZINA);
         txtNazwa.setText(NAZWA);
         txtKwota.setText("");
-        */
+
         BazaDanych.AddKategoria("Pierwsza Kategoria");
         BazaDanych.AddKategoria("Druga Kategoria");
         BazaDanych.AddKategoria("Trzecia Kategoria");
@@ -213,7 +213,9 @@ public class AddNewExpenses extends AppCompatActivity {
         BazaDanych.AddPodKategoria("Kat1. DrugaPodKat", 1);
         BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
         BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
+*/
 
+       BazaDanych.updateNamePodkategoria("dupa1", 1);
 
 
     }

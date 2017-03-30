@@ -19,10 +19,12 @@ public class Dodajpodkategorie extends AppCompatActivity {
     private EditText NazwaPodkat;
     private String WindowName = "";
     private Button btUsun;
-    boolean edycja = false;
+    boolean EdycjaKategorii = false;
+
     TextView lblWindowName;
     ArrayList<String> ListaPodkategorii;
     String BufforList[];
+    private String Nazwa_kategorii;
 
 
     @Override
@@ -41,20 +43,34 @@ public class Dodajpodkategorie extends AppCompatActivity {
             IdKategorii = extras.getInt("NumerKategorii");
             IdPodKategorii = extras.getInt("NumerPodKategorii");
             WindowName = extras.getString("Nazwa_okna");
-            edycja = extras.getBoolean("edycja");
+            EdycjaKategorii = extras.getBoolean("edycja");
             BufforList = extras.getStringArray("listaPodkategorii");
-            ListaPodkategorii = new ArrayList<String>(Arrays.asList(BufforList));
+            Nazwa_kategorii = extras.getString("Nazwa_kategorii");
+
+            if(BufforList != null) {
+                ListaPodkategorii = new ArrayList<String>(Arrays.asList(BufforList));
+            }else{
+                ListaPodkategorii = new ArrayList<String>();
+            }
+
 
 
         }
-        if(edycja == false)
+        if(IdPodKategorii == 0)//dodajesz nowa podkategorie
         {
             btUsun.setVisibility(View.INVISIBLE);
 
         }
-        else
+        else//edytujesz istniejaca pod kategorie
         {
-            NazwaPodkat.setText(BazaDanych.getPodKategoriaName(IdPodKategorii));
+            if(EdycjaKategorii == true)//edytujesz podkategorie istniejaca w bazie danych
+            {
+                NazwaPodkat.setText(BazaDanych.getPodKategoriaName(IdPodKategorii));
+            }
+            else//edytujesz podkategorie jeszcze nie istniejaca w bazie danych
+            {
+                NazwaPodkat.setText(ListaPodkategorii.get(IdPodKategorii-1));
+            }
             btUsun.setVisibility(View.VISIBLE);
         }
         //Toast.makeText(this, "NumerPodKategorii: " + IdPodKategorii, Toast.LENGTH_SHORT).show();
@@ -67,49 +83,130 @@ public class Dodajpodkategorie extends AppCompatActivity {
 
     }
 
-    public void cofnij(View view) {
+    public void cofnij(View view)
+    {
         Intent intent = new Intent(this, DodajKategorie.class);
         intent.putExtra("IdKategorii", IdKategorii);
-        intent.putExtra("nazwa_okna", "Edycja kategorii:");
+        intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
+
+        if(EdycjaKategorii == true) //Dodawanie nowej podkategorii do istniejace kategorii
+        {
+            intent.putExtra("edycja", true);
+            intent.putExtra("nazwa_okna", "Edycja kategorii:");
+        }
+        else
+        {
+            intent.putExtra("nazwa_okna", "Dodaj kategorie:");
+            intent.putExtra("edycja", false);
+            intent.putExtra("ListaPodkategori", BufforList);
+
+        }
+
         startActivity(intent);
+
     }
+
     public void dodaj(View view)
     {
-        if(edycja == false) //Dodawanie nowej podkategorii do istniejace kategorii
+        if(EdycjaKategorii == true) //dzialam na istniejacej kategorii
         {
-            if (!NazwaPodkat.getText().toString().equals("")) {
-                BazaDanych.AddPodKategoria(NazwaPodkat.getText().toString(), IdKategorii);
-                Toast.makeText(this, "Dodano nową podkategorie " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, DodajKategorie.class);
-                intent.putExtra("IdKategorii", IdKategorii);
-                intent.putExtra("nazwa_okna", "Edycja kategorii:");
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, DodajKategorie.class);
+            intent.putExtra("IdKategorii", IdKategorii);
+            intent.putExtra("nazwa_okna", "Edycja kategorii:");
+            intent.putExtra("edycja", true);
+            intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
+
+            if(IdPodKategorii == 0)//dodaje nowa podkategorie
+            {
+                if (!NazwaPodkat.getText().toString().equals("")) {
+                    BazaDanych.AddPodKategoria(NazwaPodkat.getText().toString(), IdKategorii);
+                    Toast.makeText(this, "Dodano nową podkategorie " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                }
             }
+            else//edytuje istniejaca podkategorie
+            {
+                if (!NazwaPodkat.getText().toString().equals("")) {
+                    BazaDanych.updateNamePodkategoria(NazwaPodkat.getText().toString(), IdPodKategorii);
+                    Toast.makeText(this, "Zmienione nazwe podkategorii na " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            startActivity(intent);
+
+
         }
-        else //Dodawanie nowej podkategorii do jeszcze nie istniejace kategorii
+        else //dzialam na jeszcze nie istniejacej kategorii
         {
-            ListaPodkategorii.add(NazwaPodkat.getText().toString());
-            BufforList = ListaPodkategorii.toArray(new String[0]);
+
             Intent intent = new Intent(this, DodajKategorie.class);
             intent.putExtra("IdKategorii", IdKategorii);
             intent.putExtra("nazwa_okna", "Dodaj kategorie:");
             intent.putExtra("edycja", false);
-            intent.putExtra("listapodkategorii", BufforList);
+            intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
+
+
+
+            if(IdPodKategorii == 0)//dodaje nowa podkategorie
+            {
+                if (!NazwaPodkat.getText().toString().equals("")) {
+                    ListaPodkategorii.add(NazwaPodkat.getText().toString());
+                    BufforList = ListaPodkategorii.toArray(new String[0]);
+                    Toast.makeText(this, "Dodano nową podkategorie " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else//edytuje istniejaca podkategorie
+            {
+                if (!NazwaPodkat.getText().toString().equals("")) {
+                    ListaPodkategorii.set(IdPodKategorii-1, NazwaPodkat.getText().toString());//-1 jest potrzebne po to zebym mogl operowac na tablicy o numerze 0
+                    BufforList = ListaPodkategorii.toArray(new String[0]);
+                    Toast.makeText(this, "Zmienione nazwe podkategorii na " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            intent.putExtra("ListaPodkategori", BufforList);
             startActivity(intent);
+
 
         }
     }
 
     public void usun(View view)
     {
-        BazaDanych.RemovePodKategoria(IdPodKategorii);
-        Toast.makeText(this, "Pomyślnie usunięto podkategorie " + BazaDanych.getPodKategoriaName(IdPodKategorii), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, DodajKategorie.class);
-        intent.putExtra("IdKategorii", IdKategorii);
-        intent.putExtra("nazwa_okna", "Edycja kategorii:");
-        startActivity(intent);
+        if(EdycjaKategorii == true) //dzialam na istniejacej kategorii
+        {
+            BazaDanych.RemovePodKategoria(IdPodKategorii);
+            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + BazaDanych.getPodKategoriaName(IdPodKategorii), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, DodajKategorie.class);
+            intent.putExtra("IdKategorii", IdKategorii);
+            intent.putExtra("nazwa_okna", "Edycja kategorii:");
+            intent.putExtra("edycja", true);
+            intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
+            startActivity(intent);
+
+        }
+        else // dzialam na jeszcze nie istniejacej kategorii
+        {
+            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + ListaPodkategorii.get(IdPodKategorii-1), Toast.LENGTH_SHORT).show();
+            ListaPodkategorii.remove(IdPodKategorii-1);
+            BufforList = ListaPodkategorii.toArray(new String[0]);
+            Intent intent = new Intent(this, DodajKategorie.class);
+            intent.putExtra("IdKategorii", IdKategorii);
+            intent.putExtra("nazwa_okna", "Edycja kategorii:");
+            intent.putExtra("edycja", false);
+            intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
+            intent.putExtra("ListaPodkategori", BufforList);
+            startActivity(intent);
+
+        }
+
     }
 
 

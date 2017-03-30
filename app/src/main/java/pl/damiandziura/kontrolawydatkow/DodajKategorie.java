@@ -27,6 +27,7 @@ public class DodajKategorie extends AppCompatActivity
     private int IdPodKategorii = 0;
     private ArrayList<Integer> PodkategoriaIdList;
     String Nazwa_okna = "";
+    String Nazwa_kategorii;
     TextView lblNazwaOkna;
     Boolean EdycjaKategorii = false;
     ArrayList<String> ListaPodkategori;
@@ -44,8 +45,20 @@ public class DodajKategorie extends AppCompatActivity
             IdKategorii = extras.getInt("IdKategorii");
             Nazwa_okna = extras.getString("nazwa_okna");
             EdycjaKategorii = extras.getBoolean("edycja");
-            String Buffor = extras.getString("ListaPodkategori");
-            ListaPodkategori = new ArrayList<String>(Arrays.asList(Buffor));
+            Nazwa_kategorii = extras.getString("Nazwa_kategorii");
+
+            String Buffor[] = extras.getStringArray("ListaPodkategori");
+
+            if(Buffor == null)
+            {
+                ListaPodkategori = new ArrayList<String>();
+                ListaPodkategori.add(0, "(Domyślna)");
+            }else
+            {
+                ListaPodkategori = new ArrayList<String>(Arrays.asList(Buffor));
+                ListaPodkategori.add(0, "(Domyślna)");
+            }
+
         }
 
 
@@ -63,17 +76,16 @@ public class DodajKategorie extends AppCompatActivity
             listaPodKat.remove(0);
             PodkategoriaIdList = BazaDanych.getINTpodKategorie(IdKategorii);
             editName.setText(BazaDanych.getKategoriaName(IdKategorii));
+
         }else
         {
             listaPodKat = ListaPodkategori;
+           listaPodKat.remove(0);
         }
 
-
-
+        if(Nazwa_kategorii != null) editName.setText(Nazwa_kategorii);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listaPodKat);
-
-
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -81,9 +93,11 @@ public class DodajKategorie extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id)
             {
-                IdPodKategorii = PodkategoriaIdList.get(position+1);
-                edytujPodKat(IdPodKategorii);
-               // Toast.makeText(getApplicationContext(), "IdPodKategorii " + IdPodKategorii, Toast.LENGTH_SHORT).show();
+
+                int bufor = position;
+
+                    edytujPodKat(bufor);
+
 
             }
 
@@ -100,10 +114,26 @@ public class DodajKategorie extends AppCompatActivity
 
     public void dodaj(View view)
     {
-        BazaDanych.AddKategoria(editName.getText().toString());
-        Toast.makeText(this, "Nowa kategoria " + editName.getText().toString() + " została dodana.", Toast.LENGTH_SHORT).show();
-        intent = new Intent(this, Kategorie.class);
-        startActivity(intent);
+        if(EdycjaKategorii == true)
+        {
+            BazaDanych.AddKategoria(editName.getText().toString());
+            Toast.makeText(this, "Nowa kategoria " + editName.getText().toString() + " została dodana.", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, Kategorie.class);
+            startActivity(intent);
+        }
+        else
+        {
+            BazaDanych.AddKategoria(editName.getText().toString());
+            //SELECT id FROM Kategoria ORDER BY id DESC LIMIT 1
+            for(int a = 0; a < listaPodKat.size(); a++)
+            {
+                BazaDanych.AddPodKategoria(listaPodKat.get(a), BazaDanych.getKategoriaMaxId());
+            }
+            Toast.makeText(this, "Nowa kategoria " + editName.getText().toString() + " została dodana.", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, Kategorie.class);
+            startActivity(intent);
+        }
+
     }
 
     public void usun(View view)
@@ -118,25 +148,67 @@ public class DodajKategorie extends AppCompatActivity
 
     public void dodajPodKat(View view)
     {
-        String listapodkat[] = ListaPodkategori.toArray(new String[0]);
-
         Intent intent = new Intent(this, Dodajpodkategorie.class);
-        intent.putExtra("NumerKategorii", IdKategorii);
-        intent.putExtra("NumerPodKategorii", 0);
-        intent.putExtra("Nazwa_okna", getResources().getString(R.string.str_dodaj_podk));
-        intent.putExtra("edycja", false);
-        intent.putExtra("listaPodkategorii", listapodkat);
+
+        if(EdycjaKategorii == true)
+        {
+            intent.putExtra("NumerKategorii", IdKategorii);
+            intent.putExtra("NumerPodKategorii", 0);
+            intent.putExtra("Nazwa_okna", getResources().getString(R.string.str_dodaj_podk));
+            intent.putExtra("edycja", true);
+            intent.putExtra("Nazwa_kategorii", editName.getText().toString());
+
+        }
+        else
+        {
+            intent.putExtra("NumerKategorii", 0);
+            intent.putExtra("NumerPodKategorii", 0);
+            String listapodkat[] = ListaPodkategori.toArray(new String[0]);
+            intent.putExtra("Nazwa_okna", "Edytuj podkategorie");
+            intent.putExtra("Nazwa_kategorii", editName.getText().toString());
+            intent.putExtra("listaPodkategorii", listapodkat);
+            intent.putExtra("edycja", false);
+        }
         startActivity(intent);
+
+
     }
 
     public void edytujPodKat(int IdPodkategorii)
     {
-        Intent intent = new Intent(this, Dodajpodkategorie.class);
-        intent.putExtra("NumerKategorii", IdKategorii);
-        intent.putExtra("NumerPodKategorii", IdPodkategorii);
-        intent.putExtra("Nazwa_okna", getResources().getString(R.string.strEdycjaPodKategorii));
-        intent.putExtra("edycja", true);
-        startActivity(intent);
+        if(EdycjaKategorii == true)
+        {
+            Intent intent = new Intent(this, Dodajpodkategorie.class);
+            intent.putExtra("NumerKategorii", IdKategorii);
+            intent.putExtra("NumerPodKategorii", PodkategoriaIdList.get(IdPodkategorii+1));
+            intent.putExtra("Nazwa_okna", getResources().getString(R.string.strEdycjaPodKategorii));
+            intent.putExtra("Nazwa_kategorii", editName.getText().toString());
+            intent.putExtra("edycja", true);
+            startActivity(intent);
+        }else
+        {
+            int bufor = IdPodkategorii+1;
+            Intent intent = new Intent(this, Dodajpodkategorie.class);
+            intent.putExtra("NumerKategorii", 0);
+            intent.putExtra("NumerPodKategorii", bufor);
+            intent.putExtra("Nazwa_okna", getResources().getString(R.string.strEdycjaPodKategorii));
+            intent.putExtra("Nazwa_kategorii", editName.getText().toString());
+            intent.putExtra("edycja", false);
+            String listapodkat[] = ListaPodkategori.toArray(new String[0]);
+            intent.putExtra("listaPodkategorii", listapodkat);
+
+            /*
+             intent.putExtra("NumerKategorii", 0);
+            intent.putExtra("NumerPodKategorii", 0);
+
+            intent.putExtra("Nazwa_okna", "Edytuj podkategorie");
+            intent.putExtra("Nazwa_kategorii", editName.getText().toString());
+
+            intent.putExtra("edycja", false);
+             */
+            startActivity(intent);
+        }
+
     }
 
     public void zatwierdz(View view)

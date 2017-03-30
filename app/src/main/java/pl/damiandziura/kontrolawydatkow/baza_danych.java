@@ -159,6 +159,23 @@ public class baza_danych extends SQLiteOpenHelper
         return kwota;
     }
 
+    int getKategoriaMaxId()
+    {
+        int MaxID = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM "+TABLE_kategoria + " ORDER BY id DESC LIMIT 1", null);
+
+        if(c.moveToFirst()){
+            do{
+                MaxID = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return MaxID;
+    }
+
     int getKategoria(int aID)
     {
         int kategoria = 0;
@@ -560,6 +577,20 @@ int a = 0;
         db.close();
 
         return  Listapodkategorii;
+    }
+
+    void updateNamePodkategoria(String name, int aID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("nazwa",name); //These Fields should be your String values of actual column names
+
+
+        db.update(TABLE_podkategoria, cv, "id="+aID, null);
+        db.close(); // Closing database connection
+
+       // UPDATE Podkategoria SET nazwa = "dupa" WHERE ID = 1;
     }
 
 }
