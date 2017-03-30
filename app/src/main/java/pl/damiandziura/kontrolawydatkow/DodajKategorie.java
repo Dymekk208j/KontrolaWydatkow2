@@ -1,6 +1,7 @@
 package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DodajKategorie extends AppCompatActivity
 {
@@ -23,11 +25,15 @@ public class DodajKategorie extends AppCompatActivity
     private ArrayList<String> listaPodKat;
     private int IdKategorii = 0;
     private int IdPodKategorii = 0;
-    ArrayList<Integer> PodkategoriaIdList;
-
+    private ArrayList<Integer> PodkategoriaIdList;
+    String Nazwa_okna = "";
+    TextView lblNazwaOkna;
+    Boolean EdycjaKategorii = false;
+    ArrayList<String> ListaPodkategori;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dodaj_kategorie);
@@ -36,23 +42,32 @@ public class DodajKategorie extends AppCompatActivity
         if(extras != null)
         {
             IdKategorii = extras.getInt("IdKategorii");
+            Nazwa_okna = extras.getString("nazwa_okna");
+            EdycjaKategorii = extras.getBoolean("edycja");
+            String Buffor = extras.getString("ListaPodkategori");
+            ListaPodkategori = new ArrayList<String>(Arrays.asList(Buffor));
         }
+
 
         editName = (EditText) findViewById(R.id.editText);
         BazaDanych = new baza_danych(this);
+        lblNazwaOkna = (TextView) findViewById(R.id.lblName);
 
+        if(!Nazwa_okna.equals("")) lblNazwaOkna.setText(Nazwa_okna);
 
         listView = (ListView) findViewById(R.id.LVlistaPodkategorii);
 
-        if(IdKategorii > 0)
+        if(EdycjaKategorii == true)//edycja kategorii
         {
             listaPodKat = BazaDanych.getpodKategorie(IdKategorii);
             listaPodKat.remove(0);
             PodkategoriaIdList = BazaDanych.getINTpodKategorie(IdKategorii);
+            editName.setText(BazaDanych.getKategoriaName(IdKategorii));
         }else
         {
-            listaPodKat = new ArrayList<String>();
+            listaPodKat = ListaPodkategori;
         }
+
 
 
 
@@ -103,19 +118,24 @@ public class DodajKategorie extends AppCompatActivity
 
     public void dodajPodKat(View view)
     {
+        String listapodkat[] = ListaPodkategori.toArray(new String[0]);
+
         Intent intent = new Intent(this, Dodajpodkategorie.class);
         intent.putExtra("NumerKategorii", IdKategorii);
         intent.putExtra("NumerPodKategorii", 0);
         intent.putExtra("Nazwa_okna", getResources().getString(R.string.str_dodaj_podk));
+        intent.putExtra("edycja", false);
+        intent.putExtra("listaPodkategorii", listapodkat);
         startActivity(intent);
     }
 
     public void edytujPodKat(int IdPodkategorii)
     {
         Intent intent = new Intent(this, Dodajpodkategorie.class);
-        intent.putExtra("NumerKategorii", 0);
+        intent.putExtra("NumerKategorii", IdKategorii);
         intent.putExtra("NumerPodKategorii", IdPodkategorii);
         intent.putExtra("Nazwa_okna", getResources().getString(R.string.strEdycjaPodKategorii));
+        intent.putExtra("edycja", true);
         startActivity(intent);
     }
 

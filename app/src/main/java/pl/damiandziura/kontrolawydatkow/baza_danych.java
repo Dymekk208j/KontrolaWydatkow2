@@ -385,6 +385,28 @@ int a = 0;
         return  ListaKategorii;
     }
 
+    ArrayList getINTKategorie()
+    {
+        ArrayList<Integer> idkategorii = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_kategoria, null);
+        int a = 0;
+        idkategorii.add(0);
+
+        if(c.moveToFirst()){
+            do{
+                //  bufor = c.getInt(0);
+                idkategorii.add(c.getInt(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  idkategorii;
+    }
+
     void AddKategoria(String Nazwa)
     {
         //Open connection to write data
@@ -398,50 +420,32 @@ int a = 0;
 
     }
 
-    ArrayList getpodKategorie(int idKategoria)
+    void RemoveKategoria(int idKategorii)
     {
-        ArrayList<String> Listapodkategorii = new ArrayList<String>();
-        String bufor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_kategoria,"id=?",new String[]{Integer.toString(idKategorii)});
+        db.close(); // Closing database connection
+    }
 
+    String getKategoriaName(int aID)
+    {
+        String aNazwa = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT " + KEY_nazwa + " FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+        c = db.rawQuery("SELECT nazwa FROM "+TABLE_kategoria + " WHERE id = " + Integer.toString(aID), null);
 
-        int a = 0;
-        Listapodkategorii.add("0. (Domyślna podkategoria)");
         if(c.moveToFirst()){
             do{
-                bufor = c.getString(0);
-                Listapodkategorii.add(Integer.toString(a+1)+". " + c.getString(0));
-                a++;
+                aNazwa = c.getString(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  Listapodkategorii;
+        return aNazwa;
     }
 
-    ArrayList getINTpodKategorie(int idKategoria)
-    {
-        ArrayList<Integer> idPodkategorii = new ArrayList<Integer>();
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
 
-        int a = 0;
-        idPodkategorii.add(0);
-        if(c.moveToFirst()){
-            do{
-              //  bufor = c.getInt(0);
-                idPodkategorii.add(c.getInt(0));
-                a++;
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return  idPodkategorii;
-    }
 
     void AddPodKategoria(String Nazwa, int idKategorii)
     {
@@ -489,32 +493,73 @@ int a = 0;
 
     }
 
-    void RemovePodKategoria(String Nazwa, int idKategorii, int idPodKategorii)
+    void RemovePodKategoria(int idPodKategorii)
     {
-        /*
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
-                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_nazwa + " TEXT )";
-        db.execSQL(CREATE_TABLE_STUDENT);
-        */
-
-        //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_kategoria, idKategorii);
-        values.put(KEY_nazwa,Nazwa);
-
-        // Inserting Row
-        db.insert(TABLE_podkategoria, null, values);
+        db.delete(TABLE_podkategoria,"id=?",new String[]{Integer.toString(idPodKategorii)});
         db.close(); // Closing database connection
-
     }
 
-    void getPodKategoriaName(int id)
+    String getPodKategoriaName(int aID)
     {
+        String aNazwa = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM "+TABLE_podkategoria + " WHERE id = " + Integer.toString(aID), null);
 
+        if(c.moveToFirst()){
+            do{
+                aNazwa = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return aNazwa;
+    }
+
+    ArrayList getINTpodKategorie(int idKategoria)
+    {
+        ArrayList<Integer> idPodkategorii = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+
+        int a = 0;
+        idPodkategorii.add(0);
+        if(c.moveToFirst()){
+            do{
+                //  bufor = c.getInt(0);
+                idPodkategorii.add(c.getInt(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  idPodkategorii;
+    }
+
+    ArrayList getpodKategorie(int idKategoria)
+    {
+        ArrayList<String> Listapodkategorii = new ArrayList<String>();
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT " + KEY_nazwa + " FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+
+        int a = 0;
+        Listapodkategorii.add("0. (Domyślna podkategoria)");
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                Listapodkategorii.add(Integer.toString(a+1)+". " + c.getString(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  Listapodkategorii;
     }
 
 }

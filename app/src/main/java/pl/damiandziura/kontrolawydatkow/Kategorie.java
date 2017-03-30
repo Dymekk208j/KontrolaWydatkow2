@@ -17,6 +17,8 @@ public class Kategorie extends AppCompatActivity {
     baza_danych BazaDanych;
     ListView listView;
     Intent intent;
+    ArrayList<Integer> idListKategorii;
+    int idKategorii = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +29,11 @@ public class Kategorie extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list);
         BazaDanych = new baza_danych(this);
 
+
         ArrayList<String> lista = BazaDanych.getKategorie();
         lista.remove(0);
+
+        idListKategorii = BazaDanych.getINTKategorie();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
@@ -39,6 +44,7 @@ public class Kategorie extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                idKategorii = idListKategorii.get(position+1);
                 edytujKat(position);
             }
 
@@ -48,7 +54,9 @@ public class Kategorie extends AppCompatActivity {
     private void edytujKat(int pozycja)
     {
         intent = new Intent(this, DodajKategorie.class);
-        intent.putExtra("IdKategorii", pozycja+1);
+        intent.putExtra("IdKategorii", idKategorii);
+
+        intent.putExtra("nazwa_okna", "Edycja kategorii:");
         startActivity(intent);
     }
 
@@ -59,6 +67,7 @@ public class Kategorie extends AppCompatActivity {
 
     public void dodaj(View view) {
         Intent intent = new Intent(this, DodajKategorie.class);
+        intent.putExtra("nazwa_okna", "Dodaj nową kategorie:");
         startActivity(intent);
     }
 
