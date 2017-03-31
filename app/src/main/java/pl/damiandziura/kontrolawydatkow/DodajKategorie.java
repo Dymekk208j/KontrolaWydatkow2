@@ -31,6 +31,7 @@ public class DodajKategorie extends AppCompatActivity
     TextView lblNazwaOkna;
     Boolean EdycjaKategorii = false;
     ArrayList<String> ListaPodkategori;
+    Button btUsun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,6 +40,7 @@ public class DodajKategorie extends AppCompatActivity
 
         setContentView(R.layout.activity_dodaj_kategorie);
         Bundle extras = getIntent().getExtras();
+        btUsun = (Button) findViewById(R.id.btUsun);
 
         if(extras != null)
         {
@@ -76,11 +78,13 @@ public class DodajKategorie extends AppCompatActivity
             listaPodKat.remove(0);
             PodkategoriaIdList = BazaDanych.getINTpodKategorie(IdKategorii);
             editName.setText(BazaDanych.getKategoriaName(IdKategorii));
+            btUsun.setVisibility(View.VISIBLE);
 
         }else
         {
             listaPodKat = ListaPodkategori;
-           listaPodKat.remove(0);
+            listaPodKat.remove(0);
+            btUsun.setVisibility(View.INVISIBLE);
         }
 
         if(Nazwa_kategorii != null) editName.setText(Nazwa_kategorii);
@@ -138,11 +142,15 @@ public class DodajKategorie extends AppCompatActivity
 
     public void usun(View view)
     {
-
-    }
-
-    public void zmienNazwe(View view)
-    {
+        Toast.makeText(this, "Pomyślnie usunięto kategorie " + BazaDanych.getKategoriaName(IdKategorii), Toast.LENGTH_SHORT).show();
+        PodkategoriaIdList = BazaDanych.getINTpodKategorie(IdKategorii);
+        for(int a = 0; a < PodkategoriaIdList.size(); a++)
+        {
+            BazaDanych.RemovePodKategoria(PodkategoriaIdList.get(a));
+        }
+        BazaDanych.RemoveKategoria(IdKategorii);
+        intent = new Intent(this, Kategorie.class);
+        startActivity(intent);
 
     }
 
@@ -208,11 +216,6 @@ public class DodajKategorie extends AppCompatActivity
              */
             startActivity(intent);
         }
-
-    }
-
-    public void zatwierdz(View view)
-    {
 
     }
 

@@ -105,6 +105,7 @@ public class dataPicker extends AppCompatActivity {
 
                 GODZINA = godziny + ":" + minuty;
                 intent.putExtra("Data", DATA);
+
                 intent.putExtra("Godzina", GODZINA);
                 intent.putExtra("Kwota", buforKwota);
                 intent.putExtra("Nazwa", buforNazwa);

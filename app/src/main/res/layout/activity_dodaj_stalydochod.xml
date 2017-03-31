@@ -23,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:text="@string/str_do"
-        app:layout_constraintRight_toLeftOf="@+id/txtDo"
-        app:layout_constraintTop_toTopOf="@+id/txtDo" />
+        app:layout_constraintRight_toLeftOf="@+id/txt2"
+        app:layout_constraintTop_toTopOf="@+id/txt2" />
 
     <TextView
         android:id="@+id/lblDatapierwszego"
@@ -39,8 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:text="@string/str_od"
-        app:layout_constraintRight_toLeftOf="@+id/txtOd"
-        app:layout_constraintTop_toTopOf="@+id/txtOd" />
+        app:layout_constraintRight_toLeftOf="@+id/txt1"
+        app:layout_constraintTop_toTopOf="@+id/txt1" />
 
     <EditText
         android:id="@+id/txtDatapierwszego"
@@ -51,11 +51,11 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/ListViewPodkategoria"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/txtDo"
+        app:layout_constraintTop_toBottomOf="@+id/txt2"
         android:layout_marginEnd="8dp" />
 
     <EditText
-        android:id="@+id/txtDo"
+        android:id="@+id/txt2"
         android:layout_width="114dp"
         android:layout_height="23dp"
         android:ems="10"
@@ -63,11 +63,11 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/ListViewPodkategoria"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/txtOd"
+        app:layout_constraintTop_toBottomOf="@+id/txt1"
         android:layout_marginEnd="8dp" />
 
     <EditText
-        android:id="@+id/txtOd"
+        android:id="@+id/txt1"
         android:layout_width="114dp"
         android:layout_height="23dp"
         android:ems="10"
@@ -103,7 +103,7 @@
         android:layout_height="83dp"
         android:onClick="dodaj"
         android:text="@string/str_add"
-        app:layout_constraintBottom_toTopOf="@+id/btDodajKategorie"
+        app:layout_constraintBottom_toTopOf="@+id/btCofnij"
         app:layout_constraintRight_toRightOf="@+id/btWyczysc"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="3dp" />
@@ -117,11 +117,11 @@
         android:layout_marginStart="8dp"
         android:onClick="wyczysc"
         android:text="@string/str_clear"
-        app:layout_constraintBottom_toBottomOf="@+id/btDodajKategorie"
-        app:layout_constraintLeft_toRightOf="@+id/btDodajKategorie" />
+        app:layout_constraintBottom_toBottomOf="@+id/btCofnij"
+        app:layout_constraintLeft_toRightOf="@+id/btCofnij" />
 
     <Button
-        android:id="@+id/btDodajKategorie"
+        android:id="@+id/btCofnij"
         android:layout_width="157dp"
         android:layout_height="83dp"
         android:layout_marginBottom="16dp"

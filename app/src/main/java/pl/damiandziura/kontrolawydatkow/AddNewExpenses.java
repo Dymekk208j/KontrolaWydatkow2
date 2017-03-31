@@ -147,6 +147,7 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void podkategoria(int numer)
     {
+        numer++;
         ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);

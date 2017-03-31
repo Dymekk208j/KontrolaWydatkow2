@@ -37,4 +37,15 @@
     <string name="strEdycjaKategorii">Edycja kategorii</string>
     <string name="strEdycjaPodKategorii">Edycja Podkategorii</string>
     <string name="strPodkat">Podkategorie:</string>
+    <string name="str_Zapisz">Zapisz</string>
+    <string name="str_usunkat">Usuń kategorie</string>
+
+    <string-array name="czestotliwosc">
+        <item>Codziennie</item>
+        <item>Co tydzień</item>
+        <item>Co miesiąc</item>
+        <item>Co 3 miesiące</item>
+        <item>Co rok</item>
+    </string-array>
+
 </resources>
