@@ -28,6 +28,8 @@ public class baza_danych extends SQLiteOpenHelper
     private static final String TABLE_portfel = "Portfel";
     private static final String TABLE_kategoria = "Kategoria";
     private static final String TABLE_podkategoria = "Podkategoria";
+    private static final String TABLE_Staly_wydatek = "Staly_wydatek";
+    private static final String TABLE_Staly_dochod = "Staly_dochod";
 
     // Nazwy kolumn
     private static final String KEY_ID = "id";
@@ -37,6 +39,11 @@ public class baza_danych extends SQLiteOpenHelper
     private static final String KEY_kategoria = "kategoria";
     private static final String KEY_data = "data";
     private static final String KEY_godzina = "godzina";
+    private static final String KEY_odkiedy = "od_kiedy";
+    private static final String KEY_dokiedy = "do_kiedy";
+    private static final String KEY_nastepnaData = "nastepna_data";
+    private static final String KEY_czestotliwosc = "czestotliwosc";
+
 
     // property help us to keep data
     private int wydatki_id;
@@ -49,6 +56,27 @@ public class baza_danych extends SQLiteOpenHelper
     public baza_danych(Context context )
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    enum CZESTOTLIWOSC
+    {
+        DZIENNIE("DZIENNIE"),
+        TYDZIEN("TYDZIEN"),
+        MIESIAC("MIESIAC"),
+        KWARTAL("KWARTAL"),
+        ROK("ROK");
+
+
+        private final String text;
+
+        private CZESTOTLIWOSC(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
     @Override
@@ -89,6 +117,28 @@ public class baza_danych extends SQLiteOpenHelper
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
                 + KEY_kategoria  + " INTEGER, "
                 + KEY_nazwa + " TEXT )";
+        db.execSQL(CREATE_TABLE_STUDENT);
+
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_wydatek + "("
+                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_nazwa  + " TEXT, "
+                + KEY_kategoria  + " INTEGER, "
+                + KEY_podkategoria  + " INTEGER, "
+                + KEY_odkiedy  + " TEXT, "
+                + KEY_dokiedy  + " TEXT, "
+                + KEY_nastepnaData  + " TEXT, "
+                + KEY_czestotliwosc + " TEXT )";
+        db.execSQL(CREATE_TABLE_STUDENT);
+
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_dochod + "("
+                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_nazwa  + " TEXT, "
+                + KEY_kategoria  + " INTEGER, "
+                + KEY_podkategoria  + " INTEGER, "
+                + KEY_odkiedy  + " TEXT, "
+                + KEY_dokiedy  + " TEXT, "
+                + KEY_nastepnaData  + " TEXT, "
+                + KEY_czestotliwosc + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
     }
@@ -592,5 +642,46 @@ int a = 0;
 
        // UPDATE Podkategoria SET nazwa = "dupa" WHERE ID = 1;
     }
+
+    public void addStalyWydatek(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
+                                String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kategoria,Integer.toString(aKategoria));
+        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_odkiedy,aOdKiedy);
+        values.put(KEY_dokiedy,aDoKiedy);
+        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_czestotliwosc,czest.toString());
+
+        // Inserting Row
+        db.insert(TABLE_Staly_wydatek, null, values);
+        db.close(); // Closing database connection
+
+
+    }
+
+    public void addStalyDochod(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
+                                String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kategoria,Integer.toString(aKategoria));
+        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_odkiedy,aOdKiedy);
+        values.put(KEY_dokiedy,aDoKiedy);
+        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_czestotliwosc,czest.toString());
+
+        // Inserting Row
+        db.insert(TABLE_Staly_dochod, null, values);
+        db.close(); // Closing database connection
+
+
+    }
+
 
 }
