@@ -197,13 +197,13 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-       /* NAZWA="";
+      /*  NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
         txtNazwa.setText(NAZWA);
         txtKwota.setText("");
-
+*/
         BazaDanych.AddKategoria("Pierwsza Kategoria");
         BazaDanych.AddKategoria("Druga Kategoria");
         BazaDanych.AddKategoria("Trzecia Kategoria");
@@ -214,9 +214,9 @@ public class AddNewExpenses extends AppCompatActivity {
         BazaDanych.AddPodKategoria("Kat1. DrugaPodKat", 1);
         BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
         BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
-*/
 
-       BazaDanych.updateNamePodkategoria("dupa1", 1);
+        BazaDanych.addStalyWydatek("Rata za samochod", 0, 0, "01/01/2017", "01/12/2017", "01/05/2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
+       //BazaDanych.updateNamePodkategoria("dupa1", 1);
 
 
     }
@@ -233,7 +233,14 @@ public class AddNewExpenses extends AppCompatActivity {
     private void setDataAndHour()
     {
         c = Calendar.getInstance();
-        DATA = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "-" + Integer.toString(c.get(Calendar.MONTH)+1) + "-" + Integer.toString(c.get(Calendar.YEAR));
+
+        String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+        if(c.get(Calendar.DAY_OF_MONTH) <= 9) dzien = "0" + Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+        String miesiac = Integer.toString(c.get(Calendar.MONTH)+1);
+        if((c.get(Calendar.MONTH)+1) <= 9) miesiac = "0" + Integer.toString(c.get(Calendar.MONTH)+1);
+
+
+        DATA = dzien + "-" + miesiac + "-" + Integer.toString(c.get(Calendar.YEAR));
         GODZINA = Integer.toString(c.get(Calendar.HOUR_OF_DAY)) + ":" + Integer.toString(c.get(Calendar.MINUTE));
     }
 

@@ -158,7 +158,14 @@ public class nowyPrzychod extends AppCompatActivity {
     private void setDataAndHour()
     {
         c = Calendar.getInstance();
-        DATA = Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "-" + Integer.toString(c.get(Calendar.MONTH)+1) + "-" + Integer.toString(c.get(Calendar.YEAR));
+
+        String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+        if(c.get(Calendar.DAY_OF_MONTH) <= 9) dzien = "0" + Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+        String miesiac = Integer.toString(c.get(Calendar.MONTH)+1);
+        if((c.get(Calendar.MONTH)+1) <= 9) miesiac = "0" + Integer.toString(c.get(Calendar.MONTH)+1);
+
+
+        DATA = dzien + "-" + miesiac + "-" + Integer.toString(c.get(Calendar.YEAR));
         GODZINA = Integer.toString(c.get(Calendar.HOUR_OF_DAY)) + ":" + Integer.toString(c.get(Calendar.MINUTE));
     }
 

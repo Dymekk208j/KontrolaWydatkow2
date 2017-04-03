@@ -19,7 +19,7 @@ import java.util.List;
 public class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "baza.db";
 
     // Nazwy tabeli
@@ -28,8 +28,8 @@ public class baza_danych extends SQLiteOpenHelper
     private static final String TABLE_portfel = "Portfel";
     private static final String TABLE_kategoria = "Kategoria";
     private static final String TABLE_podkategoria = "Podkategoria";
-    private static final String TABLE_Staly_wydatek = "Staly_wydatek";
-    private static final String TABLE_Staly_dochod = "Staly_dochod";
+    private static final String TABLE_Staly_wydatek = "StalyWydatek";
+    private static final String TABLE_Staly_dochod = "StalyDochod";
 
     // Nazwy kolumn
     private static final String KEY_ID = "id";
@@ -151,6 +151,8 @@ public class baza_danych extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_dochody);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_kategoria);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_podkategoria);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Staly_wydatek);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Staly_dochod);
 
         // Create tables again
         onCreate(db);
