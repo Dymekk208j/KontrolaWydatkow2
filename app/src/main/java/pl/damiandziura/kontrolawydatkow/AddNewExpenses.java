@@ -36,7 +36,7 @@ public class AddNewExpenses extends AppCompatActivity {
     TextView txtData;
     EditText txtNazwa, txtKwota;
     Spinner SpinnerListaKategorii, SpinnerListaPodKategorii;
-
+    private ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
 
 
     @Override
@@ -120,6 +120,7 @@ public class AddNewExpenses extends AppCompatActivity {
 
     private void kategoria()    {
         ArrayList<String> lista = BazaDanych.getKategorie();
+        KategoriaIDlist = BazaDanych.getINTKategorie();
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -149,6 +150,7 @@ public class AddNewExpenses extends AppCompatActivity {
     {
 
         ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
+        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(numer);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -178,9 +180,15 @@ public class AddNewExpenses extends AppCompatActivity {
            {
                KWOTA = Double.parseDouble(txtKwota.getText().toString());
                if (KWOTA > 0.0) {
-                   BazaDanych.DodajWydatek(NAZWA, KWOTA, 0, 0, GODZINA, DATA);
+                   int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(SpinnerListaKategorii.getSelectedItemPosition());
+                   int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(SpinnerListaPodKategorii.getSelectedItemPosition());
+
+                   BazaDanych.DodajWydatek(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
+
                    Toast.makeText(this, "Dodano nowy wydatek " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+
                    BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
+
                    intent = new Intent(this, MainActivity.class);
 
                    startActivity(intent);

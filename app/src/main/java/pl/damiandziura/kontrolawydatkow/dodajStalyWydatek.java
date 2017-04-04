@@ -30,6 +30,10 @@ public class dodajStalyWydatek extends AppCompatActivity {
     private TextView txt1, txt2, txt3;
     private String data_godzina1 = "", data_godzina2 = "", data_godzina3 = "";
     private String buforData = "";
+    private Spinner spnrCzestotliowsc, spnrKategoria, spnrPodkategoria;
+    ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -42,6 +46,11 @@ public class dodajStalyWydatek extends AppCompatActivity {
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
         txt3 = (TextView) findViewById(R.id.txt3);
+        spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
+        spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
+        spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
+
+        spnrCzestotliowsc.getSelectedItemPosition();
 
         Calendar c = Calendar.getInstance();
         String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
@@ -118,6 +127,103 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
     public void dodaj(View view) {
         poprawnoscDat();
+        boolean poprawnoscDanych = true;
+
+        Calendar cTxt1, cTxt2, cTxt3;
+        cTxt1 = Calendar.getInstance();
+        cTxt1.set(YEAR, Integer.parseInt(data_godzina1.substring(6, 10)));
+        cTxt1.set(MONTH, Integer.parseInt(data_godzina1.substring(3, 5)));
+        cTxt1.set(DAY_OF_MONTH, Integer.parseInt(data_godzina1.substring(0, 2)));
+
+        cTxt2 = Calendar.getInstance();
+        cTxt2.set(YEAR, Integer.parseInt(data_godzina2.substring(6, 10)));
+        cTxt2.set(MONTH, Integer.parseInt(data_godzina2.substring(3, 5)));
+        cTxt2.set(DAY_OF_MONTH, Integer.parseInt(data_godzina2.substring(0, 2)));
+
+        cTxt3 = Calendar.getInstance();
+        cTxt3.set(YEAR, Integer.parseInt(data_godzina3.substring(6, 10)));
+        cTxt3.set(MONTH, Integer.parseInt(data_godzina3.substring(3, 5)));
+        cTxt3.set(DAY_OF_MONTH, Integer.parseInt(data_godzina3.substring(0, 2)));
+
+        if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
+        {
+            txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            Toast.makeText(this, "Termin końca wydatku musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
+            poprawnoscDanych = false;
+        }else
+        {
+            txt2.setTextColor(getResources().getColor(R.color.Normalny));
+        }
+
+
+        if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
+                cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
+        {
+            txt3.setTextColor(getResources().getColor(R.color.Normalny));
+        }else
+        {
+            txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            poprawnoscDanych = false;
+
+            if(cTxt1.getTimeInMillis() == cTxt2.getTimeInMillis())
+            {
+                Toast.makeText(this, "Data początku oraz końca muszą być od siebie różne.", Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(this, "Data pierwszego pobrania musi być w przedziale od " + data_godzina1 + " do " + data_godzina2, Toast.LENGTH_LONG).show();
+        }
+
+        if(txtNazwa.getText().toString().equals(""))
+        {
+            poprawnoscDanych = false;
+            Toast.makeText(this, "Nazwa nie może być pusta", Toast.LENGTH_SHORT).show();
+
+        }
+
+        if(txtKwota.getText().toString().equals("") || Double.parseDouble(txtKwota.getText().toString()) <= 0.0)
+        {
+            poprawnoscDanych = false;
+            Toast.makeText(this, "Kwota musi być większa od 0", Toast.LENGTH_SHORT).show();
+
+        }
+
+        if(poprawnoscDanych == true)
+        {
+            int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(spnrKategoria.getSelectedItemPosition());
+            int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(spnrPodkategoria.getSelectedItemPosition());
+
+            switch(spnrCzestotliowsc.getSelectedItemPosition())
+            {
+                case 0:
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                    Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+
+                case 1:
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
+                    Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+
+                case 2:
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
+                    Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+
+                case 3:
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
+                    Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+
+                case 4:
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
+                    Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(this, "Błąd dodawania stałego wydatku", Toast.LENGTH_LONG);
+                    break;
+            }
+            // BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+            //Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void wyczysc(View view) {
@@ -126,6 +232,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
     private void kategoria()    {
         ArrayList<String> lista = BazaDanych.getKategorie();
+        KategoriaIDlist = BazaDanych.getINTKategorie();
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -152,8 +259,9 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
 
     private void Podkategoria(int numer)    {
-       // numer++;
+
         ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
+        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(numer);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -205,6 +313,8 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
     private void poprawnoscDat()
     {//DD-MM-YYYY
+
+
         Calendar cTxt1, cTxt2, cTxt3;
         cTxt1 = Calendar.getInstance();
         cTxt1.set(YEAR, Integer.parseInt(data_godzina1.substring(6, 10)));
@@ -231,13 +341,14 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
 
         if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
-                cTxt3.getTimeInMillis() > cTxt1.getTimeInMillis())
+                cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
         {
             txt3.setTextColor(getResources().getColor(R.color.Normalny));
         }else
         {
             txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
         }
+
 
         //Toast.makeText(this, data_godzina1.substring(0, 2) + "-" + data_godzina1.substring(3, 5) + "-" + data_godzina1.substring(6, 10), Toast.LENGTH_SHORT).show();
 
