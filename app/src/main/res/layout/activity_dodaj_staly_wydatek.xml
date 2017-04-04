@@ -117,8 +117,8 @@
         android:layout_height="wrap_content"
         android:text="@string/str_nazwaa"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="29dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="8dp" />
 
@@ -184,5 +184,16 @@
         android:entries="@array/czestotliwosc"
         app:layout_constraintLeft_toRightOf="@+id/lblczestotliwosc"
         app:layout_constraintTop_toTopOf="@+id/lblczestotliwosc" />
+
+    <TextView
+        android:id="@+id/lblNazwaOkna"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/str_add2"
+        android:textSize="30sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

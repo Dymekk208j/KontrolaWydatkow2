@@ -434,7 +434,6 @@ int a = 0;
     ArrayList getKategorie()
     {
         ArrayList<String> ListaKategorii = new ArrayList<String>();
-        String bufor;
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria, null);
@@ -443,7 +442,6 @@ int a = 0;
         ListaKategorii.add("0. (Domyślna kategoria)");
         if(c.moveToFirst()){
             do{
-                bufor = c.getString(0);
                 ListaKategorii.add(Integer.toString(a+1)+". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
@@ -611,7 +609,7 @@ int a = 0;
     ArrayList getpodKategorie(int idKategoria)
     {
         ArrayList<String> Listapodkategorii = new ArrayList<String>();
-        String bufor;
+
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT " + KEY_nazwa + " FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
@@ -620,7 +618,6 @@ int a = 0;
         Listapodkategorii.add("0. (Domyślna podkategoria)");
         if(c.moveToFirst()){
             do{
-                bufor = c.getString(0);
                 Listapodkategorii.add(Integer.toString(a+1)+". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
@@ -645,6 +642,47 @@ int a = 0;
        // UPDATE Podkategoria SET nazwa = "dupa" WHERE ID = 1;
     }
 
+
+    ArrayList getStaleWydatki()
+    {
+        ArrayList<String> ListaStalychWydatkow = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM " + TABLE_Staly_wydatek, null);
+
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                ListaStalychWydatkow.add(Integer.toString(a)+ ". " + c.getString(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListaStalychWydatkow;
+    }
+
+    ArrayList getINTstaleWydatki()
+    {
+        ArrayList<Integer> idStalegoWydatku = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_Staly_wydatek, null);
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                //  bufor = c.getInt(0);
+                idStalegoWydatku.add(c.getInt(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  idStalegoWydatku;
+    }
+
     public void addStalyWydatek(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
     {
@@ -665,6 +703,48 @@ int a = 0;
 
     }
 
+
+    ArrayList getStaleDochody()
+    {
+        ArrayList<String> ListaStalychDochodow = new ArrayList<String>();
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM " + TABLE_Staly_dochod, null);
+
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                ListaStalychDochodow.add(Integer.toString(a+1)+". " + c.getString(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListaStalychDochodow;
+    }
+
+    ArrayList getINTstaleDochody()
+    {
+        ArrayList<Integer> idStalegoDochodu = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_Staly_dochod, null);
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                //  bufor = c.getInt(0);
+                idStalegoDochodu.add(c.getInt(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  idStalegoDochodu;
+    }
     public void addStalyDochod(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
     {

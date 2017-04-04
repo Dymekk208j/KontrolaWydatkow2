@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -20,6 +22,7 @@ import static java.util.Calendar.YEAR;
 
 public class dodajStalyWydatek extends AppCompatActivity {
 
+    private String nazwa_okna = "";
     private Intent intent;
     private Spinner spinKategorie, spinPodkategorie;
     private baza_danych BazaDanych;
@@ -32,7 +35,9 @@ public class dodajStalyWydatek extends AppCompatActivity {
     private String buforData = "";
     private Spinner spnrCzestotliowsc, spnrKategoria, spnrPodkategoria;
     ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
-
+    private TextView lblNazwaOkna;
+    private boolean edycja = false;
+    private int idStalegoWydatku = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +54,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-
-        spnrCzestotliowsc.getSelectedItemPosition();
+        lblNazwaOkna = (TextView) findViewById(R.id.lblNazwaOkna);
 
         Calendar c = Calendar.getInstance();
         String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
@@ -62,54 +66,47 @@ public class dodajStalyWydatek extends AppCompatActivity {
         data_godzina2 = data_godzina1;
         data_godzina3 = data_godzina1;
 
-        String minuty, godziny;
-
         Bundle extras = getIntent().getExtras();
-        /*
-                intent.putExtra("Data", DATA);
-                intent.putExtra("Godzina", GODZINA);
-                intent.putExtra("Kwota", buforKwota);
-                intent.putExtra("Nazwa", buforNazwa);
-         */
+
         if(extras != null)
         {
             buforNazwa = extras.getString("Nazwa");
             buforKwota = extras.getString("Kwota");
             Powrot = extras.getString("Powrot");
             buforData = extras.getString("Data");
+            nazwa_okna = extras.getString("nazwa_okna");
+            edycja = extras.getBoolean("edycja");
+            idStalegoWydatku = extras.getInt("IdStalegoWydatku");
 
-            data_godzina1 = extras.getString("data_godzina1");
-            data_godzina2 = extras.getString("data_godzina2");
-            data_godzina3 = extras.getString("data_godzina3");
-
-
-            /*Powrot = extras.getString("Klasa");
-
-            if(Powrot.equals("nowyPrzychod"))
-            {
-                intent = new Intent(this, nowyPrzychod.class);
-            }else if(Powrot.equals("nowyWydatek"))
-            {
-                intent = new Intent(this, AddNewExpenses.class);
-            }*/
+            if(extras.getString("data_godzina1") != null) data_godzina1 = extras.getString("data_godzina1");
+            if(extras.getString("data_godzina2") != null) data_godzina2 = extras.getString("data_godzina2");
+            if(extras.getString("data_godzina3") != null) data_godzina3 = extras.getString("data_godzina3");
         }
 
-        if(!buforNazwa.equals("")) txtNazwa.setText(buforNazwa);
-        if(!buforKwota.equals("")) txtKwota.setText(buforKwota);
+        if(nazwa_okna != null) lblNazwaOkna.setText(nazwa_okna);
 
-        if(!data_godzina1.equals("")) txt1.setText(data_godzina1);
-        if(!data_godzina2.equals(""))txt2.setText(data_godzina2);
-        if(!data_godzina3.equals(""))txt3.setText(data_godzina3);
+        if( buforNazwa != null)
+        {
+            txtNazwa.setText(buforNazwa);
+        }
 
-        if(Powrot.equals("nowyStalyWydatek1")) {
-            data_godzina1 = buforData;
-            txt1.setText(buforData);
-        }else        if(Powrot.equals("nowyStalyWydatek2")) {
-            data_godzina2 = buforData;
-            txt2.setText(buforData);
-        }else        if(Powrot.equals("nowyStalyWydatek3")) {
-            data_godzina3 = buforData;
-            txt3.setText(buforData);
+        if(buforKwota != null) txtKwota.setText(buforKwota);
+
+        if(data_godzina1 != null) txt1.setText(data_godzina1);
+        if(data_godzina2 != null)txt2.setText(data_godzina2);
+        if(data_godzina3 != null)txt3.setText(data_godzina3);
+
+        if(Powrot != null) {
+            if (Powrot.equals("nowyStalyWydatek1")) {
+                data_godzina1 = buforData;
+                txt1.setText(buforData);
+            } else if (Powrot.equals("nowyStalyWydatek2")) {
+                data_godzina2 = buforData;
+                txt2.setText(buforData);
+            } else if (Powrot.equals("nowyStalyWydatek3")) {
+                data_godzina3 = buforData;
+                txt3.setText(buforData);
+            }
         }
 
 
@@ -121,8 +118,9 @@ public class dodajStalyWydatek extends AppCompatActivity {
     }
 
     public void cofnij(View view) {
-        intent = new Intent(this, AddNewExpenses.class);
+        intent = new Intent(this, CykliczneWydatki.class);
         startActivity(intent);
+       // onBackPressed();
     }
 
     public void dodaj(View view) {

@@ -73,6 +73,11 @@ public class dataPicker extends AppCompatActivity {
             intent = new Intent(this, dodajStalyWydatek.class);
             czas.setVisibility(View.INVISIBLE);
             lblGodzina.setVisibility(View.INVISIBLE);
+        }else if(Powrot.equals("nowyStalyDochod1") || Powrot.equals("nowyStalyDochod2") || Powrot.equals("nowyStalyDochod3"))
+        {
+            intent = new Intent(this, dodajStalydochod.class);
+            czas.setVisibility(View.INVISIBLE);
+            lblGodzina.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -91,6 +96,9 @@ public class dataPicker extends AppCompatActivity {
         {
             sprawdzDateZogarniczeniem();
         }else if(Powrot.equals("nowyStalyWydatek1") || Powrot.equals("nowyStalyWydatek2") || Powrot.equals("nowyStalyWydatek3"))
+        {
+            sprawdzDateBezogarniczenia();
+        }else if(Powrot.equals("nowyStalyDochod1") || Powrot.equals("nowyStalyDochod2") || Powrot.equals("nowyStalyDochod3"))
         {
             sprawdzDateBezogarniczenia();
         }

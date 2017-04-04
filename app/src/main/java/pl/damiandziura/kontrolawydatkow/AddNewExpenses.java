@@ -167,7 +167,7 @@ public class AddNewExpenses extends AppCompatActivity {
     }
 
     public void DodajStalyWydatek(View view) {
-        intent = new Intent(this, dodajStalyWydatek.class);
+        intent = new Intent(this, CykliczneWydatki.class);
         startActivity(intent);
     }
 

@@ -24,7 +24,8 @@
         <activity android:name=".nowyPrzychod" />
         <activity android:name=".dodajStalydochod" />
         <activity android:name=".dataPicker" />
-        <activity android:name=".Dodajpodkategorie"></activity>
+        <activity android:name=".Dodajpodkategorie" />
+        <activity android:name=".CykliczneWydatki"></activity>
     </application>
 
 </manifest>
