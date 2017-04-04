@@ -44,6 +44,8 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_staly_wydatek);
+        BazaDanych = new baza_danych(this);
+
         spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
         spinPodkategorie = (Spinner) findViewById(R.id.SpinnerPodKategoria);
         txtNazwa = (EditText) findViewById(R.id.txtStalyWydatekNazwa);
@@ -82,7 +84,17 @@ public class dodajStalyWydatek extends AppCompatActivity {
             if(extras.getString("data_godzina2") != null) data_godzina2 = extras.getString("data_godzina2");
             if(extras.getString("data_godzina3") != null) data_godzina3 = extras.getString("data_godzina3");
         }
+        if(edycja == true)
+        {
+            buforNazwa = BazaDanych.getStalyWydatekName(idStalegoWydatku);
+            buforKwota = Double.toString(BazaDanych.getStalyWydatekKwota(idStalegoWydatku));
+            lblNazwaOkna.setText(nazwa_okna);
+            data_godzina1 = BazaDanych.getStalyWydatekOD(idStalegoWydatku);
+            data_godzina2 = BazaDanych.getStalyWydatekDO(idStalegoWydatku);
+            data_godzina3 = BazaDanych.getStalyWydatekNastepnaData(idStalegoWydatku);
 
+
+        }
         if(nazwa_okna != null) lblNazwaOkna.setText(nazwa_okna);
 
         if( buforNazwa != null)
@@ -111,7 +123,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
 
 
-        BazaDanych = new baza_danych(this);
+
         kategoria();
         poprawnoscDat();
 
@@ -191,27 +203,27 @@ public class dodajStalyWydatek extends AppCompatActivity {
             switch(spnrCzestotliowsc.getSelectedItemPosition())
             {
                 case 0:
-                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
                     Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case 1:
-                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
                     Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case 2:
-                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
                     Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case 3:
-                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
                     Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
 
                 case 4:
-                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
+                    BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
                     Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
                 default:

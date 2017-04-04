@@ -31,8 +31,6 @@ public class CykliczneWydatki extends AppCompatActivity {
 
 
         ArrayList<String> lista = BazaDanych.getStaleWydatki();
-        lista.remove(0);
-
         idListStalychWydatkow = BazaDanych.getINTstaleWydatki();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
@@ -45,7 +43,7 @@ public class CykliczneWydatki extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 idStalegoWydatku = idListStalychWydatkow.get(position);
-                edytujStalyWydatek(position);
+                edytujStalyWydatek(position+1);
             }
 
         });
@@ -63,7 +61,8 @@ public class CykliczneWydatki extends AppCompatActivity {
     public void cofnij(View view) {
      //   Intent intent = new Intent(this, MainActivity.class);
        // startActivity(intent);
-        onBackPressed();
+        Intent intent = new Intent(this, AddNewExpenses.class);
+        startActivity(intent);
     }
 
     public void dodaj(View view) {

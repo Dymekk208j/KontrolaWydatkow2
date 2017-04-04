@@ -223,7 +223,7 @@ public class AddNewExpenses extends AppCompatActivity {
         BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
         BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
 
-        BazaDanych.addStalyWydatek("Rata za samochod", 0, 0, "01/01/2017", "01/12/2017", "01/05/2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
+        BazaDanych.addStalyWydatek("Rata za samochod", 600 , 0, 0, "01-01-2017", "01-12-2017", "01-05-2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
        //BazaDanych.updateNamePodkategoria("dupa1", 1);
 
 

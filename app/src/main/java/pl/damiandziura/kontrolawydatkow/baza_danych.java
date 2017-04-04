@@ -19,7 +19,7 @@ import java.util.List;
 public class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "baza.db";
 
     // Nazwy tabeli
@@ -122,6 +122,7 @@ public class baza_danych extends SQLiteOpenHelper
         CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_wydatek + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
                 + KEY_nazwa  + " TEXT, "
+                + KEY_kwota  + " DOUBLE, "
                 + KEY_kategoria  + " INTEGER, "
                 + KEY_podkategoria  + " INTEGER, "
                 + KEY_odkiedy  + " TEXT, "
@@ -133,6 +134,7 @@ public class baza_danych extends SQLiteOpenHelper
         CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_dochod + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
                 + KEY_nazwa  + " TEXT, "
+                + KEY_kwota  + " DOUBLE, "
                 + KEY_kategoria  + " INTEGER, "
                 + KEY_podkategoria  + " INTEGER, "
                 + KEY_odkiedy  + " TEXT, "
@@ -683,12 +685,13 @@ int a = 0;
         return  idStalegoWydatku;
     }
 
-    public void addStalyWydatek(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
+    public void addStalyWydatek(String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kwota,aKwota);
         values.put(KEY_kategoria,Integer.toString(aKategoria));
         values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
         values.put(KEY_odkiedy,aOdKiedy);
@@ -702,6 +705,95 @@ int a = 0;
 
 
     }
+
+    String getStalyWydatekName(int aID)
+    {
+        String aNazwa = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                aNazwa = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return aNazwa;
+    }
+
+    double getStalyWydatekKwota (int aID)
+    {
+        double kwota = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                kwota = c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kwota;
+    }
+
+    String getStalyWydatekOD(int aID)
+    {
+        String od_kiedy = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                od_kiedy = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return od_kiedy;
+    }
+
+    String getStalyWydatekDO(int aID)
+    {
+        String do_kiedy = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                do_kiedy = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return do_kiedy;
+    }
+
+    String getStalyWydatekNastepnaData(int aID)
+    {
+        String nastepna_data = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                nastepna_data = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return nastepna_data;
+    }
+
+
+
+
 
 
     ArrayList getStaleDochody()
@@ -745,12 +837,13 @@ int a = 0;
 
         return  idStalegoDochodu;
     }
-    public void addStalyDochod(String aNazwa, int aKategoria, int aPodkategoria, String aOdKiedy,
+    public void addStalyDochod(String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kwota,aKwota);
         values.put(KEY_kategoria,Integer.toString(aKategoria));
         values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
         values.put(KEY_odkiedy,aOdKiedy);
