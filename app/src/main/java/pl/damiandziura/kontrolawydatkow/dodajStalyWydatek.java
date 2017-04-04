@@ -56,7 +56,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        //TODO: Poszukać sposobu na to zeby do spinnerow podpiac wczytana kategorie
+        //TODO: Poszukać sposobu na to zeby do spinnerow podpiac wczytana kategoriee
 
         lblNazwaOkna = (TextView) findViewById(R.id.lblNazwaOkna);
 
