@@ -19,11 +19,9 @@ public class Dodajpodkategorie extends AppCompatActivity {
     private EditText NazwaPodkat;
     private String WindowName = "";
     private Button btUsun;
-    boolean EdycjaKategorii = false;
-
-    TextView lblWindowName;
-    ArrayList<String> ListaPodkategorii;
-    String BufforList[];
+    private boolean EdycjaKategorii = false;
+    private  ArrayList<String> ListaPodkategorii;
+    private String BufforList[];
     private String Nazwa_kategorii;
 
 
@@ -76,8 +74,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         //Toast.makeText(this, "NumerPodKategorii: " + IdPodKategorii, Toast.LENGTH_SHORT).show();
         if(!WindowName.equals(""))
         {
-            lblWindowName = (TextView) findViewById(R.id.lblWindowNamePodKat);
-            lblWindowName.setText(WindowName);
+            setTitle(WindowName);
         }
 
 

@@ -44,6 +44,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_staly_wydatek);
+        setTitle("Dodaj cykliczny wydatek");
         BazaDanych = new baza_danych(this);
 
         spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
@@ -57,8 +58,6 @@ public class dodajStalyWydatek extends AppCompatActivity {
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
         //TODO: Poszukać sposobu na to zeby do spinnerow podpiac wczytana kategoriee
-
-        lblNazwaOkna = (TextView) findViewById(R.id.lblNazwaOkna);
 
         Calendar c = Calendar.getInstance();
         String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
@@ -90,18 +89,18 @@ public class dodajStalyWydatek extends AppCompatActivity {
         {
             buforNazwa = BazaDanych.getStalyWydatekName(idStalegoWydatku);
             buforKwota = Double.toString(BazaDanych.getStalyWydatekKwota(idStalegoWydatku));
-            lblNazwaOkna.setText(nazwa_okna);
+            setTitle(nazwa_okna);
             data_godzina1 = BazaDanych.getStalyWydatekOD(idStalegoWydatku);
             data_godzina2 = BazaDanych.getStalyWydatekDO(idStalegoWydatku);
             data_godzina3 = BazaDanych.getStalyWydatekNastepnaData(idStalegoWydatku);
 
 
         }
-        if(nazwa_okna != null) lblNazwaOkna.setText(nazwa_okna);
+        if(nazwa_okna != null) setTitle(nazwa_okna);
 
         if( buforNazwa != null)
         {
-            txtNazwa.setText(buforNazwa);
+            setTitle(nazwa_okna);
         }
 
         if(buforKwota != null) txtKwota.setText(buforKwota);

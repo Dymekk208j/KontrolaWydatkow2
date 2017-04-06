@@ -31,8 +31,7 @@ public class dodajStalydochod extends AppCompatActivity {
     private String data_godzina1 = "", data_godzina2 = "", data_godzina3 = "";
     private String buforData = "";
     private Spinner spnrCzestotliowsc, spnrKategoria, spnrPodkategoria;
-    ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
-    private int buforWybrKat = 0, buforWybrPodKat =0, buforWybrCzest = 0;
+    private ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

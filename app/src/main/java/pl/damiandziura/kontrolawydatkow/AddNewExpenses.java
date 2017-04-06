@@ -55,7 +55,7 @@ public class AddNewExpenses extends AppCompatActivity {
         txtKwota.setText("");
         SpinnerListaKategorii = (Spinner) findViewById(R.id.SpinnerKategoriaWydatki);
         SpinnerListaPodKategorii = (Spinner) findViewById(R.id.SpinnerPodKategoriaWydatki);
-
+        setTitle("Dodaj nowy wydatek");
         setDataAndHour();
         kategoria();
        // podkategoria();

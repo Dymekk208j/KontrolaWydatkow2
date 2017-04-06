@@ -24,7 +24,7 @@ public class CykliczneWydatki extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cykliczne_wydatki);
-
+        setTitle("Lista cyklicznych wydatków");
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         BazaDanych = new baza_danych(this);

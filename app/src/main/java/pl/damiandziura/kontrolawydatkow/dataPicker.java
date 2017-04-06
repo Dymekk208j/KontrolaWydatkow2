@@ -65,19 +65,23 @@ public class dataPicker extends AppCompatActivity {
         if(Powrot.equals("nowyPrzychod"))
         {
             intent = new Intent(this, nowyPrzychod.class);
+            setTitle("Wybierz date i godzine");
         }else if(Powrot.equals("nowyWydatek"))
         {
             intent = new Intent(this, AddNewExpenses.class);
+            setTitle("Wybierz date i godzine");
         }else if(Powrot.equals("nowyStalyWydatek1") || Powrot.equals("nowyStalyWydatek2") || Powrot.equals("nowyStalyWydatek3"))
         {
             intent = new Intent(this, dodajStalyWydatek.class);
             czas.setVisibility(View.INVISIBLE);
             lblGodzina.setVisibility(View.INVISIBLE);
+            setTitle("Wybierz date");
         }else if(Powrot.equals("nowyStalyDochod1") || Powrot.equals("nowyStalyDochod2") || Powrot.equals("nowyStalyDochod3"))
         {
             intent = new Intent(this, dodajStalydochod.class);
             czas.setVisibility(View.INVISIBLE);
             lblGodzina.setVisibility(View.INVISIBLE);
+            setTitle("Wybierz date");
         }
 
     }

@@ -14,17 +14,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class Kategorie extends AppCompatActivity {
-    baza_danych BazaDanych;
-    ListView listView;
-    Intent intent;
-    ArrayList<Integer> idListKategorii;
-    int idKategorii = 0;
+    private baza_danych BazaDanych;
+    private ListView listView;
+    private Intent intent;
+    private ArrayList<Integer> idListKategorii;
+    private int idKategorii = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kategorie);
-
+        setTitle("Lista kategori");
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         BazaDanych = new baza_danych(this);

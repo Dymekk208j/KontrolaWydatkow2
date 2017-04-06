@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Aplikacja do kontroli wydatków");
         setContentView(R.layout.activity_main);
 
         BazaDanych = new baza_danych(this);

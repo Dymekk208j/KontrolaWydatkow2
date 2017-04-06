@@ -26,12 +26,11 @@ public class DodajKategorie extends AppCompatActivity
     private int IdKategorii = 0;
     private int IdPodKategorii = 0;
     private ArrayList<Integer> PodkategoriaIdList;
-    String Nazwa_okna = "";
-    String Nazwa_kategorii;
-    TextView lblNazwaOkna;
-    Boolean EdycjaKategorii = false;
-    ArrayList<String> ListaPodkategori;
-    Button btUsun;
+    private String Nazwa_okna = "";
+    private String Nazwa_kategorii;
+    private  Boolean EdycjaKategorii = false;
+    private ArrayList<String> ListaPodkategori;
+    private  Button btUsun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,9 +65,9 @@ public class DodajKategorie extends AppCompatActivity
 
         editName = (EditText) findViewById(R.id.editText);
         BazaDanych = new baza_danych(this);
-        lblNazwaOkna = (TextView) findViewById(R.id.lblName);
 
-        if(!Nazwa_okna.equals("")) lblNazwaOkna.setText(Nazwa_okna);
+
+        if(!Nazwa_okna.equals("")) setTitle(Nazwa_okna);
 
         listView = (ListView) findViewById(R.id.LVlistaPodkategorii);
 
