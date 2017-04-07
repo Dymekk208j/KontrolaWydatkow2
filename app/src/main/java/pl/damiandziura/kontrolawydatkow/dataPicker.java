@@ -30,8 +30,15 @@ public class dataPicker extends AppCompatActivity {
     private TimePicker czas;
     private DatePicker data;
     private Calendar AktualnaData, dataPobrana;
+
     TextView lblGodzina, lblData;
     String data_godzina1 = "", data_godzina2 = "", data_godzina3 = "";
+    int positionKategoria = 0;
+    int positionPodkategoria = 0;
+    int positionCzestotliwosc = 0;
+    boolean edycja = false;
+    int IdStalegoWydatku = 0;
+
     /*
     intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
@@ -53,6 +60,11 @@ public class dataPicker extends AppCompatActivity {
             data_godzina2 = extras.getString("data_godzina2");
             data_godzina3 = extras.getString("data_godzina3");
 
+            positionKategoria = extras.getInt("KategoriaID");
+            positionPodkategoria = extras.getInt("PodkategoriaID");
+            positionCzestotliwosc = extras.getInt("CzestotliwoscID");
+            IdStalegoWydatku = extras.getInt("IdStalegoWydatku");
+            edycja = extras.getBoolean("edycja");
 
         }
 
@@ -171,6 +183,13 @@ public class dataPicker extends AppCompatActivity {
             intent.putExtra("Godzina", GODZINA);
             intent.putExtra("Kwota", buforKwota);
             intent.putExtra("Nazwa", buforNazwa);
+
+            intent.putExtra("KategoriaID", positionKategoria);
+            intent.putExtra("PodkategoriaID", positionPodkategoria);
+
+            intent.putExtra("IdStalegoWydatku", IdStalegoWydatku);
+
+
 
             startActivity(intent);
         }
@@ -305,6 +324,11 @@ public class dataPicker extends AppCompatActivity {
             intent.putExtra("data_godzina1", data_godzina1);
             intent.putExtra("data_godzina2", data_godzina2);
             intent.putExtra("data_godzina3", data_godzina3);
+            intent.putExtra("KategoriaID", positionKategoria);
+            intent.putExtra("PodkategoriaID", positionPodkategoria);
+            intent.putExtra("CzestotliwoscID", positionCzestotliwosc);
+            intent.putExtra("IdStalegoWydatku", IdStalegoWydatku);
+            intent.putExtra("edycja", edycja);
 
             startActivity(intent);
         }

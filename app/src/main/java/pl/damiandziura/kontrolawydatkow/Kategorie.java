@@ -19,7 +19,7 @@ public class Kategorie extends AppCompatActivity {
     private Intent intent;
     private ArrayList<Integer> idListKategorii;
     private int idKategorii = 0;
-
+//TODO Nie da sie edytowac kategorii xDDDDD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

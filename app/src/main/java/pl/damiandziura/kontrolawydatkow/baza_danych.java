@@ -178,7 +178,7 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
 
     }
-
+///TODO Pozmieniac nazwy tych kategori od pobierania danych z konkretnego wydatku zeby byly bardziej adekwatne do tego co zwracaja
     String getNazwa(int aID)
     {
         String aNazwa = "";
@@ -433,6 +433,7 @@ int a = 0;
         return kwota;
     }
 
+    //TODO dodac metode ktora bedzie uaktualniala kategorie
     ArrayList getKategorie()
     {
         ArrayList<String> ListaKategorii = new ArrayList<String>();
@@ -645,6 +646,8 @@ int a = 0;
     }
 
 
+    //TODO dodac metode ktora bedzie uaktualniala cyklicznego wydatki
+    //TODO dodac metode ktora bedzie umozliwiala usuniecie cyklicznego wydatku
     ArrayList getStaleWydatki()
     {
         ArrayList<String> ListaStalychWydatkow = new ArrayList<String>();
@@ -791,6 +794,77 @@ int a = 0;
         return nastepna_data;
     }
 
+    int getStalyWydatekKategoria (int aID)
+    {
+        int Kategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_kategoria + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                Kategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Kategoria;
+    }
+
+    int getStalyWydatekPodkategoria (int aID)
+    {
+        int Podkategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_podkategoria + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                Podkategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Podkategoria;
+    }
+
+    int getStalyWydatekCzestotliwosc (int aID)
+    {
+        String buffor = "";
+
+        int Czestotliwosc = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_czestotliwosc + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                buffor = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        if(buffor.equals("DZIENNIE"))
+        {
+            Czestotliwosc = 0;
+        }else if (buffor.equals("TYDZIEN"))
+        {
+            Czestotliwosc = 1;
+        }else if (buffor.equals("MIESIAC"))
+        {
+            Czestotliwosc = 2;
+        }else if (buffor.equals("KWARTAL"))
+        {
+            Czestotliwosc = 3;
+        }else if (buffor.equals("ROK"))
+        {
+            Czestotliwosc = 4;
+        }else
+        {
+            Czestotliwosc = 0;
+        }
+        return Czestotliwosc;
+    }
 
 
 

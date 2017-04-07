@@ -38,6 +38,8 @@ public class AddNewExpenses extends AppCompatActivity {
     Spinner SpinnerListaKategorii, SpinnerListaPodKategorii;
     private ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
 
+    private int positionKategoria = 0, positionPodkategoria = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class AddNewExpenses extends AppCompatActivity {
         SpinnerListaPodKategorii = (Spinner) findViewById(R.id.SpinnerPodKategoriaWydatki);
         setTitle("Dodaj nowy wydatek");
         setDataAndHour();
-        kategoria();
+
        // podkategoria();
 
 
@@ -71,7 +73,17 @@ public class AddNewExpenses extends AppCompatActivity {
                 KWOTA = Double.parseDouble(a);
             }
             NAZWA = extras.getString("Nazwa");
+            positionKategoria = extras.getInt("KategoriaID");
+            positionPodkategoria = extras.getInt("PodkategoriaID");
+           // if( != null)
+            /*
+            intent.putExtra("KategoriaID", positionKategoria);
+        intent.putExtra("PodkategoriaID", positionPodkategor
+             */
         }
+
+        kategoria();
+
         txtKwota.setText("");
         if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
         txtNazwa.setText(NAZWA);
@@ -116,6 +128,7 @@ public class AddNewExpenses extends AppCompatActivity {
             }
         });
 
+
     }
 
     private void kategoria()    {
@@ -126,6 +139,7 @@ public class AddNewExpenses extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         SpinnerListaKategorii.setAdapter(adapter);
+        SpinnerListaKategorii.setSelection(positionKategoria);
 
         SpinnerListaKategorii.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -155,8 +169,9 @@ public class AddNewExpenses extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        SpinnerListaPodKategorii.setAdapter(adapter);
 
+        SpinnerListaPodKategorii.setAdapter(adapter);
+        SpinnerListaPodKategorii.setSelection(positionPodkategoria);
 
     }
 
@@ -169,6 +184,7 @@ public class AddNewExpenses extends AppCompatActivity {
     public void DodajStalyWydatek(View view) {
         intent = new Intent(this, CykliczneWydatki.class);
         startActivity(intent);
+        //TODO zmienic nazwe ikonki na cykliczne wydatki
     }
 
     public void dodaj(View view) {
@@ -205,6 +221,7 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
+        //TODO Brak metody do czyszczenia elementow do stanu pierwotnego
       /*  NAZWA="";
         setDataAndHour();
         KWOTA = 0;
@@ -235,6 +252,8 @@ public class AddNewExpenses extends AppCompatActivity {
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
         intent.putExtra("Klasa", "nowyWydatek");
+        intent.putExtra("KategoriaID", SpinnerListaKategorii.getSelectedItemPosition());
+        intent.putExtra("PodkategoriaID", SpinnerListaPodKategorii.getSelectedItemPosition());
         startActivity(intent);
     }
 
