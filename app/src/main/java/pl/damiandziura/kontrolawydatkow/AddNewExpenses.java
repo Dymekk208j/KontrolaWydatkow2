@@ -222,14 +222,16 @@ public class AddNewExpenses extends AppCompatActivity {
     public void wyczysc(View view)
     {
         //TODO Brak metody do czyszczenia elementow do stanu pierwotnego
-      /*  NAZWA="";
+        NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
         txtNazwa.setText(NAZWA);
         txtKwota.setText("");
-*/
-        BazaDanych.AddKategoria("Pierwsza Kategoria");
+        SpinnerListaKategorii.setSelection(0);
+        SpinnerListaPodKategorii.setSelection(0);
+
+       /* BazaDanych.AddKategoria("Pierwsza Kategoria");
         BazaDanych.AddKategoria("Druga Kategoria");
         BazaDanych.AddKategoria("Trzecia Kategoria");
         BazaDanych.AddKategoria("Czwarta Kategoria");
@@ -243,7 +245,7 @@ public class AddNewExpenses extends AppCompatActivity {
         BazaDanych.addStalyWydatek("Rata za samochod", 600 , 0, 0, "01-01-2017", "01-12-2017", "01-05-2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
        //BazaDanych.updateNamePodkategoria("dupa1", 1);
 
-
+        */
     }
 
     public void WybierzDateGodzine(View view) {
