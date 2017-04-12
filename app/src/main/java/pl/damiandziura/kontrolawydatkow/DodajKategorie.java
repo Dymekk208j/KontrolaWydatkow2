@@ -119,8 +119,8 @@ public class DodajKategorie extends AppCompatActivity
     {
         if(EdycjaKategorii == true)
         {
-            BazaDanych.AddKategoria(editName.getText().toString());
-            Toast.makeText(this, "Nowa kategoria " + editName.getText().toString() + " została dodana.", Toast.LENGTH_SHORT).show();
+            BazaDanych.EditKategoria(editName.getText().toString(), IdKategorii);
+            Toast.makeText(this, "Kategoria " + editName.getText().toString() + " została zaktualizowana.", Toast.LENGTH_SHORT).show();
             intent = new Intent(this, Kategorie.class);
             startActivity(intent);
         }

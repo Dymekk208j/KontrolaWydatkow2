@@ -184,7 +184,6 @@ public class AddNewExpenses extends AppCompatActivity {
     public void DodajStalyWydatek(View view) {
         intent = new Intent(this, CykliczneWydatki.class);
         startActivity(intent);
-        //TODO zmienic nazwe ikonki na cykliczne wydatki
     }
 
     public void dodaj(View view) {
@@ -221,8 +220,8 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-        //TODO Brak metody do czyszczenia elementow do stanu pierwotnego
-        NAZWA="";
+        BazaDanych.EditKategoria("Dupa1", 1);
+      /*  NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);

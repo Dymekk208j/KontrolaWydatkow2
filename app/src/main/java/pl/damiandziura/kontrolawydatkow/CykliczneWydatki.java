@@ -14,11 +14,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CykliczneWydatki extends AppCompatActivity {
-    baza_danych BazaDanych;
-    ListView listView;
-    Intent intent;
-    ArrayList<Integer> idListStalychWydatkow;
-    int idStalegoWydatku = 0;
+    private baza_danych BazaDanych;
+    private ListView listView;
+    private Intent intent;
+    private ArrayList<Integer> idListStalychWydatkow;
+    private int idStalegoWydatku = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +59,8 @@ public class CykliczneWydatki extends AppCompatActivity {
     }
 
     public void cofnij(View view) {
-     //   Intent intent = new Intent(this, MainActivity.class);
-       // startActivity(intent);
-       // Intent intent = new Intent(this, AddNewExpenses.class);
-       // startActivity(intent);
-        //TODO Jezeli wejdziesz w edycje konkretnego cyklicznego wydatku i nacisniejsz cofnij to tutaj wraca do edycji cykl. wydatku zamiast do menu z nowym wydatkiem. Trzeba ogarnac te flagi czy nie da sie jakos tego zalatwic tym sposobem, poniewaza w taki sposob nie musze przesylac masy danych miedzy aktywnosciami
-        onBackPressed();
+        Intent intent = new Intent(this, AddNewExpenses.class);
+        startActivity(intent);
     }
 
     public void dodaj(View view) {
@@ -75,6 +71,5 @@ public class CykliczneWydatki extends AppCompatActivity {
     }
 
 
-//TODO Brak metody do czyszczenia okienek do stanu pierwotnego
 
 }

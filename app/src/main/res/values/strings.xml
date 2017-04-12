@@ -40,6 +40,7 @@
     <string name="str_Zapisz">Zapisz</string>
     <string name="str_usunkat">Usuń kategorie</string>
     <string name="strListaCyklicznychWydatkow">Lista cyklicznych wydatków:</string>
+    <string name="str_cykliczne">Cykliczne wydatki</string>
 
     <string-array name="czestotliwosc">
         <item>Codziennie</item>

@@ -178,8 +178,8 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
 
     }
-///TODO Pozmieniac nazwy tych kategori od pobierania danych z konkretnego wydatku zeby byly bardziej adekwatne do tego co zwracaja
-    String getNazwa(int aID)
+
+    String getWydatekNazwa(int aID)
     {
         String aNazwa = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -196,7 +196,7 @@ public class baza_danych extends SQLiteOpenHelper
         return aNazwa;
     }
 
-    double getKwota(int aID)
+    double getWydatekKwota(int aID)
     {
         double kwota = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -230,7 +230,7 @@ public class baza_danych extends SQLiteOpenHelper
         return MaxID;
     }
 
-    int getKategoria(int aID)
+    int getWydatekKategoria(int aID)
     {
         int kategoria = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -247,7 +247,7 @@ public class baza_danych extends SQLiteOpenHelper
         return kategoria;
     }
 
-    int getPodKategoria(int aID)
+    int getWydatekPodKategoria(int aID)
     {
         int PodKategoria = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -264,7 +264,7 @@ public class baza_danych extends SQLiteOpenHelper
         return PodKategoria;
     }
 
-    String getGodzina(int aID)
+    String getWydatekGodzina(int aID)
     {
         String godzina = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -281,7 +281,7 @@ public class baza_danych extends SQLiteOpenHelper
         return godzina;
     }
 
-    String getData(int aID)
+    String getWydatekData(int aID)
     {
         String data2 = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -298,6 +298,14 @@ public class baza_danych extends SQLiteOpenHelper
 
         return data2;
     }
+
+    void RemoveWydatek(int _ID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_wydatki,"id=?",new String[]{Integer.toString(_ID)});
+        db.close(); // Closing database connection
+    }
+
 
     void DodajDochod(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
     {
@@ -335,12 +343,7 @@ public class baza_danych extends SQLiteOpenHelper
         return maxID;
     }
 
-    void delete(int _ID)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_wydatki,"id=?",new String[]{Integer.toString(_ID)});
-        db.close(); // Closing database connection
-    }
+
 
     String[] getOstatnieWydatki()
     {
@@ -433,7 +436,7 @@ int a = 0;
         return kwota;
     }
 
-    //TODO dodac metode ktora bedzie uaktualniala kategorie
+
     ArrayList getKategorie()
     {
         ArrayList<String> ListaKategorii = new ArrayList<String>();
@@ -514,6 +517,16 @@ int a = 0;
         return aNazwa;
     }
 
+    void EditKategoria(String Nazwa, int idKategorii)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa, Nazwa);
+
+        db.update(TABLE_kategoria, values, "id="+idKategorii, null);
+        db.close(); // Closing database connection
+    }
+
 
 
 
@@ -542,25 +555,12 @@ int a = 0;
 
     void EditPodKategoria(String Nazwa, int idKategorii, int idPodKategorii)
     {
-        /*
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
-                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_nazwa + " TEXT )";
-        db.execSQL(CREATE_TABLE_STUDENT);
-        */
-
-        //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(KEY_nazwa, Nazwa);
 
-        values.put(KEY_kategoria, idKategorii);
-        values.put(KEY_nazwa,Nazwa);
-
-        // Inserting Row
-        db.insert(TABLE_podkategoria, null, values);
+        db.update(TABLE_podkategoria, values, "id="+idPodKategorii, null);
         db.close(); // Closing database connection
-
     }
 
     void RemovePodKategoria(int idPodKategorii)
@@ -646,8 +646,7 @@ int a = 0;
     }
 
 
-    //TODO dodac metode ktora bedzie uaktualniala cyklicznego wydatki
-    //TODO dodac metode ktora bedzie umozliwiala usuniecie cyklicznego wydatku
+
     ArrayList getStaleWydatki()
     {
         ArrayList<String> ListaStalychWydatkow = new ArrayList<String>();
@@ -776,7 +775,7 @@ int a = 0;
 
         return do_kiedy;
     }
-
+//TODO dodać metodę która będzie aktualizowała Następny wydatek, powinna przesówać datę o iles tam dni względem tego jaka jest ustawiona czestotliwość.
     String getStalyWydatekNastepnaData(int aID)
     {
         String nastepna_data = "";
@@ -866,6 +865,32 @@ int a = 0;
         return Czestotliwosc;
     }
 
+    void EditStalyWydatek(int aID, String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
+                          String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kwota,aKwota);
+        values.put(KEY_kategoria,Integer.toString(aKategoria));
+        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_odkiedy,aOdKiedy);
+        values.put(KEY_dokiedy,aDoKiedy);
+        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_czestotliwosc,czest.toString());
+
+        // Inserting Row
+        db.update(TABLE_Staly_wydatek, values, "id="+aID, null);
+        db.close(); // Closing database connection
+    }
+
+    void RemoveStalyWydatek(int aID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_Staly_wydatek,"id=?",new String[]{Integer.toString(aID)});
+        db.close(); // Closing database connection
+    }
+
 
 
 
@@ -873,7 +898,6 @@ int a = 0;
     ArrayList getStaleDochody()
     {
         ArrayList<String> ListaStalychDochodow = new ArrayList<String>();
-        String bufor;
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT nazwa FROM " + TABLE_Staly_dochod, null);
@@ -881,8 +905,7 @@ int a = 0;
         int a = 0;
         if(c.moveToFirst()){
             do{
-                bufor = c.getString(0);
-                ListaStalychDochodow.add(Integer.toString(a+1)+". " + c.getString(0));
+                ListaStalychDochodow.add(Integer.toString(a)+ ". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
         }
@@ -911,6 +934,7 @@ int a = 0;
 
         return  idStalegoDochodu;
     }
+
     public void addStalyDochod(String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
     {
@@ -930,6 +954,189 @@ int a = 0;
         db.close(); // Closing database connection
 
 
+    }
+
+    String getStalyDochodName(int aID)
+    {
+        String aNazwa = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                aNazwa = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return aNazwa;
+    }
+
+    double getStalyDochodKwota (int aID)
+    {
+        double kwota = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                kwota = c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kwota;
+    }
+
+    String getStalyDochodOD(int aID)
+    {
+        String od_kiedy = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                od_kiedy = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return od_kiedy;
+    }
+
+    String getStalyDochodDO(int aID)
+    {
+        String do_kiedy = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                do_kiedy = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return do_kiedy;
+    }
+    //TODO dodać metodę która będzie aktualizowała Następny wydatek, powinna przesówać datę o iles tam dni względem tego jaka jest ustawiona czestotliwość.
+    String getStalyDochodNastepnaData(int aID)
+    {
+        String nastepna_data = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                nastepna_data = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return nastepna_data;
+    }
+
+    int getStalyDochodKategoria (int aID)
+    {
+        int Kategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_kategoria + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                Kategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Kategoria;
+    }
+
+    int getStalyDochodPodkategoria (int aID)
+    {
+        int Podkategoria = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_podkategoria + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                Podkategoria = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Podkategoria;
+    }
+
+    int getStalyDochodCzestotliwosc (int aID)
+    {
+        String buffor = "";
+
+        int Czestotliwosc = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT "+ KEY_czestotliwosc + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                buffor = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        if(buffor.equals("DZIENNIE"))
+        {
+            Czestotliwosc = 0;
+        }else if (buffor.equals("TYDZIEN"))
+        {
+            Czestotliwosc = 1;
+        }else if (buffor.equals("MIESIAC"))
+        {
+            Czestotliwosc = 2;
+        }else if (buffor.equals("KWARTAL"))
+        {
+            Czestotliwosc = 3;
+        }else if (buffor.equals("ROK"))
+        {
+            Czestotliwosc = 4;
+        }else
+        {
+            Czestotliwosc = 0;
+        }
+        return Czestotliwosc;
+    }
+
+    void EditStalyDochod(int aID, String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
+                          String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_nazwa,aNazwa);
+        values.put(KEY_kwota,aKwota);
+        values.put(KEY_kategoria,Integer.toString(aKategoria));
+        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_odkiedy,aOdKiedy);
+        values.put(KEY_dokiedy,aDoKiedy);
+        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_czestotliwosc,czest.toString());
+
+        // Inserting Row
+        db.update(TABLE_Staly_dochod, values, "id="+aID, null);
+        db.close(); // Closing database connection
+    }
+
+    void RemoveStalyDochod(int aID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_Staly_dochod,"id=?",new String[]{Integer.toString(aID)});
+        db.close(); // Closing database connection
     }
 
 
