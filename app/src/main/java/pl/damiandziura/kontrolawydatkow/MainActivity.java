@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private baza_danych BazaDanych;
     TextView OstatniWydatek[] = new TextView[10];
     String sOstatniWydatek[] = new String[10];
+
+    TextView OstatniDochod[] = new TextView[10];
+    String sOstatniDochod[] = new String[10];
     TextView PosiadaneSrodki;
 
     @Override
@@ -40,11 +43,25 @@ public class MainActivity extends AppCompatActivity {
         OstatniWydatek[7] = (TextView) findViewById(R.id.TxtLastExp7);
         OstatniWydatek[8] = (TextView) findViewById(R.id.TxtLastExp8);
         OstatniWydatek[9] = (TextView) findViewById(R.id.TxtLastExp9);
+
+        OstatniDochod[0] = (TextView) findViewById(R.id.TxtOstatniDochod0);
+        OstatniDochod[1] = (TextView) findViewById(R.id.TxtOstatniDochod1);
+        OstatniDochod[2] = (TextView) findViewById(R.id.TxtOstatniDochod2);
+        OstatniDochod[3] = (TextView) findViewById(R.id.TxtOstatniDochod3);
+        OstatniDochod[4] = (TextView) findViewById(R.id.TxtOstatniDochod4);
+        OstatniDochod[5] = (TextView) findViewById(R.id.TxtOstatniDochod5);
+        OstatniDochod[6] = (TextView) findViewById(R.id.TxtOstatniDochod6);
+        OstatniDochod[7] = (TextView) findViewById(R.id.TxtOstatniDochod7);
+        OstatniDochod[8] = (TextView) findViewById(R.id.TxtOstatniDochod8);
+        OstatniDochod[9] = (TextView) findViewById(R.id.TxtOstatniDochod9);
+
         sOstatniWydatek = BazaDanych.getOstatnieWydatki();
+        sOstatniDochod = BazaDanych.getOstatnieDochody();
 
         for(int a = 0; a < 10; a++)
         {
             OstatniWydatek[a].setText(sOstatniWydatek[a]);
+            OstatniDochod[a].setText(sOstatniDochod[a]);
         }
     }
 

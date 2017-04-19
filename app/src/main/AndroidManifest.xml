@@ -25,7 +25,8 @@
         <activity android:name=".dodajStalydochod" />
         <activity android:name=".dataPicker" />
         <activity android:name=".Dodajpodkategorie" />
-        <activity android:name=".CykliczneWydatki"></activity>
+        <activity android:name=".CykliczneWydatki" />
+        <activity android:name=".CyklicznyDochod"></activity>
     </application>
 
 </manifest>

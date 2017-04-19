@@ -353,7 +353,7 @@ public class baza_danych extends SQLiteOpenHelper
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT nazwa, kwota FROM " + TABLE_wydatki + " ORDER BY data DESC, godzina DESC LIMIT 10", null);
-int a = 0;
+        int a = 0;
 
         if(c.moveToFirst()){
             do{
@@ -369,6 +369,33 @@ int a = 0;
 
 
         return OstatnieWydatki;
+
+    }
+
+    String[] getOstatnieDochody()
+    {
+        String OstatnieDochody[] = new String[10];
+        double KwotaOstatnieDochody[] = new double[10];
+        String bufor;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa, kwota FROM " + TABLE_dochody + " ORDER BY data DESC, godzina DESC LIMIT 10", null);
+        int a = 0;
+
+        if(c.moveToFirst()){
+            do{
+                bufor = c.getString(0);
+                KwotaOstatnieDochody[a] = c.getDouble(1);
+
+                OstatnieDochody[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(KwotaOstatnieDochody[a]) + "zł";
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+
+        return OstatnieDochody;
 
     }
 

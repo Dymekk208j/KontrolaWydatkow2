@@ -21,6 +21,7 @@ import static java.util.Calendar.YEAR;
 
 public class dodajStalydochod extends AppCompatActivity {
 
+
     private Intent intent;
     private Spinner spinKategorie, spinPodkategorie;
     private baza_danych BazaDanych;
@@ -35,20 +36,17 @@ public class dodajStalydochod extends AppCompatActivity {
     ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
     private TextView lblNazwaOkna;
     private boolean edycja = false;
-    private int idStalegoWydatku = 0;
+    private int idStalegoDochodu = 0;
     private Button btUsun;
 
     private int positionKategoria = 0, positionPodkategoria = 0, positionCzestotliwosc = 0;
-//TODO trzeba przejrzec cala classe bo jest tylko skopiowana z stalych wydatkow
-    //TODO trzeba dodac fizycznie przycisk Usun, bo jest tylko metoda
-    //TODO trzeba dodac aktywnosc Cykliczne dochody
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_stalydochod);
-        setTitle("Dodaj cykliczny dochód");
+        setTitle("Dodaj cykliczny dochod");
         BazaDanych = new baza_danych(this);
 
         spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
@@ -83,7 +81,7 @@ public class dodajStalydochod extends AppCompatActivity {
             Powrot = extras.getString("Powrot");
             buforData = extras.getString("Data");
             edycja = extras.getBoolean("edycja");
-            idStalegoWydatku = extras.getInt("IdStalegoWydatku");
+            idStalegoDochodu = extras.getInt("IdStalegoDochodu");
 
             if(extras.getString("data_godzina1") != null) data_godzina1 = extras.getString("data_godzina1");
             if(extras.getString("data_godzina2") != null) data_godzina2 = extras.getString("data_godzina2");
@@ -101,16 +99,16 @@ public class dodajStalydochod extends AppCompatActivity {
             PodkategoriaIDlist = BazaDanych.getINTKategorie();
 
 
-            positionKategoria = KategoriaIDlist.indexOf(BazaDanych.getStalyWydatekKategoria(idStalegoWydatku));
-            positionPodkategoria = PodkategoriaIDlist.indexOf(BazaDanych.getStalyWydatekPodkategoria(idStalegoWydatku));
-            positionCzestotliwosc = BazaDanych.getStalyWydatekCzestotliwosc(idStalegoWydatku);
+            positionKategoria = KategoriaIDlist.indexOf(BazaDanych.getStalyDochodKategoria(idStalegoDochodu));
+            positionPodkategoria = PodkategoriaIDlist.indexOf(BazaDanych.getStalyDochodPodkategoria(idStalegoDochodu));
+            positionCzestotliwosc = BazaDanych.getStalyDochodCzestotliwosc(idStalegoDochodu);
 
-            buforNazwa = BazaDanych.getStalyWydatekName(idStalegoWydatku);
-            buforKwota = Double.toString(BazaDanych.getStalyWydatekKwota(idStalegoWydatku));
+            buforNazwa = BazaDanych.getStalyDochodName(idStalegoDochodu);
+            buforKwota = Double.toString(BazaDanych.getStalyDochodKwota(idStalegoDochodu));
             setTitle("Edycja cyklicznego dochodu");
-            data_godzina1 = BazaDanych.getStalyWydatekOD(idStalegoWydatku);
-            data_godzina2 = BazaDanych.getStalyWydatekDO(idStalegoWydatku);
-            data_godzina3 = BazaDanych.getStalyWydatekNastepnaData(idStalegoWydatku);
+            data_godzina1 = BazaDanych.getStalyDochodOD(idStalegoDochodu);
+            data_godzina2 = BazaDanych.getStalyDochodDO(idStalegoDochodu);
+            data_godzina3 = BazaDanych.getStalyDochodNastepnaData(idStalegoDochodu);
 
 
         }
@@ -125,13 +123,13 @@ public class dodajStalydochod extends AppCompatActivity {
         spnrCzestotliowsc.setSelection(positionCzestotliwosc);
 
         if(Powrot != null) {
-            if (Powrot.equals("nowyStalyWydatek1")) {
+            if (Powrot.equals("nowyStalyDochod1")) {
                 data_godzina1 = buforData;
                 txt1.setText(buforData);
-            } else if (Powrot.equals("nowyStalyWydatek2")) {
+            } else if (Powrot.equals("nowyStalyDochod2")) {
                 data_godzina2 = buforData;
                 txt2.setText(buforData);
-            } else if (Powrot.equals("nowyStalyWydatek3")) {
+            } else if (Powrot.equals("nowyStalyDochod3")) {
                 data_godzina3 = buforData;
                 txt3.setText(buforData);
             }
@@ -146,7 +144,7 @@ public class dodajStalydochod extends AppCompatActivity {
     }
 
     public void cofnij(View view) {
-        intent = new Intent(this, CykliczneWydatki.class);
+        intent = new Intent(this, CyklicznyDochod.class);
         startActivity(intent);
         // onBackPressed();
     }
@@ -174,7 +172,7 @@ public class dodajStalydochod extends AppCompatActivity {
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
             txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
-            Toast.makeText(this, "Termin końca wydatku musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Termin końca dochodu musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
             poprawnoscDanych = false;
         }else
         {
@@ -219,31 +217,31 @@ public class dodajStalydochod extends AppCompatActivity {
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
-                        BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
-                        BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
-                        Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
+                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
-                        BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
-                        Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
+                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
-                        Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
+                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
-                        Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
+                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd dodawania stałego wydatku", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd dodawania stałego dochodu", Toast.LENGTH_LONG);
                         break;
                 }
             }
@@ -251,37 +249,37 @@ public class dodajStalydochod extends AppCompatActivity {
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
-                        BazaDanych.EditStalyWydatek(idStalegoWydatku,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
-                        BazaDanych.EditStalyWydatek(idStalegoWydatku,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
-                        BazaDanych.EditStalyWydatek(idStalegoWydatku,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        BazaDanych.EditStalyWydatek(idStalegoWydatku,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        BazaDanych.EditStalyWydatek(idStalegoWydatku,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd aktualizacji stałego wydatku", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd aktualizacji stałego dochodu", Toast.LENGTH_LONG);
                         break;
                 }
             }
-            // BazaDanych.addStalyWydatek(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-            //Toast.makeText(this, "Dodaje staly wydatek o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
-            intent = new Intent(this, CykliczneWydatki.class);
+            // BazaDanych.addStalyDochod(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
+            //Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, CyklicznyDochod.class);
             startActivity(intent);
         }
     }
@@ -359,7 +357,7 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyWydatek1");
+        intent.putExtra("Klasa", "nowyStalyDochod1");
         //data_godzina3
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
@@ -367,7 +365,7 @@ public class dodajStalydochod extends AppCompatActivity {
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
         intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoWydatku", idStalegoWydatku);
+        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
         intent.putExtra("edycja", edycja);
         startActivity(intent);
 
@@ -378,14 +376,14 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyWydatek2");
+        intent.putExtra("Klasa", "nowyStalyDochod2");
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
         intent.putExtra("data_godzina3", data_godzina3);
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
         intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoWydatku", idStalegoWydatku);
+        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
         intent.putExtra("edycja", edycja);
         startActivity(intent);
 
@@ -396,14 +394,14 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyWydatek3");
+        intent.putExtra("Klasa", "nowyStalyDochod3");
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
         intent.putExtra("data_godzina3", data_godzina3);
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
         intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoWydatku", idStalegoWydatku);
+        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
         intent.putExtra("edycja", edycja);
 
         startActivity(intent);
@@ -457,8 +455,8 @@ public class dodajStalydochod extends AppCompatActivity {
 
     public void usun(View view)
     {
-        BazaDanych.RemoveStalyWydatek(idStalegoWydatku);
-        intent = new Intent(this, CykliczneWydatki.class);
+        BazaDanych.RemoveStalyDochod(idStalegoDochodu);
+        intent = new Intent(this, CyklicznyDochod.class);
         startActivity(intent);
     }
 }

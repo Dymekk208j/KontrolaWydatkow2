@@ -34,11 +34,12 @@ public class nowyPrzychod extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         BazaDanych = new baza_danych(this);
 
-        txtData = (TextView) findViewById(R.id.txtDate);
+        txtData = (TextView) findViewById(R.id.txtDate2);
         txtNazwa = (EditText) findViewById(R.id.txtNazwa2);
         txtNazwa.setText(NAZWA);
         txtKwota = (EditText) findViewById(R.id.txtEditAmount2);
         txtKwota.setText("");
+        setTitle("Dodaj nowy dochód");
         setDataAndHour();
 
         if(extras != null)
@@ -106,7 +107,7 @@ public class nowyPrzychod extends AppCompatActivity {
     }
 
     public void dodajStalyDochod(View view) {
-        intent = new Intent(this, dodajStalydochod.class);
+        intent = new Intent(this, CyklicznyDochod.class);
         startActivity(intent);
     }
 

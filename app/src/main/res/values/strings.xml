@@ -41,6 +41,8 @@
     <string name="str_usunkat">Usuń kategorie</string>
     <string name="strListaCyklicznychWydatkow">Lista cyklicznych wydatków:</string>
     <string name="str_cykliczne">Cykliczne wydatki</string>
+    <string name="str_ostatni_dochod">Ostatnie dochody</string>
+    <string name="str_ost_doch">x. Ostatni dochód.</string>
 
     <string-array name="czestotliwosc">
         <item>Codziennie</item>
