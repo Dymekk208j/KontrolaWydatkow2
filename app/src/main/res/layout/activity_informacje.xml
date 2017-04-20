@@ -29,4 +29,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:layout_editor_absoluteY="480dp" />
+
+    <TextView
+        android:id="@+id/lblTest"
+        android:layout_width="264dp"
+        android:layout_height="34dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="105dp" />
+
 </android.support.constraint.ConstraintLayout>

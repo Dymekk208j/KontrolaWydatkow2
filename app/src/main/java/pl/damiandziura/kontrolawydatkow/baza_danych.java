@@ -1166,5 +1166,22 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
+    double getIleWydanoWkategorii(int _kategoria)
+    {
+        double kwota = 0.0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+
+        if(c.moveToFirst()){
+            do{
+                kwota += c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return kwota;
+    }
 
 }
