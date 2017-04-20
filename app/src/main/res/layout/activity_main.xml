@@ -265,9 +265,19 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/dummyview"
+        android:text="TextView"
+        android:layout_below="@+id/scrollView2"
+        android:layout_centerHorizontal="true" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/idPieChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/BtMainAdd"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:text="TextView" />
+        android:layout_below="@+id/textView"></com.github.mikephil.charting.charts.PieChart>
 
 </RelativeLayout>

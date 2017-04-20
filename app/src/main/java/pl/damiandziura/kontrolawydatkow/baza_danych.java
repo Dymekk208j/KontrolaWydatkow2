@@ -1166,9 +1166,9 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
-    double getIleWydanoWkategorii(int _kategoria)
+    float getIleWydanoWkategorii(int _kategoria)
     {
-        double kwota = 0.0;
+        float kwota = 0.0f;
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);

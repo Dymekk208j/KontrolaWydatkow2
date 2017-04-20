@@ -1,16 +1,31 @@
 package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
+
+    PieChart pieChart;
 
     private baza_danych BazaDanych;
     TextView OstatniWydatek[] = new TextView[10];
@@ -63,6 +78,27 @@ public class MainActivity extends AppCompatActivity {
             OstatniWydatek[a].setText(sOstatniWydatek[a]);
             OstatniDochod[a].setText(sOstatniDochod[a]);
         }
+
+        pieChart = (PieChart) findViewById(R.id.idPieChart);
+        pieChart.setRotationEnabled(true);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setUsePercentValues(true);
+        pieChart.setDrawHoleEnabled(false);
+
+
+        addDataSet();
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
     public void dodajWydatek(View view) {
@@ -85,5 +121,65 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    private void addDataSet()
+    {
+        ArrayList<PieEntry> yEntrys = new ArrayList<>();
+        ArrayList<String> NazwyKategorii = new ArrayList<>();
+        ArrayList<Float> WydanePieniadze = new ArrayList<>();
+        ArrayList<Integer> intKategorie = BazaDanych.getINTKategorie();
+
+
+        for(int a = 0; a < intKategorie.size(); a++)
+        {
+            float bufor = BazaDanych.getIleWydanoWkategorii(intKategorie.get(a));
+            if(bufor > 0)
+            {
+                WydanePieniadze.add(bufor);
+
+               if(a == 0)
+               {
+                   NazwyKategorii.add("0. Domyślna kategoria");
+               }
+               else
+               {
+                   NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
+               }
+            }
+
+        }
+
+        for(int i = 0; i < NazwyKategorii.size(); i++)
+        {
+            yEntrys.add(new PieEntry(WydanePieniadze.get(i), NazwyKategorii.get(i)));
+        }
+
+
+
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
+        pieDataSet.setSliceSpace(2);
+        pieDataSet.setValueTextSize(8);
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.CYAN);
+        colors.add(Color.DKGRAY);
+        colors.add(Color.GREEN);
+        colors.add(Color.MAGENTA);
+        colors.add(Color.RED);
+        colors.add(Color.YELLOW);
+
+        pieDataSet.setColors(colors);
+
+        Legend legend = pieChart.getLegend();
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+
+        pieChart.setData(pieData);
+        pieChart.invalidate();
+    }
 
 }
