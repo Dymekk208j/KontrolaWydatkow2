@@ -1,86 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pl.damiandziura.kontrolawydatkow.dataPicker">
 
+
+    <TextView
+        android:id="@+id/dummyview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        />
+
     <DatePicker
         android:id="@+id/datePicker2"
-        android:layout_width="368dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="38dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         android:spinnersShown="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp" />
+        android:layout_below="@+id/lblData"
+        android:layout_centerHorizontal="true" />
 
-    <TimePicker
-        android:id="@+id/timePicker3"
-        android:layout_width="256dp"
-        android:layout_height="wrap_content"
-        android:hapticFeedbackEnabled="true"
-        android:timePickerMode="spinner"
-        android:layout_marginLeft="64dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="64dp" />
-
-    <Button
-        android:id="@+id/btCofnij"
+    <TextView
+        android:id="@+id/lblData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="btCofnij"
-        android:text="@string/stre_back"
-        app:layout_constraintBottom_toBottomOf="@+id/btZatwierdz"
-        app:layout_constraintRight_toLeftOf="@+id/btTeraz"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="0dp" />
-
-    <Button
-        android:id="@+id/btZatwierdz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="btZatwierdz"
-        android:text="@string/str_zatwierdz"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker3"
-        android:layout_marginRight="32dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:text="@string/str_data"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/datePicker2"
+        android:layout_alignStart="@+id/datePicker2" />
 
     <TextView
         android:id="@+id/lblGodzina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/str_godzina"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/timePicker3"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/timePicker3" />
+        android:layout_above="@+id/dummyview"
+        android:layout_alignLeft="@+id/datePicker2"
+        android:layout_alignStart="@+id/datePicker2" />
 
-    <TextView
-        android:id="@+id/lblData"
-        android:layout_width="58dp"
-        android:layout_height="15dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="0dp"
-        android:text="@string/str_data"
-        app:layout_constraintBottom_toTopOf="@+id/datePicker2"
-        app:layout_constraintLeft_toLeftOf="@+id/lblGodzina" />
-
-    <Button
-        android:id="@+id/btTeraz"
+    <TimePicker
+        android:id="@+id/timePicker3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:hapticFeedbackEnabled="true"
+        android:timePickerMode="spinner"
+        android:layout_below="@+id/lblGodzina"
+        android:layout_alignRight="@+id/datePicker2"
+        android:layout_alignEnd="@+id/datePicker2"
+        android:layout_alignLeft="@+id/lblGodzina"
+        android:layout_alignStart="@+id/lblGodzina" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="btCofnij"
+        android:text="@string/stre_back" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:onClick="btTeraz"
-        android:text="@string/strTeraz"
-        app:layout_constraintTop_toTopOf="@+id/btCofnij"
-        app:layout_constraintRight_toLeftOf="@+id/btZatwierdz"
-        android:layout_marginRight="16dp" />
-</android.support.constraint.ConstraintLayout>
+        android:text="@string/strTeraz" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/button2"
+        android:onClick="btZatwierdz"
+        android:text="@string/str_zatwierdz" />
+
+</RelativeLayout>

@@ -12,8 +12,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -52,7 +50,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
         spinPodkategorie = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        txtNazwa = (EditText) findViewById(R.id.txtStalyWydatekNazwa);
+        txtNazwa = (EditText) findViewById(R.id.txtNazwa);
         txtKwota = (EditText) findViewById(R.id.txtKwota);
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
@@ -97,10 +95,13 @@ public class dodajStalyWydatek extends AppCompatActivity {
             btUsun.setVisibility(View.VISIBLE);
             ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
             KategoriaIDlist = BazaDanych.getINTKategorie();
-            PodkategoriaIDlist = BazaDanych.getINTKategorie();
-
 
             positionKategoria = KategoriaIDlist.indexOf(BazaDanych.getStalyWydatekKategoria(idStalegoWydatku));
+
+            PodkategoriaIDlist = BazaDanych.getINTpodKategorie(KategoriaIDlist.get(positionKategoria));
+
+
+
             positionPodkategoria = PodkategoriaIDlist.indexOf(BazaDanych.getStalyWydatekPodkategoria(idStalegoWydatku));
             positionCzestotliwosc = BazaDanych.getStalyWydatekCzestotliwosc(idStalegoWydatku);
 
@@ -110,7 +111,6 @@ public class dodajStalyWydatek extends AppCompatActivity {
             data_godzina1 = BazaDanych.getStalyWydatekOD(idStalegoWydatku);
             data_godzina2 = BazaDanych.getStalyWydatekDO(idStalegoWydatku);
             data_godzina3 = BazaDanych.getStalyWydatekNastepnaData(idStalegoWydatku);
-
 
         }
 
@@ -140,6 +140,10 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
 
         kategoria();
+
+        spinKategorie.setSelection(positionKategoria);
+
+
         poprawnoscDat();
 
     }
@@ -318,36 +322,32 @@ public class dodajStalyWydatek extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinKategorie.setAdapter(adapter);
-        spinKategorie.setSelection(positionKategoria);
-
         spinKategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Podkategoria(position);
+                Podkategoria();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-                // sometimes you need nothing here
             }
         });
 
-        // Toast.makeText(this, lista.get(1), Toast.LENGTH_SHORT).show();
-        //podkategoria();
+
+
     }
 
 
 
-    private void Podkategoria(int numer)    {
+    private void Podkategoria()    {
 
-        ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
-        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(numer);
+        int kat = KategoriaIDlist.get(spinKategorie.getSelectedItemPosition());
+        ArrayList<String> lista = BazaDanych.getpodKategorie(kat);
+        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(kat);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinPodkategorie.setAdapter(adapter);
         spinPodkategorie.setSelection(positionPodkategoria);
 
@@ -413,8 +413,6 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
     private void poprawnoscDat()
     {//DD-MM-YYYY
-
-
         Calendar cTxt1, cTxt2, cTxt3;
         cTxt1 = Calendar.getInstance();
         cTxt1.set(YEAR, Integer.parseInt(data_godzina1.substring(6, 10)));
