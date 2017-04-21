@@ -258,6 +258,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/BtMainAdd"
         android:layout_toRightOf="@+id/dummyview"
+        android:layout_toEndOf="@+id/dummyview"
         android:onClick="dodajdochod"
         android:text="@string/str_dodaj_dochod" />
 
@@ -265,9 +266,9 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:layout_below="@+id/scrollView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@android:string/unknownName" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/idPieChart"

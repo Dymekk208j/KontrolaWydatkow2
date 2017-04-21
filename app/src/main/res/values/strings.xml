@@ -46,6 +46,7 @@
     <string name="str_data_new">00-00-0000</string>
     <string name="str_cykliczne_do">Cykliczne dochody</string>
 
+
     <string-array name="czestotliwosc">
         <item>Codziennie</item>
         <item>Co tydzień</item>

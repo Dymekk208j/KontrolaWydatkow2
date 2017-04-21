@@ -27,6 +27,8 @@
         <activity android:name=".Dodajpodkategorie" />
         <activity android:name=".CykliczneWydatki" />
         <activity android:name=".CyklicznyDochod"></activity>
+        <service android:name=".MyService"></service>
     </application>
+
 
 </manifest>

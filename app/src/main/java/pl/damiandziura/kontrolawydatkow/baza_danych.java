@@ -5,12 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.support.annotation.IntegerRes;
 import android.support.v4.app.INotificationSideChannel;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 /**
  * Created by Dymek on 23.03.2017.
@@ -1182,6 +1190,168 @@ public class baza_danych extends SQLiteOpenHelper
         db.close();
 
         return kwota;
+    }
+//00-00-0000
+    void sprawdzanieStalychWydatkow()
+    {
+        Calendar AktualnaData = Calendar.getInstance();
+        Calendar dataDoKiedy = Calendar.getInstance();
+        //aktualna data
+        int YEAR_N = AktualnaData.get(Calendar.YEAR);
+        int DAY_N = AktualnaData.get(Calendar.DAY_OF_MONTH);
+        int MONTH_N = AktualnaData.get(Calendar.MONTH) +1;
+
+        // data pobierana z bazy
+        int YEAR, DAY, MONTH;
+
+        int ID = 0;
+
+        double  kwota = 0.0f;
+
+        int     kategoria = 0,
+                podkategoria = 0;
+
+
+        String  aNazwa = "",
+                aOdKiedy = "",
+                aDoKiedy = "",
+                aNastepnaData = "",
+                czestotliwosc = "";
+
+
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_nazwa + "," + KEY_kwota + "," + KEY_kategoria + "," + KEY_podkategoria
+                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_czestotliwosc +
+                " FROM " + TABLE_Staly_wydatek, null);
+
+        if(c.moveToFirst()){
+            do{
+                ID = c.getInt(0);
+                aNazwa = c.getString(1);
+                kwota = c.getDouble(2);
+                kategoria = c.getInt(3);
+                podkategoria = c.getInt(4);
+                aOdKiedy = c.getString(5);
+                aDoKiedy = c.getString(6);
+                aNastepnaData = c.getString(7);
+                czestotliwosc = c.getString(8);
+
+
+                DAY = Integer.parseInt(aNastepnaData.substring(0, 2));
+                MONTH = Integer.parseInt(aNastepnaData.substring(3, 5));
+                YEAR = Integer.parseInt(aNastepnaData.substring(7, 10));
+
+                if(czestotliwosc.equals("DZIENNIE"))
+                {
+                    if(DAY_N >= DAY)
+                    {
+                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+
+                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                        {
+                            N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                        {
+                            RemoveStalyWydatek(ID);
+                        }
+                    }
+
+                }else if(czestotliwosc.equals("TYDZIEN"))
+                {
+                    if(DAY_N >= DAY+7)
+                    {
+                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+
+                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                        {
+                            N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.TYDZIEN);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                        {
+                            RemoveStalyWydatek(ID);
+                        }
+                    }
+                }else if(czestotliwosc.equals("MIESIAC"))
+                {
+                    if(MONTH_N >= MONTH)
+                    {
+                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+
+                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                        {
+                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
+                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                        {
+                            RemoveStalyWydatek(ID);
+                        }
+                    }
+                }else if(czestotliwosc.equals("KWARTAL"))
+                {
+                    if(MONTH_N >= MONTH+3)
+                    {
+                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+
+                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                        {
+                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
+                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                        {
+                            RemoveStalyWydatek(ID);
+                        }
+                    }
+                }else if(czestotliwosc.equals("ROK"))
+                {
+                    if(YEAR_N >= YEAR)
+                    {
+                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+
+                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                        {
+                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
+                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                        {
+                            RemoveStalyWydatek(ID);
+                        }
+                    }
+                }
+
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
     }
 
 }

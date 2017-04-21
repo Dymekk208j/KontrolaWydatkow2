@@ -55,10 +55,12 @@ public class dodajStalyWydatek extends AppCompatActivity {
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
         txt3 = (TextView) findViewById(R.id.txt3);
+
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
         btUsun = (Button) findViewById(R.id.btUsun);
+
         btUsun.setVisibility(View.INVISIBLE);
 
         Calendar c = Calendar.getInstance();

@@ -58,7 +58,7 @@ public class dodajStalydochod extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        btUsun = (Button) findViewById(R.id.btUsun);
+        btUsun = (Button) findViewById(R.id.btDodaj);
         btUsun.setVisibility(View.INVISIBLE);
 
         Calendar c = Calendar.getInstance();

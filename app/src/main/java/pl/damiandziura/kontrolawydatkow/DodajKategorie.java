@@ -37,7 +37,7 @@ public class DodajKategorie extends AppCompatActivity
 
         setContentView(R.layout.activity_dodaj_kategorie);
         Bundle extras = getIntent().getExtras();
-        btUsun = (Button) findViewById(R.id.btUsun);
+        btUsun = (Button) findViewById(R.id.btDodaj);
 
         if(extras != null)
         {

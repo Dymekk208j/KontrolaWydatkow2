@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -78,13 +79,15 @@ public class MainActivity extends AppCompatActivity {
             OstatniWydatek[a].setText(sOstatniWydatek[a]);
             OstatniDochod[a].setText(sOstatniDochod[a]);
         }
+        Description desc = new Description();
+        desc.setText("Wydatki względem kategorii");
 
         pieChart = (PieChart) findViewById(R.id.idPieChart);
         pieChart.setRotationEnabled(true);
         pieChart.setDrawEntryLabels(false);
         pieChart.setUsePercentValues(true);
         pieChart.setDrawHoleEnabled(false);
-
+        pieChart.setDescription(desc);
 
         addDataSet();
 
@@ -99,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Intent serviceIntent = new Intent(this, MyService.class);
+        startService(serviceIntent);
+
     }
 
     public void dodajWydatek(View view) {
@@ -112,13 +119,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void kategorie(View view) {
-        intent = new Intent(this, Kategorie.class);
-        startActivity(intent);
+      //  intent = new Intent(this, Kategorie.class);
+      //  startActivity(intent);
+        Intent serviceIntent = new Intent(this, MyService.class);
+        stopService(serviceIntent);
     }
 
     public void Informacje(View view) {
-        intent = new Intent(this, Informacje.class);
-        startActivity(intent);
+       // intent = new Intent(this, CykliczneWydatki2.class);
+        //startActivity(intent);
+        //BazaDanych.sprawdzanieStalychWydatkow();
+
+
     }
 
 

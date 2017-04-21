@@ -31,7 +31,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         BazaDanych = new baza_danych(this);
         NazwaPodkat = (EditText) findViewById(R.id.txtPodKatName);
-        btUsun = (Button) findViewById(R.id.btUsun);
+        btUsun = (Button) findViewById(R.id.btDodaj);
 
 
         if(extras != null)
