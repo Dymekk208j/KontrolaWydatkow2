@@ -9,25 +9,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddNewExpenses" />
-        <activity android:name=".dodajStalyWydatek" />
-        <activity android:name=".Kategorie" />
-        <activity android:name=".DodajKategorie" />
-        <activity android:name=".Informacje" />
+        <activity android:name=".AddNewExpenses"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dodajStalyWydatek"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Kategorie"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DodajKategorie"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Informacje"
+            android:screenOrientation="portrait"/>
         <activity android:name=".nowyPrzychod" />
-        <activity android:name=".dodajStalydochod" />
-        <activity android:name=".dataPicker" />
-        <activity android:name=".Dodajpodkategorie" />
-        <activity android:name=".CykliczneWydatki" />
-        <activity android:name=".CyklicznyDochod"></activity>
-        <service android:name=".MyService"></service>
+        <activity android:name=".dodajStalydochod"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dataPicker"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Dodajpodkategorie"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CykliczneWydatki"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CyklicznyDochod"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 
