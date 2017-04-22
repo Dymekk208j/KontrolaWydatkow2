@@ -45,6 +45,8 @@
     <string name="str_ost_doch">x. Ostatni dochód.</string>
     <string name="str_data_new">00-00-0000</string>
     <string name="str_cykliczne_do">Cykliczne dochody</string>
+    <string name="str_name1">Wydatki:</string>
+    <string name="strName2">Dochody:</string>
 
 
     <string-array name="czestotliwosc">

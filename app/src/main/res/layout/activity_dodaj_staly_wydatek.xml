@@ -178,7 +178,7 @@
         android:text="@string/str_clear" />
 
     <Button
-        android:id="@+id/btUsun"
+        android:id="@+id/btWyczysc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btCofnij"
@@ -198,7 +198,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/dummyview"
-        android:layout_alignTop="@+id/btUsun"
+        android:layout_alignTop="@+id/btWyczysc"
         android:onClick="dodaj"
         android:text="@string/str_Zapisz" />
 

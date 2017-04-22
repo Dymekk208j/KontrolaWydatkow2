@@ -43,30 +43,31 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
+        android:onClick="cofnij"
         android:text="@string/stre_back" />
-
-    <Button
-        android:id="@+id/btWyczysc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/btCofnij"
-        android:layout_toEndOf="@+id/dummyview"
-        android:layout_toRightOf="@+id/dummyview"
-        android:backgroundTint="@color/RedAsFuck"
-        android:text="@string/str_usun" />
 
     <Button
         android:id="@+id/btUsun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/RedAsFuck"
+        android:onClick="usun"
+        android:text="@string/str_usun"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/dummyview"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/btWyczysc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="dodajPodKat"
+        android:text="@string/str_dodaj_podk"
         android:layout_above="@+id/btCofnij"
+        android:layout_toLeftOf="@+id/btDodaj"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/btWyczysc"
-        android:layout_toStartOf="@+id/btWyczysc"
-        android:text="@string/str_dodaj_podk" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/btDodaj"
@@ -74,9 +75,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/btUsun"
+        android:layout_alignTop="@+id/btWyczysc"
         android:layout_toEndOf="@+id/btCofnij"
         android:layout_toRightOf="@+id/btCofnij"
+        android:onClick="dodaj"
         android:text="@string/str_Zapisz" />
 
     <TextView
@@ -92,7 +94,7 @@
         android:id="@+id/LVlistaPodkategorii"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btUsun"
+        android:layout_above="@+id/btWyczysc"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/lblListaPodkat" />

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,9 +18,8 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
@@ -35,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     TextView OstatniDochod[] = new TextView[10];
     String sOstatniDochod[] = new String[10];
     TextView PosiadaneSrodki;
+    Random r = new Random();
+    int Low = 65;
+    int High = 255;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,17 +120,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void kategorie(View view) {
-      //  intent = new Intent(this, Kategorie.class);
-      //  startActivity(intent);
-        Intent serviceIntent = new Intent(this, MyService.class);
-        stopService(serviceIntent);
+        intent = new Intent(this, Kategorie.class);
+        startActivity(intent);
     }
 
     public void Informacje(View view) {
-       // intent = new Intent(this, CykliczneWydatki2.class);
-        //startActivity(intent);
-        //BazaDanych.sprawdzanieStalychWydatkow();
-
+        intent = new Intent(this, Informacje.class);
+        startActivity(intent);
 
     }
 
@@ -151,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                if(a == 0)
                {
-                   NazwyKategorii.add("0. Domyślna kategoria");
+                   NazwyKategorii.add("Domyślna kategoria");
                }
                else
                {
@@ -173,18 +170,16 @@ public class MainActivity extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.BLUE);
-        colors.add(Color.CYAN);
-        colors.add(Color.DKGRAY);
-        colors.add(Color.GREEN);
-        colors.add(Color.MAGENTA);
-        colors.add(Color.RED);
-        colors.add(Color.YELLOW);
+        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        {
+            colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
+        }
 
         pieDataSet.setColors(colors);
 
         Legend legend = pieChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
+
+        legend.setForm(Legend.LegendForm.SQUARE);
         legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
 
         PieData pieData = new PieData(pieDataSet);

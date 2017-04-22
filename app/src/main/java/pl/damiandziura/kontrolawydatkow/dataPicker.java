@@ -108,7 +108,7 @@ public class dataPicker extends AppCompatActivity {
         if(Powrot.equals("nowyPrzychod"))
         {
             sprawdzDateZogarniczeniem();
-        }else if(Powrot.equals("nowyWydatek"))
+        }else if(Powrot.equals("nowyWydatek") || Powrot.equals("nowyDochod"))
         {
             sprawdzDateZogarniczeniem();
         }else if(Powrot.equals("nowyStalyWydatek1") || Powrot.equals("nowyStalyWydatek2") || Powrot.equals("nowyStalyWydatek3"))

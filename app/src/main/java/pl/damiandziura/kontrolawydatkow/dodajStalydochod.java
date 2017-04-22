@@ -149,7 +149,7 @@ public class dodajStalydochod extends AppCompatActivity {
     }
 
     public void cofnij(View view) {
-        intent = new Intent(this, CykliczneWydatki.class);
+        intent = new Intent(this, CyklicznyDochod.class);
         startActivity(intent);
         // onBackPressed();
     }

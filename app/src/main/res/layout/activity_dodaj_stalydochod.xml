@@ -166,19 +166,19 @@
         android:text="@string/stre_back" />
 
     <Button
-        android:id="@+id/btWyczysc"
+        android:id="@+id/btDodaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dummyview"
-        android:layout_alignParentEnd="true"
+        android:onClick="dodaj"
+        android:text="@string/str_Zapisz"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/SpinnerPodKategoria"
+        android:layout_alignStart="@+id/SpinnerPodKategoria"
         android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/dummyview"
-        android:layout_alignTop="@+id/btCofnij"
-        android:onClick="wyczysc"
-        android:text="@string/str_clear" />
+        android:layout_alignParentEnd="true" />
 
     <Button
-        android:id="@+id/btUsun"
+        android:id="@+id/btWyczysc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btCofnij"
@@ -186,20 +186,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
+        android:onClick="wyczysc"
+        android:text="@string/str_clear" />
+
+    <Button
+        android:id="@+id/btUsun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btDodaj"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/btDodaj"
+        android:layout_alignTop="@+id/btWyczysc"
         android:backgroundTint="@color/RedAsFuck"
         android:onClick="usun"
         android:text="@string/str_usun" />
-
-    <Button
-        android:id="@+id/btDodaj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dummyview"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/dummyview"
-        android:layout_alignTop="@+id/btUsun"
-        android:onClick="dodaj"
-        android:text="@string/str_Zapisz" />
 
 </RelativeLayout>
