@@ -27,7 +27,7 @@ import static java.util.Calendar.YEAR;
 public class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "baza.db";
 
     // Nazwy tabeli
@@ -314,6 +314,62 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
+    ArrayList getWydatkiNames(int _IdKategorii, int _IdPodkategoria)
+    {
+        ArrayList<String> ListaNazwWydatkow = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT nazwa FROM wydatki WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+
+        if(c.moveToFirst()){
+            do{
+                ListaNazwWydatkow.add(c.getString(0));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListaNazwWydatkow;
+    }
+
+    ArrayList getWydatkiKwoty(int _IdKategorii, int _IdPodkategoria)
+    {
+        ArrayList<Double> getWydatkiKwoty = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                getWydatkiKwoty.add(c.getDouble(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  getWydatkiKwoty;
+    }
+
+    ArrayList getWydatkiDaty(int _IdKategorii, int _IdPodkategoria)
+    {
+        ArrayList<String> getWydatkiDaty = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT data FROM " + TABLE_wydatki + " WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+
+        if(c.moveToFirst()){
+            do{
+                getWydatkiDaty.add(c.getString(0));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  getWydatkiDaty;
+    }
+
 
     void DodajDochod(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
     {
@@ -539,7 +595,7 @@ public class baza_danych extends SQLiteOpenHelper
     {
         String aNazwa = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM "+TABLE_kategoria + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -1552,25 +1608,267 @@ public class baza_danych extends SQLiteOpenHelper
         return kwota;
     }
 
-  /*  ArrayList getListaWydatkowDanejKategorii()
+    float getIleWydanoWkategorii(int _kategoria, String _OD, String _DO)
     {
-        ArrayList<String> ListaKategorii = new ArrayList<String>();
+        boolean wszystko = false;
+        if(_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
+
+        Calendar DataOD = Calendar.getInstance();
+        Calendar DataDO = Calendar.getInstance();
+        Calendar DataPobrana = Calendar.getInstance();
+
+        DataOD.set(Calendar.YEAR, Integer.parseInt(_OD.substring(7, 10)));
+        DataOD.set(Calendar.MONTH, Integer.parseInt(_OD.substring(3, 5)));
+        DataOD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_OD.substring(0, 2)));
+
+        DataDO.set(Calendar.YEAR, Integer.parseInt(_DO.substring(7, 10)));
+        DataDO.set(Calendar.MONTH, Integer.parseInt(_DO.substring(3, 5)));
+        DataDO.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_DO.substring(0, 2)));
+
+
+
+        float kwota = 0.0f;
+
+
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria, null);
+        c = db.rawQuery("SELECT kwota, data FROM " + TABLE_wydatki + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
 
+        if (wszystko == false)
+        {
+            if (c.moveToFirst()) {
+                do {
+                    DataPobrana.set(Calendar.YEAR, Integer.parseInt(c.getString(1).substring(7, 10)));
+                    DataPobrana.set(Calendar.MONTH, Integer.parseInt(c.getString(1).substring(3, 5)));
+                    DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
+
+                    if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
+                        kwota += c.getDouble(0);
+                    }
+                } while (c.moveToNext());
+            }
+        } else {
+            if (c.moveToFirst())
+            {
+                do {
+                    kwota += c.getDouble(0);
+                } while (c.moveToNext());
+            }
+        }
+
+        c.close();
+        db.close();
+
+        return kwota;
+    }
+
+
+
+    ArrayList<Integer> getListaIDKategorii(String _OD, String _DO)//nazwy kategorii w ktorych byl utworzony wyadtek w zadanej dacie
+    {
+        ArrayList<Integer> ListaIDKategorii = new ArrayList<>();
+
+        boolean wszystko = false;
+        if(_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
+
+
+        Calendar DataOD = Calendar.getInstance();
+        Calendar DataDO = Calendar.getInstance();
+        Calendar DataPobrana = Calendar.getInstance();
+
+        DataOD.set(Calendar.YEAR, Integer.parseInt(_OD.substring(7, 10)));
+        DataOD.set(Calendar.MONTH, Integer.parseInt(_OD.substring(3, 5)));
+        DataOD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_OD.substring(0, 2)));
+
+        DataDO.set(Calendar.YEAR, Integer.parseInt(_DO.substring(7, 10)));
+        DataDO.set(Calendar.MONTH, Integer.parseInt(_DO.substring(3, 5)));
+        DataDO.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_DO.substring(0, 2)));
+        int buffor;
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kategoria, data FROM " + TABLE_wydatki, null);
+
+
+        if(wszystko == false)
+        {
+            if (c.moveToFirst()) {
+                do {
+                    DataPobrana.set(Calendar.YEAR, Integer.parseInt(c.getString(1).substring(7, 10)));
+                    DataPobrana.set(Calendar.MONTH, Integer.parseInt(c.getString(1).substring(3, 5)));
+                    DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
+
+                    if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
+                        buffor = c.getInt(0);
+
+                        if (!ListaIDKategorii.contains(buffor)) {
+                            ListaIDKategorii.add(buffor);
+                        }
+                    }
+                } while (c.moveToNext());
+            }
+        }else
+        {
+            if (c.moveToFirst()) {
+                do {
+                        buffor = c.getInt(0);
+                        if (!ListaIDKategorii.contains(buffor))
+                        {
+                            ListaIDKategorii.add(buffor);
+                        }
+
+                } while (c.moveToNext());
+            }
+        }
+
+        c.close();
+        db.close();
+
+        return  ListaIDKategorii;
+    }
+
+
+    float getIleDochoduWkategorii(int _kategoria, String _OD, String _DO) {
+        boolean wszystko = false;
+        if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
+
+        Calendar DataOD = Calendar.getInstance();
+        Calendar DataDO = Calendar.getInstance();
+        Calendar DataPobrana = Calendar.getInstance();
+
+        DataOD.set(Calendar.YEAR, Integer.parseInt(_OD.substring(7, 10)));
+        DataOD.set(Calendar.MONTH, Integer.parseInt(_OD.substring(3, 5)));
+        DataOD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_OD.substring(0, 2)));
+
+        DataDO.set(Calendar.YEAR, Integer.parseInt(_DO.substring(7, 10)));
+        DataDO.set(Calendar.MONTH, Integer.parseInt(_DO.substring(3, 5)));
+        DataDO.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_DO.substring(0, 2)));
+
+
+
+
+        float kwota = 0.0f;
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kwota, data FROM " + TABLE_dochody + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+
+        if (wszystko == false)
+        {
+            if (c.moveToFirst()) {
+                do {
+                    DataPobrana.set(Calendar.YEAR, Integer.parseInt(c.getString(1).substring(7, 10)));
+                    DataPobrana.set(Calendar.MONTH, Integer.parseInt(c.getString(1).substring(3, 5)));
+                    DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
+
+                    if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
+                        kwota += c.getDouble(0);
+                    }
+                } while (c.moveToNext());
+            }
+        } else {
+            if (c.moveToFirst())
+            {
+                do {
+                    kwota += c.getDouble(0);
+                } while (c.moveToNext());
+            }
+        }
+
+        c.close();
+        db.close();
+
+        return kwota;
+    }
+
+
+
+    ArrayList<Integer> getListaIDKategoriiDochod(String _OD, String _DO)//nazwy kategorii w ktorych byl utworzony wyadtek w zadanej dacie
+    {
+        boolean wszystko = false;
+        if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
+
+        ArrayList<Integer> ListaIDKategorii = new ArrayList<>();
+
+        Calendar DataOD = Calendar.getInstance();
+        Calendar DataDO = Calendar.getInstance();
+        Calendar DataPobrana = Calendar.getInstance();
+
+        DataOD.set(Calendar.YEAR, Integer.parseInt(_OD.substring(7, 10)));
+        DataOD.set(Calendar.MONTH, Integer.parseInt(_OD.substring(3, 5)));
+        DataOD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_OD.substring(0, 2)));
+
+        DataDO.set(Calendar.YEAR, Integer.parseInt(_DO.substring(7, 10)));
+        DataDO.set(Calendar.MONTH, Integer.parseInt(_DO.substring(3, 5)));
+        DataDO.set(Calendar.DAY_OF_MONTH, Integer.parseInt(_DO.substring(0, 2)));
+        int buffor;
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT kategoria, data FROM " + TABLE_dochody, null);
+
+        if(wszystko == false)
+        {
+            if (c.moveToFirst()) {
+                do {
+                    DataPobrana.set(Calendar.YEAR, Integer.parseInt(c.getString(1).substring(7, 10)));
+                    DataPobrana.set(Calendar.MONTH, Integer.parseInt(c.getString(1).substring(3, 5)));
+                    DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
+
+                    if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
+                        buffor = c.getInt(0);
+
+                        if (!ListaIDKategorii.contains(buffor)) {
+                            ListaIDKategorii.add(buffor);
+                        }
+                    }
+                } while (c.moveToNext());
+            }
+        }else
+        {
+            if (c.moveToFirst()) {
+                do {
+                    buffor = c.getInt(0);
+                    if (!ListaIDKategorii.contains(buffor))
+                    {
+                        ListaIDKategorii.add(buffor);
+                    }
+
+                } while (c.moveToNext());
+            }
+        }
+
+
+        c.close();
+        db.close();
+
+        return  ListaIDKategorii;
+    }
+
+
+/*
+    ArrayList getINTKategorie()
+    {
+        ArrayList<Integer> idkategorii = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM " + TABLE_kategoria, null);
         int a = 0;
-        ListaKategorii.add("0. (Domyślna kategoria)");
+        idkategorii.add(0);
+
         if(c.moveToFirst()){
             do{
-                ListaKategorii.add(Integer.toString(a+1)+". " + c.getString(0));
+                //  bufor = c.getInt(0);
+                idkategorii.add(c.getInt(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  ListaKategorii;
-    }*/
+        return  idkategorii;
+    }
+     */
+
 
 }

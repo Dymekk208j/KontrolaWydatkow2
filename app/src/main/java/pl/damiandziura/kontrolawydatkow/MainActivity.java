@@ -2,10 +2,15 @@ package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -19,6 +24,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,14 +42,16 @@ public class MainActivity extends AppCompatActivity {
     Random r = new Random();
     int Low = 65;
     int High = 255;
+    private Spinner SpinnerCzestotliwosc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        BazaDanych = new baza_danych(this);
         super.onCreate(savedInstanceState);
         setTitle("Aplikacja do kontroli wydatków");
         setContentView(R.layout.activity_main);
 
-        BazaDanych = new baza_danych(this);
+
 
         BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
         PosiadaneSrodki = (TextView) findViewById(R.id.textView);
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         sOstatniWydatek = BazaDanych.getOstatnieWydatki();
         sOstatniDochod = BazaDanych.getOstatnieDochody();
 
+
+
         for(int a = 0; a < 10; a++)
         {
             OstatniWydatek[a].setText(sOstatniWydatek[a]);
@@ -90,12 +100,12 @@ public class MainActivity extends AppCompatActivity {
         pieChart.setDrawHoleEnabled(false);
         pieChart.setDescription(desc);
 
-        addDataSet();
+        RysujWykres(0);
+
 
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-
             }
 
             @Override
@@ -103,6 +113,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        Spinner SpinnerCzestotliwosc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
+
+        ArrayAdapter<CharSequence> czestotliwoscAdapter = ArrayAdapter.createFromResource(
+                this, R.array.czestotliwosc2, R.layout.spinner_layout);
+        czestotliwoscAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
+
+        SpinnerCzestotliwosc.setAdapter(czestotliwoscAdapter);
+        SpinnerCzestotliwosc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RysujWykres(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
+
 
         Intent serviceIntent = new Intent(this, MyService.class);
         startService(serviceIntent);
@@ -130,33 +161,95 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    private void addDataSet()
+    private void RysujWykres(int wybor)
     {
+        boolean wszystko = false;
+        Calendar DataDzisiejsza = Calendar.getInstance();
+        int DO_DAY = DataDzisiejsza.get(Calendar.DAY_OF_MONTH);
+        int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
+        int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
+
+
+
+        Calendar DataOdKiedy = Calendar.getInstance();
+        int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
+        int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
+        int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
+
+
+
+
+
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
+
+        switch(wybor)
+        {
+            case 0:
+                wszystko = true;
+                break;
+            case 1://dziennie
+                break;
+            case 2:
+                OD_DAY -= 7;
+                break;
+            case 3:
+                OD_MONTH -=1;
+                break;
+            case 4:
+                OD_MONTH -=3;
+                break;
+            case 5:
+                OD_YEAR -=1;
+                break;
+
+        }
+
+        String dzien = Integer.toString(DO_DAY);
+        if(DO_DAY <= 9) dzien = "0" + Integer.toString(DO_DAY);
+
+        String miesiac = Integer.toString(DO_MONTH);
+        if((DO_MONTH) <= 9) miesiac = "0" + Integer.toString(DO_MONTH);
+
+        String AktualnaData = dzien + "-" + miesiac + "-" + Integer.toString(DO_YEAR);
+
+
+        dzien = Integer.toString(OD_DAY);
+        if(OD_DAY <= 9) dzien = "0" + Integer.toString(OD_DAY);
+
+        miesiac = Integer.toString(OD_MONTH);
+        if((OD_MONTH) <= 9) miesiac = "0" + Integer.toString(OD_MONTH);
+
+        String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
+
+        if(wszystko == true)
+        {
+            DataOd = "33-33-3333";
+            AktualnaData = "33-33-3333";
+        }
         ArrayList<String> NazwyKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        ArrayList<Integer> intKategorie = BazaDanych.getINTKategorie();
+        ArrayList<Integer> intKategorie = BazaDanych.getListaIDKategorii(DataOd, AktualnaData);
 
 
         for(int a = 0; a < intKategorie.size(); a++)
         {
-            float bufor = BazaDanych.getIleWydanoWkategorii(intKategorie.get(a));
+            float bufor = BazaDanych.getIleWydanoWkategorii(intKategorie.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
 
-               if(a == 0)
-               {
-                   NazwyKategorii.add("Domyślna kategoria");
-               }
-               else
-               {
-                   NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
-               }
+                if(intKategorie.get(a) == 0)
+                {
+                    NazwyKategorii.add("Domyślna kategoria");
+                }
+                else
+                {
+                    NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
+                }
             }
 
         }
+
 
         for(int i = 0; i < NazwyKategorii.size(); i++)
         {
@@ -187,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
 
         pieChart.setData(pieData);
         pieChart.invalidate();
+
     }
+
 
 }

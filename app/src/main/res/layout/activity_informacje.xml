@@ -64,5 +64,23 @@
         android:layout_below="@+id/idPieChart"
         android:text="@string/strName2" />
 
+    <Spinner
+        android:id="@+id/SpinnerCzestotliwosc1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/lblName"
+        android:entries="@array/czestotliwosc2" />
+
+    <Spinner
+        android:id="@+id/SpinnerCzestotliwosc2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dummyview"
+        android:entries="@array/czestotliwosc2" />
+
 
 </RelativeLayout>

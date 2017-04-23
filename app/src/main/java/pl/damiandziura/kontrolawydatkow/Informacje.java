@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 public class Informacje extends AppCompatActivity {
@@ -35,7 +39,6 @@ public class Informacje extends AppCompatActivity {
     int Low = 0;
     int High = 255;
     ArrayList<Integer> IdWydatku, IdDochodu;
-    ArrayList<Integer> intKategorie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,7 @@ public class Informacje extends AppCompatActivity {
         setContentView(R.layout.activity_informacje);
 
         BazaDanych = new baza_danych(this);
-        intKategorie = BazaDanych.getINTKategorie();
+
 
         Description desc = new Description();
         desc.setText(" ");
@@ -66,8 +69,28 @@ public class Informacje extends AppCompatActivity {
 
 
 
-        dodajDaneWydatkow();
+        RysujWykresWydatku(0);
+        Spinner SpinnerCzestotliwosc1 = (Spinner) findViewById(R.id.SpinnerCzestotliwosc1);
 
+        ArrayAdapter<CharSequence> czestotliwoscAdapter = ArrayAdapter.createFromResource(
+                this, R.array.czestotliwosc2, R.layout.spinner_layout);
+        czestotliwoscAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
+
+        SpinnerCzestotliwosc1.setAdapter(czestotliwoscAdapter);
+        SpinnerCzestotliwosc1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RysujWykresWydatku(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
+        
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
@@ -89,7 +112,7 @@ public class Informacje extends AppCompatActivity {
         pieChart2.setDescription(desc);
         pieChart2.animateXY(1500, 1500);
 
-        dodajDaneDochodow();
+        RysujWykresDochodu(0);
 
         pieChart2.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -102,7 +125,26 @@ public class Informacje extends AppCompatActivity {
 
             }
         });
+        Spinner SpinnerCzestotliwosc2 = (Spinner) findViewById(R.id.SpinnerCzestotliwosc2);
 
+        ArrayAdapter<CharSequence> czestotliwosc2Adapter = ArrayAdapter.createFromResource(
+                this, R.array.czestotliwosc2, R.layout.spinner_layout);
+        czestotliwosc2Adapter.setDropDownViewResource(R.layout.spinner_layout);
+
+
+        SpinnerCzestotliwosc2.setAdapter(czestotliwosc2Adapter);
+        SpinnerCzestotliwosc2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RysujWykresDochodu(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
 
 
 
@@ -114,36 +156,114 @@ public class Informacje extends AppCompatActivity {
     }
 
 
-    private void dodajDaneWydatkow()
+    void SzczegolyKategoriiWydatku(Highlight he)
     {
+        ArrayList<Integer> neww = IdWydatku;
+        intent = new Intent(this, SzczegoloweInformacje.class);
+        intent.putExtra("WydatekDochod", false); // wydatek
+        intent.putExtra("IdKategorii", IdWydatku.get((int)he.getX()));
+        startActivity(intent);
+    }
+
+    void SzczegolyKategoriiDochodu(Highlight he)
+    {
+        intent = new Intent(this, SzczegoloweInformacje.class);
+        intent.putExtra("WydatekDochod", true); // wydatek
+        intent.putExtra("IdKategorii", IdDochodu.get((int)he.getX()));
+        startActivity(intent);
+    }
+
+    private void RysujWykresWydatku(int wybor)
+    {
+        boolean wszystko = false;
+
+        Calendar DataDzisiejsza = Calendar.getInstance();
+        int DO_DAY = DataDzisiejsza.get(Calendar.DAY_OF_MONTH);
+        int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
+        int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
+
+
+
+        Calendar DataOdKiedy = Calendar.getInstance();
+        int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
+        int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
+        int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
+
+
+
+
+
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
+
+        switch(wybor)
+        {
+            case 0:
+                wszystko = true;
+                break;
+            case 1://dziennie
+                break;
+            case 2:
+                OD_DAY -= 7;
+                break;
+            case 3:
+                OD_MONTH -=1;
+                break;
+            case 4:
+                OD_MONTH -=3;
+                break;
+            case 5:
+                OD_YEAR -=1;
+                break;
+
+        }
+
+        String dzien = Integer.toString(DO_DAY);
+        if(DO_DAY <= 9) dzien = "0" + Integer.toString(DO_DAY);
+
+        String miesiac = Integer.toString(DO_MONTH);
+        if((DO_MONTH) <= 9) miesiac = "0" + Integer.toString(DO_MONTH);
+
+        String AktualnaData = dzien + "-" + miesiac + "-" + Integer.toString(DO_YEAR);
+
+
+        dzien = Integer.toString(OD_DAY);
+        if(OD_DAY <= 9) dzien = "0" + Integer.toString(OD_DAY);
+
+        miesiac = Integer.toString(OD_MONTH);
+        if((OD_MONTH) <= 9) miesiac = "0" + Integer.toString(OD_MONTH);
+
+        String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
+
+        if(wszystko == true)
+        {
+            DataOd = "33-33-3333";
+            AktualnaData = "33-33-3333";
+        }
+
         ArrayList<String> NazwyKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        IdWydatku = new ArrayList<>();
+        IdWydatku = BazaDanych.getListaIDKategorii(DataOd, AktualnaData);
 
 
-
-
-        for(int a = 0; a < intKategorie.size(); a++)
+        for(int a = 0; a < IdWydatku.size(); a++)
         {
-            float bufor = BazaDanych.getIleWydanoWkategorii(intKategorie.get(a));
+            float bufor = BazaDanych.getIleWydanoWkategorii(IdWydatku.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
 
-                if(a == 0)
+                if(IdWydatku.get(a) == 0)
                 {
                     NazwyKategorii.add("Domyślna kategoria");
-                    IdWydatku.add(0);
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
-                    IdWydatku.add(intKategorie.get(a));
+                    NazwyKategorii.add(BazaDanych.getKategoriaName(IdWydatku.get(a)));
                 }
             }
 
         }
+
 
         for(int i = 0; i < NazwyKategorii.size(); i++)
         {
@@ -156,11 +276,16 @@ public class Informacje extends AppCompatActivity {
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(8);
 
-
+        ArrayList<Integer> colors = new ArrayList<>();
+        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        {
+            colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
+        }
 
         pieDataSet.setColors(colors);
 
         Legend legend = pieChart.getLegend();
+
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART_CENTER);
 
@@ -169,81 +294,134 @@ public class Informacje extends AppCompatActivity {
 
         pieChart.setData(pieData);
         pieChart.invalidate();
+
     }
 
-    private void dodajDaneDochodow()
+
+    private void RysujWykresDochodu(int wybor)
     {
+        boolean wszystko = false;
+
+        Calendar DataDzisiejsza = Calendar.getInstance();
+        int DO_DAY = DataDzisiejsza.get(Calendar.DAY_OF_MONTH);
+        int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
+        int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
+
+
+
+        Calendar DataOdKiedy = Calendar.getInstance();
+        int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
+        int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
+        int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
+
+
+
+
+
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        ArrayList<String> NazwyKategorii = new ArrayList<>();
-        ArrayList<Float> ZarobionePieniadze = new ArrayList<>();
-        IdDochodu = new ArrayList<>();
 
-
-
-        for(int a = 0; a < intKategorie.size(); a++)
+        switch(wybor)
         {
-            float bufor = BazaDanych.getIleDochoduWkategorii(intKategorie.get(a));
+            case 0:
+                wszystko = true;
+                break;
+            case 1://dziennie
+                break;
+            case 2:
+                OD_DAY -= 7;
+                break;
+            case 3:
+                OD_MONTH -=1;
+                break;
+            case 4:
+                OD_MONTH -=3;
+                break;
+            case 5:
+                OD_YEAR -=1;
+                break;
+
+        }
+
+        String dzien = Integer.toString(DO_DAY);
+        if(DO_DAY <= 9) dzien = "0" + Integer.toString(DO_DAY);
+
+        String miesiac = Integer.toString(DO_MONTH);
+        if((DO_MONTH) <= 9) miesiac = "0" + Integer.toString(DO_MONTH);
+
+        String AktualnaData = dzien + "-" + miesiac + "-" + Integer.toString(DO_YEAR);
+
+
+        dzien = Integer.toString(OD_DAY);
+        if(OD_DAY <= 9) dzien = "0" + Integer.toString(OD_DAY);
+
+        miesiac = Integer.toString(OD_MONTH);
+        if((OD_MONTH) <= 9) miesiac = "0" + Integer.toString(OD_MONTH);
+
+        String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
+
+        if(wszystko == true)
+        {
+            DataOd = "33-33-3333";
+            AktualnaData = "33-33-3333";
+        }
+
+        ArrayList<String> NazwyKategorii = new ArrayList<>();
+        ArrayList<Float> WydanePieniadze = new ArrayList<>();
+        IdDochodu = BazaDanych.getListaIDKategoriiDochod(DataOd, AktualnaData);
+
+
+        for(int a = 0; a < IdDochodu.size(); a++)
+        {
+            float bufor = BazaDanych.getIleDochoduWkategorii(IdDochodu.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
-                ZarobionePieniadze.add(bufor);
+                WydanePieniadze.add(bufor);
 
-                if(a == 0)
+                if(IdDochodu.get(a) == 0)
                 {
                     NazwyKategorii.add("Domyślna kategoria");
-                    IdDochodu.add(0);
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
-                    IdDochodu.add(intKategorie.get(a));
+                    NazwyKategorii.add(BazaDanych.getKategoriaName(IdDochodu.get(a)));
                 }
             }
 
         }
 
+
         for(int i = 0; i < NazwyKategorii.size(); i++)
         {
-            yEntrys.add(new PieEntry(ZarobionePieniadze.get(i), NazwyKategorii.get(i)));
+            yEntrys.add(new PieEntry(WydanePieniadze.get(i), NazwyKategorii.get(i)));
         }
 
 
 
-        PieDataSet pieDataSet2 = new PieDataSet(yEntrys, "");
-        pieDataSet2.setSliceSpace(2);
-        pieDataSet2.setValueTextSize(8);
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
+        pieDataSet.setSliceSpace(2);
+        pieDataSet.setValueTextSize(8);
 
+        ArrayList<Integer> colors = new ArrayList<>();
+        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        {
+            colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
+        }
 
-        pieDataSet2.setColors(colors);
+        pieDataSet.setColors(colors);
 
-        Legend legend2 = pieChart2.getLegend();
-        legend2.setForm(Legend.LegendForm.SQUARE);
-        legend2.setPosition(Legend.LegendPosition.LEFT_OF_CHART_CENTER);
+        Legend legend = pieChart2.getLegend();
 
-        PieData pieData2 = new PieData(pieDataSet2);
-        pieData2.setValueFormatter(new PercentFormatter());
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART_CENTER);
 
-        pieChart2.setData(pieData2);
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+
+        pieChart2.setData(pieData);
         pieChart2.invalidate();
+
     }
 
-    void SzczegolyKategoriiWydatku(Highlight he)
-    {
-        Toast.makeText(this, BazaDanych.getKategoriaName(IdWydatku.get((int)he.getX())), Toast.LENGTH_SHORT).show();
-        intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("NazwaKategorii", "Szczegóły kategorii " + BazaDanych.getKategoriaName(IdWydatku.get((int)he.getX())));
-        intent.putExtra("WydatekDochod", false); // wydatek
-        intent.putExtra("IdKategorii", IdWydatku.get((int)he.getX()));
-        startActivity(intent);
-    }
 
-    void SzczegolyKategoriiDochodu(Highlight he)
-    {
-        Toast.makeText(this, BazaDanych.getKategoriaName(IdWydatku.get((int)he.getX())), Toast.LENGTH_SHORT).show();
-        intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("NazwaKategorii", "Szczegóły kategorii " + BazaDanych.getKategoriaName(IdDochodu.get((int)he.getX())));
-        intent.putExtra("WydatekDochod", true); // wydatek
-        intent.putExtra("IdKategorii", IdDochodu.get((int)he.getX()));
-        startActivity(intent);
-    }
 
 }

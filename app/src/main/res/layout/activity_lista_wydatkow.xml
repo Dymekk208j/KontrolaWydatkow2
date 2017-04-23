@@ -6,4 +6,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.damiandziura.kontrolawydatkow.ListaWydatkow">
 
+    <TableLayout
+        android:id="@+id/TableLp"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btCofnij">
+
+        <TableRow
+            android:id="@+id/RowLp0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/TableNazwa"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btCofnij"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/TableLp"
+        android:layout_toRightOf="@+id/TableLp">
+
+        <TableRow
+            android:id="@+id/RowNazwa0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/TableKwota"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/TableNazwa"
+        android:layout_toRightOf="@+id/TableNazwa"
+        android:layout_alignBottom="@+id/TableNazwa">
+
+        <TableRow
+            android:id="@+id/RowKwota0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/TableData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/TableKwota"
+        android:layout_toRightOf="@+id/TableKwota"
+        android:layout_alignBottom="@+id/TableKwota">
+
+        <TableRow
+            android:id="@+id/RowData0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/btCofnij"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="Cofnij"
+        android:text="@string/stre_back" />
+
 </RelativeLayout>

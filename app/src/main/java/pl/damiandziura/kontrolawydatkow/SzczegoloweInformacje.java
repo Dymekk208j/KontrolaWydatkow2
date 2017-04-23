@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -23,17 +24,18 @@ import java.util.Random;
 public class SzczegoloweInformacje extends AppCompatActivity {
 
     private Intent intent;
-    PieChart pieChart;
+    private int ID_KATEGORII = 0;
+    private PieChart pieChart;
     private baza_danych BazaDanych;
     private ArrayList<Integer> colors;
-    Random r = new Random();
-    int Low = 0;
-    int High = 255;
-    ArrayList<Integer> IdWydatku;
-
-    String NazwaKategorii = "";
-    int IdKategorii = 0;
+    private Random r = new Random();
+    private int Low = 0;
+    private int High = 255;
     boolean WydatekDochod = false; //0 wydatek, 1 dochod
+
+    private ArrayList<Integer> IdWydatku;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +46,16 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
         if(extras != null)
         {
-            NazwaKategorii = extras.getString("NazwaKategorii");
             WydatekDochod = extras.getBoolean("WydatekDochod");
-            IdKategorii = extras.getInt("IdKategorii");
+            ID_KATEGORII = extras.getInt("IdKategorii");
         }
 
-        setTitle(NazwaKategorii);
+        String Nazwa_id_kategorii;
+        if(ID_KATEGORII != 0) {
+            Nazwa_id_kategorii = BazaDanych.getKategoriaName(ID_KATEGORII);
+        }else{ Nazwa_id_kategorii = "Domyślna kategoria";}
+
+        setTitle(Nazwa_id_kategorii);
 
 
 
@@ -77,7 +83,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-
+                SzczegolyPodKategoriiWydatku(h);
             }
 
             @Override
@@ -95,7 +101,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
         IdWydatku = new ArrayList<>();
 
-        ArrayList<Integer> intPodKategorie = BazaDanych.getINTpodKategorie(IdKategorii);
+        ArrayList<Integer> intPodKategorie = BazaDanych.getINTpodKategorie(ID_KATEGORII);
 
 
         for(int a = 0; a < intPodKategorie.size(); a++)
@@ -152,7 +158,19 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
     public void test(View view)
     {
-        
+        intent = new Intent(this, ListaWydatkow.class);
+        startActivity(intent);
+    }
+
+    void SzczegolyPodKategoriiWydatku(Highlight he)
+    {
+        Toast.makeText(this, BazaDanych.getPodKategoriaName(IdWydatku.get((int)he.getX())), Toast.LENGTH_SHORT).show();
+        intent = new Intent(this, ListaWydatkow.class);
+        intent.putExtra("IdKategorii", ID_KATEGORII);
+        intent.putExtra("IdPodKategorii", IdWydatku.get((int)he.getX()));
+        intent.putExtra("WydatekDochod", WydatekDochod);
+
+        startActivity(intent);
     }
 
 }

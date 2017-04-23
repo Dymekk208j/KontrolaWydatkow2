@@ -281,4 +281,16 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"></com.github.mikephil.charting.charts.PieChart>
 
+    <Spinner
+        android:id="@+id/SpinnerCzestotliwosc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/czestotliwosc2"
+        android:foregroundGravity="right"
+        android:gravity="right"
+        android:textAlignment="viewEnd"
+        android:layout_alignTop="@+id/idPieChart"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
