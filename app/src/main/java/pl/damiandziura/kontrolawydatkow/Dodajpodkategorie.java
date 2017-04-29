@@ -22,7 +22,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
     private  ArrayList<String> ListaPodkategorii;
     private String BufforList[];
     private String Nazwa_kategorii;
-
+    private int buforKatWydatekDochod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         if(extras != null)
         {
 
+            buforKatWydatekDochod = extras.getInt("KatWydatekDochod");
             IdKategorii = extras.getInt("NumerKategorii");
             IdPodKategorii = extras.getInt("NumerPodKategorii");
             WindowName = extras.getString("Nazwa_okna");
@@ -62,7 +63,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         {
             if(EdycjaKategorii == true)//edytujesz podkategorie istniejaca w bazie danych
             {
-                NazwaPodkat.setText(BazaDanych.getPodKategoriaName(IdPodKategorii));
+                NazwaPodkat.setText(BazaDanych.getSubcategoryName(IdPodKategorii));
             }
             else//edytujesz podkategorie jeszcze nie istniejaca w bazie danych
             {
@@ -82,6 +83,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
     public void cofnij(View view)
     {
         Intent intent = new Intent(this, DodajKategorie.class);
+        intent.putExtra("KatWydatekDochod", buforKatWydatekDochod);
         intent.putExtra("IdKategorii", IdKategorii);
         intent.putExtra("Nazwa_kategorii", Nazwa_kategorii);
 
@@ -107,6 +109,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         if(EdycjaKategorii == true) //dzialam na istniejacej kategorii
         {
             Intent intent = new Intent(this, DodajKategorie.class);
+            intent.putExtra("KatWydatekDochod", buforKatWydatekDochod);
             intent.putExtra("IdKategorii", IdKategorii);
             intent.putExtra("nazwa_okna", "Edycja kategorii:");
             intent.putExtra("edycja", true);
@@ -115,7 +118,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
             if(IdPodKategorii == 0)//dodaje nowa podkategorie
             {
                 if (!NazwaPodkat.getText().toString().equals("")) {
-                    BazaDanych.AddPodKategoria(NazwaPodkat.getText().toString(), IdKategorii);
+                    BazaDanych.AddSubcategory(NazwaPodkat.getText().toString(), IdKategorii);
                     Toast.makeText(this, "Dodano nową podkategorie " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
@@ -124,7 +127,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
             else//edytuje istniejaca podkategorie
             {
                 if (!NazwaPodkat.getText().toString().equals("")) {
-                    BazaDanych.updateNamePodkategoria(NazwaPodkat.getText().toString(), IdPodKategorii);
+                    BazaDanych.updateSubcategoryName(NazwaPodkat.getText().toString(), IdPodKategorii);
                     Toast.makeText(this, "Zmienione nazwe podkategorii na " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
@@ -178,8 +181,8 @@ public class Dodajpodkategorie extends AppCompatActivity {
     {
         if(EdycjaKategorii == true) //dzialam na istniejacej kategorii
         {
-            BazaDanych.RemovePodKategoria(IdPodKategorii);
-            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + BazaDanych.getPodKategoriaName(IdPodKategorii), Toast.LENGTH_SHORT).show();
+            BazaDanych.RemoveSubcategory(IdPodKategorii);
+            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + BazaDanych.getSubcategoryName(IdPodKategorii), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, DodajKategorie.class);
             intent.putExtra("IdKategorii", IdKategorii);
             intent.putExtra("nazwa_okna", "Edycja kategorii:");

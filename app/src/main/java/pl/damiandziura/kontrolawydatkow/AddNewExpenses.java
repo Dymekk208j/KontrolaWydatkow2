@@ -1,27 +1,20 @@
 package pl.damiandziura.kontrolawydatkow;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class AddNewExpenses extends AppCompatActivity {
 
@@ -30,7 +23,6 @@ public class AddNewExpenses extends AppCompatActivity {
     private String NAZWA = "", DATA = "", GODZINA = "";
     private double KWOTA = 0;
 
-    private String strData, strGodzina;
     private Intent intent;
     private Calendar c;
     TextView txtData;
@@ -57,7 +49,7 @@ public class AddNewExpenses extends AppCompatActivity {
         txtKwota.setText("");
         SpinnerListaKategorii = (Spinner) findViewById(R.id.SpinnerKategoriaWydatki);
         SpinnerListaPodKategorii = (Spinner) findViewById(R.id.SpinnerPodKategoriaWydatki);
-        setTitle("Dodaj nowy wydatek");
+        setTitle(getResources().getString(R.string.str_dodaj_nowy_wydatek));
         setDataAndHour();
 
        // podkategoria();
@@ -132,8 +124,8 @@ public class AddNewExpenses extends AppCompatActivity {
     }
 
     private void kategoria()    {
-        ArrayList<String> lista = BazaDanych.getKategorie();
-        KategoriaIDlist = BazaDanych.getINTKategorie();
+        ArrayList<String> lista = BazaDanych.getCategory(0);
+        KategoriaIDlist = BazaDanych.getIdListOfCategory(0);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,17 +136,17 @@ public class AddNewExpenses extends AppCompatActivity {
         SpinnerListaKategorii.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                podkategoria(position);
+                podkategoria(KategoriaIDlist.get(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                // sometimes you need nothing here
+                //sometimes you need nothing here
             }
         });
 
-       // Toast.makeText(this, lista.get(1), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, lista.get(1), Toast.LENGTH_SHORT).show();
         //podkategoria();
     }
 
@@ -163,8 +155,8 @@ public class AddNewExpenses extends AppCompatActivity {
     public void podkategoria(int numer)
     {
 
-        ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
-        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(numer);
+        ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(numer);
+        PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(numer);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -191,26 +183,26 @@ public class AddNewExpenses extends AppCompatActivity {
 
         if(!NAZWA.equals("") && NAZWA != null)
         {
-           if(!txtKwota.getText().toString().equals("") && txtKwota.getText().toString() != null)
+           if(!txtKwota.getText().toString().equals(""))
            {
                KWOTA = Double.parseDouble(txtKwota.getText().toString());
                if (KWOTA > 0.0) {
                    int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(SpinnerListaKategorii.getSelectedItemPosition());
                    int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(SpinnerListaPodKategorii.getSelectedItemPosition());
 
-                   BazaDanych.DodajWydatek(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
+                   BazaDanych.AddExpenses(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
 
-                   Toast.makeText(this, "Dodano nowy wydatek " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(this, getResources().getString(R.string.str_dodawno_nowy_wydatek) + NAZWA + " " + Double.toString(KWOTA) + getResources().getString(R.string.str_skrot_waluty), Toast.LENGTH_SHORT).show();
 
-                   BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
+                   BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
 
                    intent = new Intent(this, MainActivity.class);
 
                    startActivity(intent);
-               } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
-           } else Toast.makeText(this, "Musisz wpisać kwote!", Toast.LENGTH_SHORT).show();
+               } else Toast.makeText(this, getResources().getString(R.string.str_kwota_wieksza_od_0), Toast.LENGTH_SHORT).show();
+           } else Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_kwote), Toast.LENGTH_SHORT).show();
 
-        }else{Toast.makeText(this, "Musisz wpisać nazwe!", Toast.LENGTH_SHORT).show();}
+        }else{Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_nazwe), Toast.LENGTH_SHORT).show();}
 
 
 
@@ -220,8 +212,7 @@ public class AddNewExpenses extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-        BazaDanych.EditKategoria("Dupa1", 1);
-      /*  NAZWA="";
+        NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
@@ -229,22 +220,6 @@ public class AddNewExpenses extends AppCompatActivity {
         txtKwota.setText("");
         SpinnerListaKategorii.setSelection(0);
         SpinnerListaPodKategorii.setSelection(0);
-
-       /* BazaDanych.AddKategoria("Pierwsza Kategoria");
-        BazaDanych.AddKategoria("Druga Kategoria");
-        BazaDanych.AddKategoria("Trzecia Kategoria");
-        BazaDanych.AddKategoria("Czwarta Kategoria");
-        BazaDanych.AddKategoria("Piąta");
-
-        BazaDanych.AddPodKategoria("Kat1. PierwszPodKat", 1);
-        BazaDanych.AddPodKategoria("Kat1. DrugaPodKat", 1);
-        BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
-        BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
-
-        BazaDanych.addStalyWydatek("Rata za samochod", 600 , 0, 0, "01-01-2017", "01-12-2017", "01-05-2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
-       //BazaDanych.updateNamePodkategoria("dupa1", 1);
-
-        */
     }
 
     public void WybierzDateGodzine(View view) {

@@ -38,15 +38,15 @@ public class Informacje extends AppCompatActivity {
     Random r = new Random();
     int Low = 0;
     int High = 255;
-    ArrayList<Integer> IdWydatku, IdDochodu;
+    ArrayList<Integer> IdWydatku, IdIncomeu;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setTitle("Szczegółowe informacje");
         setContentView(R.layout.activity_informacje);
 
         BazaDanych = new baza_danych(this);
-
 
         Description desc = new Description();
         desc.setText(" ");
@@ -62,7 +62,7 @@ public class Informacje extends AppCompatActivity {
 
 
         colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }
@@ -112,12 +112,12 @@ public class Informacje extends AppCompatActivity {
         pieChart2.setDescription(desc);
         pieChart2.animateXY(1500, 1500);
 
-        RysujWykresDochodu(0);
+        RysujWykresIncomeu(0);
 
         pieChart2.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                SzczegolyKategoriiDochodu(h);
+                SzczegolyKategoriiIncomeu(h);
             }
 
             @Override
@@ -136,7 +136,7 @@ public class Informacje extends AppCompatActivity {
         SpinnerCzestotliwosc2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                RysujWykresDochodu(position);
+                RysujWykresIncomeu(position);
             }
 
             @Override
@@ -158,18 +158,18 @@ public class Informacje extends AppCompatActivity {
 
     void SzczegolyKategoriiWydatku(Highlight he)
     {
-        ArrayList<Integer> neww = IdWydatku;
         intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("WydatekDochod", false); // wydatek
-        intent.putExtra("IdKategorii", IdWydatku.get((int)he.getX()));
+        intent.putExtra("WydatekIncome", false); // wydatek
+        int bufor =  IdWydatku.get((int)he.getX());
+        intent.putExtra("IdKategorii", bufor);
         startActivity(intent);
     }
 
-    void SzczegolyKategoriiDochodu(Highlight he)
+    void SzczegolyKategoriiIncomeu(Highlight he)
     {
         intent = new Intent(this, SzczegoloweInformacje.class);
         intent.putExtra("WydatekDochod", true); // wydatek
-        intent.putExtra("IdKategorii", IdDochodu.get((int)he.getX()));
+        intent.putExtra("IdKategorii", IdIncomeu.get((int)he.getX()));
         startActivity(intent);
     }
 
@@ -242,12 +242,12 @@ public class Informacje extends AppCompatActivity {
 
         ArrayList<String> NazwyKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        IdWydatku = BazaDanych.getListaIDKategorii(DataOd, AktualnaData);
+        IdWydatku = BazaDanych.getCategoryIdListForExpenses(DataOd, AktualnaData);
 
 
         for(int a = 0; a < IdWydatku.size(); a++)
         {
-            float bufor = BazaDanych.getIleWydanoWkategorii(IdWydatku.get(a), DataOd, AktualnaData);
+            float bufor = BazaDanych.getHowMuchSpendInCategory(IdWydatku.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
@@ -258,7 +258,7 @@ public class Informacje extends AppCompatActivity {
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getKategoriaName(IdWydatku.get(a)));
+                    NazwyKategorii.add(BazaDanych.getCategoryName(IdWydatku.get(a)));
                 }
             }
 
@@ -277,7 +277,7 @@ public class Informacje extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }
@@ -294,11 +294,10 @@ public class Informacje extends AppCompatActivity {
 
         pieChart.setData(pieData);
         pieChart.invalidate();
-
     }
 
 
-    private void RysujWykresDochodu(int wybor)
+    private void RysujWykresIncomeu(int wybor)
     {
         boolean wszystko = false;
 
@@ -307,15 +306,10 @@ public class Informacje extends AppCompatActivity {
         int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
         int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
 
-
-
         Calendar DataOdKiedy = Calendar.getInstance();
         int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
         int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
         int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
-
-
-
 
 
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
@@ -367,23 +361,23 @@ public class Informacje extends AppCompatActivity {
 
         ArrayList<String> NazwyKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        IdDochodu = BazaDanych.getListaIDKategoriiDochod(DataOd, AktualnaData);
+        IdIncomeu = BazaDanych.getCategoryIdListForIncome(DataOd, AktualnaData);
 
 
-        for(int a = 0; a < IdDochodu.size(); a++)
+        for(int a = 0; a < IdIncomeu.size(); a++)
         {
-            float bufor = BazaDanych.getIleDochoduWkategorii(IdDochodu.get(a), DataOd, AktualnaData);
+            float bufor = BazaDanych.getHowMuchEarnInCategory(IdIncomeu.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
 
-                if(IdDochodu.get(a) == 0)
+                if(IdIncomeu.get(a) == 0)
                 {
                     NazwyKategorii.add("Domyślna kategoria");
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getKategoriaName(IdDochodu.get(a)));
+                    NazwyKategorii.add(BazaDanych.getCategoryName(IdIncomeu.get(a)));
                 }
             }
 
@@ -402,7 +396,7 @@ public class Informacje extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }

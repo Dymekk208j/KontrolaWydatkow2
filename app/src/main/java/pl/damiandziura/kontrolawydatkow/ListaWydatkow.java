@@ -36,19 +36,32 @@ public class ListaWydatkow extends AppCompatActivity {
 
         String Nazwa_id_kategorii, Nazwa_id_podkategorii;
         if(ID_KATEGORII != 0) {
-            Nazwa_id_kategorii = BazaDanych.getKategoriaName(ID_KATEGORII);
+            Nazwa_id_kategorii = BazaDanych.getCategoryName(ID_KATEGORII);
         }else{ Nazwa_id_kategorii = "Domyślna kategoria";}
 
         if(ID_PODKATEGORI != 0) {
-            Nazwa_id_podkategorii = BazaDanych.getPodKategoriaName(ID_PODKATEGORI);
+            Nazwa_id_podkategorii = BazaDanych.getSubcategoryName(ID_PODKATEGORI);
         }else{ Nazwa_id_podkategorii = "Domyślna podkategoria";}
 
-        setTitle(Nazwa_id_kategorii + "/" + Nazwa_id_podkategorii + "/Wydatki");
+        setTitle(Nazwa_id_kategorii + "/" + Nazwa_id_podkategorii + "/*");
 
-        ArrayList<String> ListaNazwa = BazaDanych.getWydatkiNames(ID_KATEGORII, ID_PODKATEGORI);
-        ArrayList<String> ListaDat = BazaDanych.getWydatkiDaty(ID_KATEGORII, ID_PODKATEGORI);
-        ArrayList<Double> ListaKwot = BazaDanych.getWydatkiKwoty(ID_KATEGORII, ID_PODKATEGORI);
+        ArrayList<String> ListaNazwa;
+        ArrayList<String> ListaDat;
+        ArrayList<Double> ListaKwot;
 
+        if(WydatekDochod == false)
+        {
+            ListaNazwa = BazaDanych.getExpensesNames(ID_KATEGORII, ID_PODKATEGORI);
+            ListaDat = BazaDanych.getExpensesDates(ID_KATEGORII, ID_PODKATEGORI);
+            ListaKwot = BazaDanych.getExpensesAmount(ID_KATEGORII, ID_PODKATEGORI);
+        }
+        else
+        {
+            ListaNazwa = BazaDanych.getIncomeNames(ID_KATEGORII, ID_PODKATEGORI);
+            ListaDat = BazaDanych.getIncomeDates(ID_KATEGORII, ID_PODKATEGORI);
+            ListaKwot = BazaDanych.getIncomeAmounts(ID_KATEGORII, ID_PODKATEGORI);
+
+        }
         for(int a = 0; a < ListaNazwa.size(); a++)
         {
             DodajDane(ListaNazwa.get(a), ListaKwot.get(a), ListaDat.get(a));

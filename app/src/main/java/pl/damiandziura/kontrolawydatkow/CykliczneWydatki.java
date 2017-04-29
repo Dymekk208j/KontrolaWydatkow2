@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
@@ -17,21 +15,21 @@ public class CykliczneWydatki extends AppCompatActivity {
     private baza_danych BazaDanych;
     private ListView listView;
     private Intent intent;
-    private ArrayList<Integer> idListStalychWydatkow;
-    private int idStalegoWydatku = 0;
+    private ArrayList<Integer> idListCyclicalWydatkow;
+    private int idCyclicalWydatku = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cykliczne_wydatki);
-        setTitle("Lista cyklicznych wydatków");
+        setTitle(getResources().getString(R.string.str_lista_cykl_wydatkow));
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         BazaDanych = new baza_danych(this);
 
 
-        ArrayList<String> lista = BazaDanych.getStaleWydatki();
-        idListStalychWydatkow = BazaDanych.getINTstaleWydatki();
+        ArrayList<String> lista = BazaDanych.getNameListOfCyclilcalExpenses();
+        idListCyclicalWydatkow = BazaDanych.getIdListOfCyclicalExpenses();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
@@ -42,19 +40,19 @@ public class CykliczneWydatki extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                idStalegoWydatku = idListStalychWydatkow.get(position);
-                edytujStalyWydatek(position+1);
+                idCyclicalWydatku = idListCyclicalWydatkow.get(position);
+                edytujStalyWydatek();
             }
 
         });
     }
 
-    private void edytujStalyWydatek(int pozycja)
+    private void edytujStalyWydatek()
     {
         intent = new Intent(this, dodajStalyWydatek.class);
-        intent.putExtra("IdStalegoWydatku", idStalegoWydatku);
+        intent.putExtra("IdStalegoWydatku", idCyclicalWydatku);
         intent.putExtra("edycja", true);
-        intent.putExtra("nazwa_okna", "Edycja cyklicznego wydatku:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_edycja_cyklicznego_wydatku));
         startActivity(intent);
     }
 
@@ -65,7 +63,7 @@ public class CykliczneWydatki extends AppCompatActivity {
 
     public void dodaj(View view) {
         Intent intent = new Intent(this, dodajStalyWydatek.class);
-        intent.putExtra("nazwa_okna", "Dodaj nowy cykliczny wydatek:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_dodaj_cykliczny_wydatek));
         intent.putExtra("edycja", false);
         startActivity(intent);
     }

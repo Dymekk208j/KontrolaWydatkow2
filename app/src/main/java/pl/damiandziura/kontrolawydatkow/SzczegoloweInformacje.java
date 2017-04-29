@@ -24,7 +24,7 @@ import java.util.Random;
 public class SzczegoloweInformacje extends AppCompatActivity {
 
     private Intent intent;
-    private int ID_KATEGORII = 0;
+    private int ID_KATEGORII;
     private PieChart pieChart;
     private baza_danych BazaDanych;
     private ArrayList<Integer> colors;
@@ -52,7 +52,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
         String Nazwa_id_kategorii;
         if(ID_KATEGORII != 0) {
-            Nazwa_id_kategorii = BazaDanych.getKategoriaName(ID_KATEGORII);
+            Nazwa_id_kategorii = BazaDanych.getCategoryName(ID_KATEGORII);
         }else{ Nazwa_id_kategorii = "Domyślna kategoria";}
 
         setTitle(Nazwa_id_kategorii);
@@ -78,19 +78,21 @@ public class SzczegoloweInformacje extends AppCompatActivity {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }
 
-        dodajDanePodkategorii();
 
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                SzczegolyPodKategoriiWydatku(h);
-            }
+            dodajDanePodkategorii();
 
-            @Override
-            public void onNothingSelected() {
+            pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                @Override
+                public void onValueSelected(Entry e, Highlight h) {
+                    SzczegolyPodKategoriiWydatku(h);
+                }
 
-            }
-        });
+                @Override
+                public void onNothingSelected() {
+
+                }
+            });
+
 
     }
 
@@ -99,31 +101,41 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
         ArrayList<String> NazwyPodKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
+        ArrayList<Integer> intPodkat = BazaDanych.getIdListOfSubcategory(ID_KATEGORII);
         IdWydatku = new ArrayList<>();
+        float bufor;
 
-        ArrayList<Integer> intPodKategorie = BazaDanych.getINTpodKategorie(ID_KATEGORII);
+      //  ArrayList<Integer> intPodKategorie = BazaDanych.getINTpodKategorie(ID_KATEGORII);
 
 
-        for(int a = 0; a < intPodKategorie.size(); a++)
+        for(int a = 0; a < intPodkat.size(); a++)
         {
-            float bufor = BazaDanych.getIleWydanoWPodkategorii(intPodKategorie.get(a));
+            if(WydatekDochod == false)
+            {
+                bufor = BazaDanych.getHowMuchSpendInSubcategory(intPodkat.get(a));
+            }else
+            {
+                bufor = BazaDanych.getHowMuchEarnInSubcategory(intPodkat.get(a));
+            }
+
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
 
-                if(a == 0)
+                if(intPodkat.get(a) == 0)
                 {
                     NazwyPodKategorii.add("Domyślna podkategoria");
                     IdWydatku.add(0);
                 }
                 else
                 {
-                    NazwyPodKategorii.add(BazaDanych.getPodKategoriaName(intPodKategorie.get(a)));
-                    IdWydatku.add(intPodKategorie.get(a));
+                    NazwyPodKategorii.add(BazaDanych.getSubcategoryName(intPodkat.get(a)));
+                    IdWydatku.add(intPodkat.get(a));
                 }
             }
 
         }
+
 
         for(int i = 0; i < NazwyPodKategorii.size(); i++)
         {
@@ -164,13 +176,16 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
     void SzczegolyPodKategoriiWydatku(Highlight he)
     {
-        Toast.makeText(this, BazaDanych.getPodKategoriaName(IdWydatku.get((int)he.getX())), Toast.LENGTH_SHORT).show();
         intent = new Intent(this, ListaWydatkow.class);
         intent.putExtra("IdKategorii", ID_KATEGORII);
-        intent.putExtra("IdPodKategorii", IdWydatku.get((int)he.getX()));
+        int bufor =  IdWydatku.get((int)he.getX());
+        intent.putExtra("IdPodKategorii", bufor);
         intent.putExtra("WydatekDochod", WydatekDochod);
 
         startActivity(intent);
     }
+
+
+
 
 }

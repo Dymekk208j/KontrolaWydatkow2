@@ -17,23 +17,14 @@ public class MyService extends Service {
     private class MyTimerTask extends TimerTask {
         @Override
         public void run() {
-            BazaDanych.sprawdzanieStalychWydatkow();
+            BazaDanych.CheckCyclicalExpenses();
+            BazaDanych.CheckCyclicalIncome();
         }
-    }
-
-    private void showToast(String text) {
-        toast.setText(text);
-        toast.show();
-    }
-
-    private void writeToLogs(String message) {
-        Log.d("HelloServices", message);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        writeToLogs("Called onCreate() method.");
         timer = new Timer();
         BazaDanych = new baza_danych(this);
 
@@ -41,7 +32,6 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        writeToLogs("Called onStartCommand() methond");
         clearTimerSchedule();
         initTask();
         timer.scheduleAtFixedRate(timerTask, 4 * 1000, 60 * 60 * 1000);
@@ -62,7 +52,6 @@ public class MyService extends Service {
 
     @Override
     public void onDestroy() {
-        writeToLogs("Called onDestroy() method");
         clearTimerSchedule();
         super.onDestroy();
     }

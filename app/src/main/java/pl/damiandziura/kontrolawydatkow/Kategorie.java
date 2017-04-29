@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 
@@ -19,6 +21,8 @@ public class Kategorie extends AppCompatActivity {
     private Intent intent;
     private ArrayList<Integer> idListKategorii;
     private int idKategorii = 0;
+    private int KatWydatekDochod = 0; // 0-wydatek; 1-dochod
+    private RadioButton RadioWydatek;
 
 
     @Override
@@ -28,20 +32,30 @@ public class Kategorie extends AppCompatActivity {
         setTitle("Lista kategori");
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
+        RadioWydatek = (RadioButton) findViewById(R.id.RadioWydatki);
+
         BazaDanych = new baza_danych(this);
 
 
-        ArrayList<String> lista = BazaDanych.getKategorie();
+        RadioGroup radioWydatekDochod = (RadioGroup) findViewById(R.id.RadioGrup);
+
+
+        radioWydatekDochod.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup arg0, int id) {
+                test();
+            }
+        });
+
+        ArrayList<String> lista = BazaDanych.getCategory(KatWydatekDochod);
         lista.remove(0);
 
-        idListKategorii = BazaDanych.getINTKategorie();
+        idListKategorii = BazaDanych.getIdListOfCategory(KatWydatekDochod);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -74,7 +88,38 @@ public class Kategorie extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void test()
+    {
 
+        if(RadioWydatek.isChecked())
+        {
+            KatWydatekDochod = 0;
+        }else
+        {
+            KatWydatekDochod = 1;
+        }
+
+        ArrayList<String> lista = BazaDanych.getCategory(KatWydatekDochod);
+        lista.remove(0);
+
+        idListKategorii = BazaDanych.getIdListOfCategory(KatWydatekDochod);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+
+
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                idKategorii = idListKategorii.get(position+1);
+                edytujKat(position);
+            }
+
+        });
+
+
+    }
 
 
 }

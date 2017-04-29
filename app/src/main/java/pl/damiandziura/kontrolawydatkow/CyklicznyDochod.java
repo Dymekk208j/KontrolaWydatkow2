@@ -15,21 +15,21 @@ public class CyklicznyDochod extends AppCompatActivity {
     private baza_danych BazaDanych;
     private ListView listView;
     private Intent intent;
-    private ArrayList<Integer> idListStalychDochodow;
-    private int idStalegodochodu = 0;
+    private ArrayList<Integer> idListCyclicalIncome;
+    private int idCyclicalIncomeu = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cykliczny_dochod);
-        setTitle("Lista cyklicznych dochodów");
+        setTitle(getResources().getString(R.string.str_lista_cykl_dochodow));
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         BazaDanych = new baza_danych(this);
 
 
-        ArrayList<String> lista = BazaDanych.getStaleDochody();
-        idListStalychDochodow = BazaDanych.getINTstaleDochody();
+        ArrayList<String> lista = BazaDanych.getNameListOfCyclicalIncome();
+        idListCyclicalIncome = BazaDanych.getIdListOfCyclicalIncome();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
@@ -40,19 +40,19 @@ public class CyklicznyDochod extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                idStalegodochodu = idListStalychDochodow.get(position);
-                edytujStalyDochod(position+1);
+                idCyclicalIncomeu = idListCyclicalIncome.get(position);
+                edytujCyclicalIncome();
             }
 
         });
     }
 
-    private void edytujStalyDochod(int pozycja)
+    private void edytujCyclicalIncome()
     {
         intent = new Intent(this, dodajStalydochod.class);
-        intent.putExtra("IdStalegoDochodu", idStalegodochodu);
+        intent.putExtra("IdStalegoWydatku", idCyclicalIncomeu);
         intent.putExtra("edycja", true);
-        intent.putExtra("nazwa_okna", "Edycja cyklicznego dochodu:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_edycja_cyklicznego_dochodu));
         startActivity(intent);
     }
 
@@ -63,7 +63,7 @@ public class CyklicznyDochod extends AppCompatActivity {
 
     public void dodaj(View view) {
         Intent intent = new Intent(this, dodajStalydochod.class);
-        intent.putExtra("nazwa_okna", "Dodaj nowy cykliczny dochod:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_dodaj_cykliczny_dochod));
         intent.putExtra("edycja", false);
         startActivity(intent);
     }

@@ -132,8 +132,8 @@ public class nowyPrzychod extends AppCompatActivity {
     }
 
     private void kategoria()    {
-        ArrayList<String> lista = BazaDanych.getKategorie();
-        KategoriaIDlist = BazaDanych.getINTKategorie();
+        ArrayList<String> lista = BazaDanych.getCategory(1);
+        KategoriaIDlist = BazaDanych.getIdListOfCategory(1);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,7 +144,7 @@ public class nowyPrzychod extends AppCompatActivity {
         SpinnerListaKategorii.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                podkategoria(position);
+                podkategoria(KategoriaIDlist.get(position));
             }
 
             @Override
@@ -163,8 +163,8 @@ public class nowyPrzychod extends AppCompatActivity {
     public void podkategoria(int numer)
     {
 
-        ArrayList<String> lista = BazaDanych.getpodKategorie(numer);
-        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(numer);
+        ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(numer);
+        PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(numer);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -199,11 +199,11 @@ public class nowyPrzychod extends AppCompatActivity {
                     int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(SpinnerListaKategorii.getSelectedItemPosition());
                     int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(SpinnerListaPodKategorii.getSelectedItemPosition());
 
-                    BazaDanych.DodajDochod(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
+                    BazaDanych.AddIncome(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
 
                     Toast.makeText(this, "Dodano nowy dochod " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
 
-                    BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
+                    BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
 
                     intent = new Intent(this, MainActivity.class);
 
@@ -221,8 +221,7 @@ public class nowyPrzychod extends AppCompatActivity {
 
     public void wyczysc(View view)
     {
-        BazaDanych.EditKategoria("Dupa1", 1);
-      /*  NAZWA="";
+        NAZWA="";
         setDataAndHour();
         KWOTA = 0;
         txtData.setText(DATA + " " + GODZINA);
@@ -231,21 +230,6 @@ public class nowyPrzychod extends AppCompatActivity {
         SpinnerListaKategorii.setSelection(0);
         SpinnerListaPodKategorii.setSelection(0);
 
-       /* BazaDanych.AddKategoria("Pierwsza Kategoria");
-        BazaDanych.AddKategoria("Druga Kategoria");
-        BazaDanych.AddKategoria("Trzecia Kategoria");
-        BazaDanych.AddKategoria("Czwarta Kategoria");
-        BazaDanych.AddKategoria("Piąta");
-
-        BazaDanych.AddPodKategoria("Kat1. PierwszPodKat", 1);
-        BazaDanych.AddPodKategoria("Kat1. DrugaPodKat", 1);
-        BazaDanych.AddPodKategoria("Kat2. PierwszPodKat", 2);
-        BazaDanych.AddPodKategoria("Kat2. DrugaPodKat", 2);
-
-        BazaDanych.addStalyWydatek("Rata za samochod", 600 , 0, 0, "01-01-2017", "01-12-2017", "01-05-2017", baza_danych.CZESTOTLIWOSC.DZIENNIE);
-       //BazaDanych.updateNamePodkategoria("dupa1", 1);
-
-        */
     }
 
     public void WybierzDateGodzine(View view) {

@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
     PieChart pieChart;
 
     private baza_danych BazaDanych;
-    TextView OstatniWydatek[] = new TextView[10];
-    String sOstatniWydatek[] = new String[10];
+    TextView LastWydatek[] = new TextView[10];
+    String sLastWydatek[] = new String[10];
 
-    TextView OstatniDochod[] = new TextView[10];
-    String sOstatniDochod[] = new String[10];
+    TextView LastDochod[] = new TextView[10];
+    String sLastDochod[] = new String[10];
     TextView PosiadaneSrodki;
     Random r = new Random();
     int Low = 65;
@@ -53,45 +53,45 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        BazaDanych.PortfelUstawSaldo(BazaDanych.PortfelPrzeliczSaldo());
+        BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
         PosiadaneSrodki = (TextView) findViewById(R.id.textView);
-        String kwotaa = String.format("%.2f",BazaDanych.getPortfelSaldo());
+        String kwotaa = String.format("%.2f",BazaDanych.getWalletBalance());
         PosiadaneSrodki.setText("Saldo konta: " + kwotaa + "zł");
 
-        OstatniWydatek[0] = (TextView) findViewById(R.id.TxtLastExp0);
-        OstatniWydatek[1] = (TextView) findViewById(R.id.TxtLastExp1);
-        OstatniWydatek[2] = (TextView) findViewById(R.id.TxtLastExp2);
-        OstatniWydatek[3] = (TextView) findViewById(R.id.TxtLastExp3);
-        OstatniWydatek[4] = (TextView) findViewById(R.id.TxtLastExp4);
-        OstatniWydatek[5] = (TextView) findViewById(R.id.TxtLastExp5);
-        OstatniWydatek[6] = (TextView) findViewById(R.id.TxtLastExp6);
-        OstatniWydatek[7] = (TextView) findViewById(R.id.TxtLastExp7);
-        OstatniWydatek[8] = (TextView) findViewById(R.id.TxtLastExp8);
-        OstatniWydatek[9] = (TextView) findViewById(R.id.TxtLastExp9);
+        LastWydatek[0] = (TextView) findViewById(R.id.TxtLastExp0);
+        LastWydatek[1] = (TextView) findViewById(R.id.TxtLastExp1);
+        LastWydatek[2] = (TextView) findViewById(R.id.TxtLastExp2);
+        LastWydatek[3] = (TextView) findViewById(R.id.TxtLastExp3);
+        LastWydatek[4] = (TextView) findViewById(R.id.TxtLastExp4);
+        LastWydatek[5] = (TextView) findViewById(R.id.TxtLastExp5);
+        LastWydatek[6] = (TextView) findViewById(R.id.TxtLastExp6);
+        LastWydatek[7] = (TextView) findViewById(R.id.TxtLastExp7);
+        LastWydatek[8] = (TextView) findViewById(R.id.TxtLastExp8);
+        LastWydatek[9] = (TextView) findViewById(R.id.TxtLastExp9);
 
-        OstatniDochod[0] = (TextView) findViewById(R.id.TxtOstatniDochod0);
-        OstatniDochod[1] = (TextView) findViewById(R.id.TxtOstatniDochod1);
-        OstatniDochod[2] = (TextView) findViewById(R.id.TxtOstatniDochod2);
-        OstatniDochod[3] = (TextView) findViewById(R.id.TxtOstatniDochod3);
-        OstatniDochod[4] = (TextView) findViewById(R.id.TxtOstatniDochod4);
-        OstatniDochod[5] = (TextView) findViewById(R.id.TxtOstatniDochod5);
-        OstatniDochod[6] = (TextView) findViewById(R.id.TxtOstatniDochod6);
-        OstatniDochod[7] = (TextView) findViewById(R.id.TxtOstatniDochod7);
-        OstatniDochod[8] = (TextView) findViewById(R.id.TxtOstatniDochod8);
-        OstatniDochod[9] = (TextView) findViewById(R.id.TxtOstatniDochod9);
+        LastDochod[0] = (TextView) findViewById(R.id.TxtLastDochod0);
+        LastDochod[1] = (TextView) findViewById(R.id.TxtLastDochod1);
+        LastDochod[2] = (TextView) findViewById(R.id.TxtLastDochod2);
+        LastDochod[3] = (TextView) findViewById(R.id.TxtLastDochod3);
+        LastDochod[4] = (TextView) findViewById(R.id.TxtLastDochod4);
+        LastDochod[5] = (TextView) findViewById(R.id.TxtLastDochod5);
+        LastDochod[6] = (TextView) findViewById(R.id.TxtLastDochod6);
+        LastDochod[7] = (TextView) findViewById(R.id.TxtLastDochod7);
+        LastDochod[8] = (TextView) findViewById(R.id.TxtLastDochod8);
+        LastDochod[9] = (TextView) findViewById(R.id.TxtLastDochod9);
 
-        sOstatniWydatek = BazaDanych.getOstatnieWydatki();
-        sOstatniDochod = BazaDanych.getOstatnieDochody();
+        sLastWydatek = BazaDanych.getLastExpenses();
+        sLastDochod = BazaDanych.getLastIncome();
 
 
 
         for(int a = 0; a < 10; a++)
         {
-            OstatniWydatek[a].setText(sOstatniWydatek[a]);
-            OstatniDochod[a].setText(sOstatniDochod[a]);
+            LastWydatek[a].setText(sLastWydatek[a]);
+            LastDochod[a].setText(sLastDochod[a]);
         }
         Description desc = new Description();
-        desc.setText("Wydatki względem kategorii");
+        desc.setText("Expenses względem kategorii");
 
         pieChart = (PieChart) findViewById(R.id.idPieChart);
         pieChart.setRotationEnabled(true);
@@ -228,12 +228,12 @@ public class MainActivity extends AppCompatActivity {
         }
         ArrayList<String> NazwyKategorii = new ArrayList<>();
         ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        ArrayList<Integer> intKategorie = BazaDanych.getListaIDKategorii(DataOd, AktualnaData);
+        ArrayList<Integer> intKategorie = BazaDanych.getCategoryIdListForExpenses(DataOd, AktualnaData);
 
 
         for(int a = 0; a < intKategorie.size(); a++)
         {
-            float bufor = BazaDanych.getIleWydanoWkategorii(intKategorie.get(a), DataOd, AktualnaData);
+            float bufor = BazaDanych.getHowMuchSpendInCategory(intKategorie.get(a), DataOd, AktualnaData);
             if(bufor > 0)
             {
                 WydanePieniadze.add(bufor);
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getKategoriaName(intKategorie.get(a)));
+                    NazwyKategorii.add(BazaDanych.getCategoryName(intKategorie.get(a)));
                 }
             }
 
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getKategoriaMaxId(); i++)
+        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }

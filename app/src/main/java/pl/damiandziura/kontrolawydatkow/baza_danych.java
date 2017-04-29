@@ -5,79 +5,58 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import android.support.annotation.IntegerRes;
-import android.support.v4.app.INotificationSideChannel;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.HOUR_OF_DAY;
-import static java.util.Calendar.MINUTE;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-
-/**
- * Created by Dymek on 23.03.2017.
- */
 
 public class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
-    private static final int DATABASE_VERSION = 10;
-    private static final String DATABASE_NAME = "baza.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "baza2.db";
 
-    // Nazwy tabeli
-    private static final String TABLE_wydatki = "Wydatki";
-    private static final String TABLE_dochody = "Dochody";
-    private static final String TABLE_portfel = "Portfel";
-    private static final String TABLE_kategoria = "Kategoria";
-    private static final String TABLE_podkategoria = "Podkategoria";
-    private static final String TABLE_Staly_wydatek = "StalyWydatek";
-    private static final String TABLE_Staly_dochod = "StalyDochod";
+    // Name tabeli
+    private static final String TABLE_Expenses = "Expenses";
+    private static final String TABLE_Income = "Income";
+    private static final String TABLE_Wallet = "Wallet";
+    private static final String TABLE_Category = "Category";
+    private static final String TABLE_Subcategory = "Subcategory";
+    private static final String TABLE_Cyclical_Expenses = "CyclicalExpenses";
+    private static final String TABLE_Cyclical_Income = "CyclicalIncome";
 
-    // Nazwy kolumn
+    // Name kolumn
     private static final String KEY_ID = "id";
-    private static final String KEY_nazwa = "nazwa";
-    private static final String KEY_kwota = "kwota";
-    private static final String KEY_podkategoria = "podkategoria";
-    private static final String KEY_kategoria = "kategoria";
-    private static final String KEY_data = "data";
-    private static final String KEY_godzina = "godzina";
+    private static final String KEY_Name = "Name";
+    private static final String KEY_Amount = "Amount";
+    private static final String KEY_Subcategory = "Subcategory";
+    private static final String KEY_Category = "Category";
+    private static final String KEY_date = "date";
+    private static final String KEY_hour = "hour";
     private static final String KEY_odkiedy = "od_kiedy";
     private static final String KEY_dokiedy = "do_kiedy";
     private static final String KEY_nastepnaData = "nastepna_data";
-    private static final String KEY_czestotliwosc = "czestotliwosc";
-
-
-    // property help us to keep data
-    private int wydatki_id;
-    private String nazwa;
-    private double kwota;
-    private int kategoria;
-    private int podkategoria;
-    private int data;
+    private static final String KEY_frequency = "frequency";
+    private static final String KEY_Type = "Type"; // 0- Expenses; 1- Income// Do czego przypisana jest Category.
 
     public baza_danych(Context context )
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    enum CZESTOTLIWOSC
+    enum FREQUENCY
     {
-        DZIENNIE("DZIENNIE"),
-        TYDZIEN("TYDZIEN"),
-        MIESIAC("MIESIAC"),
-        KWARTAL("KWARTAL"),
-        ROK("ROK");
+        DAILY("DAILY"),
+        WEEKLY("WEEKLY"),
+        MONTHLY("MONTHLY"),
+        QUARTERLY("QUARTERLY"),
+        YEARLY("YEARLY");
 
 
         private final String text;
 
-        private CZESTOTLIWOSC(final String text) {
+        private FREQUENCY(final String text) {
             this.text = text;
         }
 
@@ -90,65 +69,66 @@ public class baza_danych extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) {
         //All necessary tables you like to create will create here
-        String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_wydatki  + "("
+        String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Expenses  + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_nazwa + " TEXT, "
-                + KEY_kwota + " DOUBLE, "
-                + KEY_kategoria + " INTEGER, "
-                + KEY_podkategoria + " INTEGER, "
-                + KEY_godzina + " TEXT, "
-                + KEY_data + " TEXT )";
+                + KEY_Name + " TEXT, "
+                + KEY_Amount + " DOUBLE, "
+                + KEY_Category + " INTEGER, "
+                + KEY_Subcategory + " INTEGER, "
+                + KEY_hour + " TEXT, "
+                + KEY_date + " TEXT )";
 
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_dochody  + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Income  + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_nazwa + " TEXT, "
-                + KEY_kwota + " DOUBLE, "
-                + KEY_kategoria + " INTEGER, "
-                + KEY_podkategoria + " INTEGER, "
-                + KEY_godzina + " TEXT, "
-                + KEY_data + " TEXT )";
+                + KEY_Name + " TEXT, "
+                + KEY_Amount + " DOUBLE, "
+                + KEY_Category + " INTEGER, "
+                + KEY_Subcategory + " INTEGER, "
+                + KEY_hour + " TEXT, "
+                + KEY_date + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_portfel  + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Wallet  + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_kwota + " DOUBLE )";
+                + KEY_Amount + " DOUBLE )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_kategoria  + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Category  + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_nazwa + " TEXT )";
+                + KEY_Name + " TEXT, "
+                + KEY_Type + " INTEGER )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Subcategory + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_nazwa + " TEXT )";
+                + KEY_Category  + " INTEGER, "
+                + KEY_Name + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_wydatek + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Cyclical_Expenses + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_nazwa  + " TEXT, "
-                + KEY_kwota  + " DOUBLE, "
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_podkategoria  + " INTEGER, "
+                + KEY_Name  + " TEXT, "
+                + KEY_Amount  + " DOUBLE, "
+                + KEY_Category  + " INTEGER, "
+                + KEY_Subcategory  + " INTEGER, "
                 + KEY_odkiedy  + " TEXT, "
                 + KEY_dokiedy  + " TEXT, "
                 + KEY_nastepnaData  + " TEXT, "
-                + KEY_czestotliwosc + " TEXT )";
+                + KEY_frequency + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Staly_dochod + "("
+        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Cyclical_Income + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_nazwa  + " TEXT, "
-                + KEY_kwota  + " DOUBLE, "
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_podkategoria  + " INTEGER, "
+                + KEY_Name  + " TEXT, "
+                + KEY_Amount  + " DOUBLE, "
+                + KEY_Category  + " INTEGER, "
+                + KEY_Subcategory  + " INTEGER, "
                 + KEY_odkiedy  + " TEXT, "
                 + KEY_dokiedy  + " TEXT, "
                 + KEY_nastepnaData  + " TEXT, "
-                + KEY_czestotliwosc + " TEXT )";
+                + KEY_frequency + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
     }
@@ -156,76 +136,42 @@ public class baza_danych extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone!!!
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_wydatki);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_portfel);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_dochody);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_kategoria);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_podkategoria);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Staly_wydatek);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Staly_dochod);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Expenses);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Wallet);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Income);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Category);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Subcategory);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Cyclical_Expenses);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Cyclical_Income);
 
         // Create tables again
         onCreate(db);
 
     }
 
-    void DodajWydatek(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
+    public void AddExpenses(String Name, Double Amount, int Category, int Subcategory, String hour, String Date)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,Nazwa);
-        values.put(KEY_kwota,Double.toString(kwota));
-        values.put(KEY_kategoria,Integer.toString(kategoria));
-        values.put(KEY_podkategoria,Integer.toString(podkategoria));
-        values.put(KEY_godzina,Godzina);
-        values.put(KEY_data,Data);
+        values.put(KEY_Name,Name);
+        values.put(KEY_Amount,Double.toString(Amount));
+        values.put(KEY_Category,Integer.toString(Category));
+        values.put(KEY_Subcategory,Integer.toString(Subcategory));
+        values.put(KEY_hour,hour);
+        values.put(KEY_date,Date);
 
         // Inserting Row
-        db.insert(TABLE_wydatki, null, values);
+        db.insert(TABLE_Expenses, null, values);
         db.close(); // Closing database connection
 
     }
 
-    String getWydatekNazwa(int aID)
-    {
-        String aNazwa = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                aNazwa = c.getString(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return aNazwa;
-    }
-
-    double getWydatekKwota(int aID)
-    {
-        double kwota = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                kwota = c.getDouble(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return kwota;
-    }
-
-    int getKategoriaMaxId()
+    int getCategoryMaxId()
     {
         int MaxID = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM "+TABLE_kategoria + " ORDER BY id DESC LIMIT 1", null);
+        c = db.rawQuery("SELECT id FROM "+TABLE_Category + " ORDER BY id DESC LIMIT 1", null);
 
         if(c.moveToFirst()){
             do{
@@ -238,162 +184,156 @@ public class baza_danych extends SQLiteOpenHelper
         return MaxID;
     }
 
-    int getWydatekKategoria(int aID)
-    {
-        int kategoria = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kategoria FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                kategoria = c.getInt(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return kategoria;
-    }
-
-    int getWydatekPodKategoria(int aID)
-    {
-        int PodKategoria = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT podkategoria FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                PodKategoria = c.getInt(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return PodKategoria;
-    }
-
-    String getWydatekGodzina(int aID)
-    {
-        String godzina = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT godzina FROM "+TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                godzina = c.getString(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return godzina;
-    }
-
-    String getWydatekData(int aID)
-    {
-        String data2 = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT data FROM "+ TABLE_wydatki + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                data2 = c.getString(0);
-
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return data2;
-    }
-
-    void RemoveWydatek(int _ID)
+    private void setDefaultCategoryAndSubcategory(int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_wydatki,"id=?",new String[]{Integer.toString(_ID)});
+        ContentValues values = new ContentValues();
+        values.put(KEY_Category,0);
+        values.put(KEY_Subcategory,0);
+
+        // Inserting Row
+        db.update(TABLE_Expenses, values, "id="+aID, null);
         db.close(); // Closing database connection
+
+
+
     }
 
-    ArrayList getWydatkiNames(int _IdKategorii, int _IdPodkategoria)
+    public ArrayList<String> getExpensesNames(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<String> ListaNazwWydatkow = new ArrayList<String>();
+        ArrayList<String> ListOfExpensesNames = new ArrayList<String>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM wydatki WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+        c = db.rawQuery("SELECT Name FROM Expenses WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
-                ListaNazwWydatkow.add(c.getString(0));
+                ListOfExpensesNames.add(c.getString(0));
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  ListaNazwWydatkow;
+        return  ListOfExpensesNames;
     }
 
-    ArrayList getWydatkiKwoty(int _IdKategorii, int _IdPodkategoria)
+    public ArrayList<Double> getExpensesAmount(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<Double> getWydatkiKwoty = new ArrayList<>();
+        ArrayList<Double> ListOfExpensesAmounts = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
 
         int a = 0;
         if(c.moveToFirst()){
             do{
-                getWydatkiKwoty.add(c.getDouble(0));
+                ListOfExpensesAmounts.add(c.getDouble(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  getWydatkiKwoty;
+        return  ListOfExpensesAmounts;
     }
 
-    ArrayList getWydatkiDaty(int _IdKategorii, int _IdPodkategoria)
+    public ArrayList<String> getExpensesDates(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<String> getWydatkiDaty = new ArrayList<String>();
+        ArrayList<String> ListOfExpensesDates = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT data FROM " + TABLE_wydatki + " WHERE podkategoria = " + Integer.toString(_IdPodkategoria) + " AND kategoria = " + Integer.toString(_IdKategorii), null);
+        c = db.rawQuery("SELECT date FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
-                getWydatkiDaty.add(c.getString(0));
+                ListOfExpensesDates.add(c.getString(0));
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  getWydatkiDaty;
+        return  ListOfExpensesDates;
     }
 
 
-    void DodajDochod(String Nazwa, Double kwota, int kategoria, int podkategoria, String Godzina, String Data)
+    void AddIncome(String Name, Double Amount, int Category, int Subcategory, String hour, String Date)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,Nazwa);
-        values.put(KEY_kwota,Double.toString(kwota));
-        values.put(KEY_kategoria,Integer.toString(kategoria));
-        values.put(KEY_podkategoria,Integer.toString(podkategoria));
-        values.put(KEY_godzina,Godzina);
-        values.put(KEY_data,Data);
+        values.put(KEY_Name,Name);
+        values.put(KEY_Amount,Double.toString(Amount));
+        values.put(KEY_Category,Integer.toString(Category));
+        values.put(KEY_Subcategory,Integer.toString(Subcategory));
+        values.put(KEY_hour,hour);
+        values.put(KEY_date,Date);
 
         // Inserting Row
-        db.insert(TABLE_dochody, null, values);
+        db.insert(TABLE_Income, null, values);
         db.close(); // Closing database connection
 
     }
+    public ArrayList<String> getIncomeNames(int _IdCategory, int _IdSubcategory)
+    {
+        ArrayList<String> ListOfIncomeNames = new ArrayList<String>();
 
-    int getWydatkiMaxId()
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT Name FROM Income WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+
+        if(c.moveToFirst()){
+            do{
+                ListOfIncomeNames.add(c.getString(0));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListOfIncomeNames;
+    }
+
+    public ArrayList<Double> getIncomeAmounts(int _IdCategory, int _IdSubcategory)
+    {
+        ArrayList<Double> ListOfIncomeAmounts = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+
+        int a = 0;
+        if(c.moveToFirst()){
+            do{
+                ListOfIncomeAmounts.add(c.getDouble(0));
+                a++;
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListOfIncomeAmounts;
+    }
+
+    public ArrayList<String> getIncomeDates(int _IdCategory, int _IdSubcategory)
+    {
+        ArrayList<String> ListOfIncomeDates = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT date FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+
+        if(c.moveToFirst()){
+            do{
+                ListOfIncomeDates.add(c.getString(0));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListOfIncomeDates;
+    }
+    
+    public int getExpensesMaxId()
     {
         int maxID = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_wydatki + " ORDER BY id DESC LIMIT 1", null);
+        c = db.rawQuery("SELECT id FROM " + TABLE_Expenses + " ORDER BY id DESC LIMIT 1", null);
 
         if(c.moveToFirst()){
             do{
@@ -409,22 +349,22 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-    String[] getOstatnieWydatki()
+    public String[] getLastExpenses()
     {
-        String OstatnieWydatki[] = new String[10];
-        double KwotaOstatnieWydatki[] = new double[10];
+        String LastExpenses[] = new String[10];
+        double AmountLastExpenses[] = new double[10];
         String bufor;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa, kwota FROM " + TABLE_wydatki + " ORDER BY data DESC, godzina DESC LIMIT 10", null);
+        c = db.rawQuery("SELECT Name, Amount FROM " + TABLE_Expenses + " ORDER BY date DESC, hour DESC LIMIT 10", null);
         int a = 0;
 
         if(c.moveToFirst()){
             do{
                 bufor = c.getString(0);
-                KwotaOstatnieWydatki[a] = c.getDouble(1);
+                AmountLastExpenses[a] = c.getDouble(1);
 
-                OstatnieWydatki[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(KwotaOstatnieWydatki[a]) + "zł";
+                LastExpenses[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(AmountLastExpenses[a]) + "zł";
                 a++;
             }while(c.moveToNext());
         }
@@ -432,26 +372,26 @@ public class baza_danych extends SQLiteOpenHelper
         db.close();
 
 
-        return OstatnieWydatki;
+        return LastExpenses;
 
     }
 
-    String[] getOstatnieDochody()
+    public String[] getLastIncome()
     {
-        String OstatnieDochody[] = new String[10];
-        double KwotaOstatnieDochody[] = new double[10];
+        String LastIncome[] = new String[10];
+        double AmountLastIncome[] = new double[10];
         String bufor;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa, kwota FROM " + TABLE_dochody + " ORDER BY data DESC, godzina DESC LIMIT 10", null);
+        c = db.rawQuery("SELECT Name, Amount FROM " + TABLE_Income + " ORDER BY date DESC, hour DESC LIMIT 10", null);
         int a = 0;
 
         if(c.moveToFirst()){
             do{
                 bufor = c.getString(0);
-                KwotaOstatnieDochody[a] = c.getDouble(1);
+                AmountLastIncome[a] = c.getDouble(1);
 
-                OstatnieDochody[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(KwotaOstatnieDochody[a]) + "zł";
+                LastIncome[a] = Integer.toString(a+1) + ". " + bufor + " " + Double.toString(AmountLastIncome[a]) + "zł";
                 a++;
             }while(c.moveToNext());
         }
@@ -459,22 +399,22 @@ public class baza_danych extends SQLiteOpenHelper
         db.close();
 
 
-        return OstatnieDochody;
+        return LastIncome;
 
     }
 
 
-    double PortfelPrzeliczSaldo()
+    double WalletRecalculate()
     {
-        double dochody =0, wydatki=0;
+        double Income =0, Expenses=0;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki, null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses, null);
 
 
         if(c.moveToFirst()){
             do{
-                wydatki += c.getDouble(0);
+                Expenses += c.getDouble(0);
 
             }while(c.moveToNext());
         }
@@ -482,362 +422,386 @@ public class baza_danych extends SQLiteOpenHelper
         db.close();
 
         db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_dochody, null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income, null);
 
 
         if(c.moveToFirst()){
             do{
-                dochody += c.getDouble(0);
+                Income += c.getDouble(0);
 
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return dochody-wydatki;
+        return Income-Expenses;
 
     }
 
-    public void PortfelUstawSaldo(Double kwota)
+    public void WalletSetBalance(Double Amount)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id", 1);
-        values.put("kwota", kwota);
+        values.put("Amount", Amount);
 
-        db.replaceOrThrow(TABLE_portfel, null, values);
+        db.replaceOrThrow(TABLE_Wallet, null, values);
 
         db.close(); // Closing database connection
     }
 
-    public double getPortfelSaldo()
+    public double getWalletBalance()
     {
-        double kwota = 0;
+        double Amount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM "+TABLE_portfel + " WHERE id = " + Integer.toString(1), null);
+        c = db.rawQuery("SELECT Amount FROM "+TABLE_Wallet + " WHERE id = " + Integer.toString(1), null);
 
         if(c.moveToFirst()){
             do{
-                kwota = c.getDouble(0);
+                Amount = c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
 
-    ArrayList getKategorie()
+    public ArrayList<String> getCategory(int RodzKat)
     {
-        ArrayList<String> ListaKategorii = new ArrayList<String>();
+        ArrayList<String> ListOfCategoryName = new ArrayList<String>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria, null);
+        c = db.rawQuery("SELECT Name, Type FROM " + TABLE_Category, null);
 
+        int a = 1;
+        ListOfCategoryName.add("0. (Domyślna Category)");
+        if(c.moveToFirst()){
+            do{
+                if(RodzKat == c.getInt(1))
+                {
+                    ListOfCategoryName.add(Integer.toString(a)+". " + c.getString(0));
+                    a++;
+                }
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return  ListOfCategoryName;
+    }
+
+    public ArrayList<Integer> getIdListOfCategory(int RodzKat)
+    {
+        ArrayList<Integer> idCategory = new ArrayList<Integer>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id, Type FROM " + TABLE_Category, null);
         int a = 0;
-        ListaKategorii.add("0. (Domyślna kategoria)");
+        idCategory.add(0);
+
         if(c.moveToFirst()){
             do{
-                ListaKategorii.add(Integer.toString(a+1)+". " + c.getString(0));
-                a++;
+                if(RodzKat == c.getInt(1))
+                {
+                    idCategory.add(c.getInt(0));
+                    a++;
+                }
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  ListaKategorii;
+        return  idCategory;
     }
 
-    ArrayList getINTKategorie()
-    {
-        ArrayList<Integer> idkategorii = new ArrayList<Integer>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_kategoria, null);
-        int a = 0;
-        idkategorii.add(0);
-
-        if(c.moveToFirst()){
-            do{
-                //  bufor = c.getInt(0);
-                idkategorii.add(c.getInt(0));
-                a++;
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return  idkategorii;
-    }
-
-    void AddKategoria(String Nazwa)
+    public void AddCategory(String Name, int RodzKat)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,Nazwa);
-
+        values.put(KEY_Name,Name);
+        values.put(KEY_Type, RodzKat);
         // Inserting Row
-        db.insert(TABLE_kategoria, null, values);
+        db.insert(TABLE_Category, null, values);
+
         db.close(); // Closing database connection
 
     }
 
-    void RemoveKategoria(int idKategorii)
+    public void RemoveCategory(int idCategory)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_kategoria,"id=?",new String[]{Integer.toString(idKategorii)});
+        db.delete(TABLE_Category,"id=?",new String[]{Integer.toString(idCategory)});
         db.close(); // Closing database connection
-    }
 
-    String getKategoriaName(int aID)
-    {
-        String aNazwa = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM " + TABLE_kategoria + " WHERE id = " + Integer.toString(aID), null);
+        db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT id FROM "+ TABLE_Expenses + " WHERE " + KEY_Category + " = " + Integer.toString(idCategory), null);
 
         if(c.moveToFirst()){
             do{
-                aNazwa = c.getString(0);
+                setDefaultCategoryAndSubcategory(c.getInt(0));
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return aNazwa;
     }
 
-    void EditKategoria(String Nazwa, int idKategorii)
+    public String getCategoryName(int aID)
+    {
+        String aName = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT Name FROM " + TABLE_Category + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                aName = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return aName;
+    }
+
+    public int getTypeOfCategory(int aID)
+    {
+        int KatExpensesIncome = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT " + KEY_Type + " FROM " + TABLE_Category + " WHERE id = " + Integer.toString(aID), null);
+
+        if(c.moveToFirst()){
+            do{
+                KatExpensesIncome = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return KatExpensesIncome;
+    }
+
+
+    public void UpdateCategory(String Name, int idCategory, int Type)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa, Nazwa);
+        values.put(KEY_Name, Name);
+        values.put(KEY_Type, Type);
 
-        db.update(TABLE_kategoria, values, "id="+idKategorii, null);
+        db.update(TABLE_Category, values, "id="+idCategory, null);
         db.close(); // Closing database connection
     }
 
-
-
-
-    void AddPodKategoria(String Nazwa, int idKategorii)
+    public void AddSubcategory(String Name, int idCategory)
     {
-        /*
-        CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_podkategoria + "("
-                + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_kategoria  + " INTEGER, "
-                + KEY_nazwa + " TEXT )";
-        db.execSQL(CREATE_TABLE_STUDENT);
-        */
-
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(KEY_kategoria, idKategorii);
-        values.put(KEY_nazwa,Nazwa);
+        values.put(KEY_Category, idCategory);
+        values.put(KEY_Name,Name);
 
         // Inserting Row
-        db.insert(TABLE_podkategoria, null, values);
+        db.insert(TABLE_Subcategory, null, values);
         db.close(); // Closing database connection
 
     }
 
-    void EditPodKategoria(String Nazwa, int idKategorii, int idPodKategorii)
+    public void UpdateSubcategory(String Name, int idCategory, int idSubcategory)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa, Nazwa);
+        values.put(KEY_Name, Name);
 
-        db.update(TABLE_podkategoria, values, "id="+idPodKategorii, null);
+        db.update(TABLE_Subcategory, values, "id="+idSubcategory, null);
         db.close(); // Closing database connection
     }
 
-    void RemovePodKategoria(int idPodKategorii)
+    public void RemoveSubcategory(int idSubcategory)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_podkategoria,"id=?",new String[]{Integer.toString(idPodKategorii)});
+        db.delete(TABLE_Subcategory,"id=?",new String[]{Integer.toString(idSubcategory)});
         db.close(); // Closing database connection
     }
 
-    String getPodKategoriaName(int aID)
+    public String getSubcategoryName(int aID)
     {
-        String aNazwa = "";
+        String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM "+TABLE_podkategoria + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT Name FROM "+TABLE_Subcategory + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                aNazwa = c.getString(0);
+                aName = c.getString(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return aNazwa;
+        return aName;
     }
 
-    ArrayList getINTpodKategorie(int idKategoria)
+    public ArrayList<Integer> getIdListOfSubcategory(int idCategory)
     {
-        ArrayList<Integer> idPodkategorii = new ArrayList<Integer>();
+        ArrayList<Integer> IdListOfSubcategory = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+        c = db.rawQuery("SELECT id FROM " + TABLE_Subcategory + " WHERE " + KEY_Category + " = " + Integer.toString(idCategory), null);
 
-        int a = 0;
-        idPodkategorii.add(0);
+
+        IdListOfSubcategory.add(0);
         if(c.moveToFirst()){
             do{
                 //  bufor = c.getInt(0);
-                idPodkategorii.add(c.getInt(0));
-                a++;
+                IdListOfSubcategory.add(c.getInt(0));
+
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  idPodkategorii;
+        return  IdListOfSubcategory;
     }
 
-    ArrayList getpodKategorie(int idKategoria)
+    public ArrayList<String> getNameListOfSubcategory(int idCategory)
     {
-        ArrayList<String> Listapodkategorii = new ArrayList<String>();
+        ArrayList<String> NameListOfSubcategory = new ArrayList<>();
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT " + KEY_nazwa + " FROM " + TABLE_podkategoria + " WHERE " + KEY_kategoria + " = " + Integer.toString(idKategoria), null);
+        c = db.rawQuery("SELECT " + KEY_Name + " FROM " + TABLE_Subcategory + " WHERE " + KEY_Category + " = " + Integer.toString(idCategory), null);
 
         int a = 0;
-        Listapodkategorii.add("0. (Domyślna podkategoria)");
+        NameListOfSubcategory.add("0. (Domyślna Subcategory)");
         if(c.moveToFirst()){
             do{
-                Listapodkategorii.add(Integer.toString(a+1)+". " + c.getString(0));
+                NameListOfSubcategory.add(Integer.toString(a+1)+". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  Listapodkategorii;
+        return  NameListOfSubcategory;
     }
 
-    void updateNamePodkategoria(String name, int aID)
+    public void updateSubcategoryName(String name, int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put("nazwa",name); //These Fields should be your String values of actual column names
+        cv.put("Name",name); //These Fields should be your String values of actual column names
 
 
-        db.update(TABLE_podkategoria, cv, "id="+aID, null);
+        db.update(TABLE_Subcategory, cv, "id="+aID, null);
         db.close(); // Closing database connection
 
-       // UPDATE Podkategoria SET nazwa = "dupa" WHERE ID = 1;
+       // UPDATE Subcategory SET Name = "dupa" WHERE ID = 1;
     }
 
-
-
-    ArrayList getStaleWydatki()
+    public ArrayList<String> getNameListOfCyclilcalExpenses()
     {
-        ArrayList<String> ListaStalychWydatkow = new ArrayList<String>();
+        ArrayList<String> NameListOfCyclilcalExpenses = new ArrayList<String>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM " + TABLE_Staly_wydatek, null);
+        c = db.rawQuery("SELECT Name FROM " + TABLE_Cyclical_Expenses, null);
 
         int a = 0;
         if(c.moveToFirst()){
             do{
-                ListaStalychWydatkow.add(Integer.toString(a)+ ". " + c.getString(0));
+                NameListOfCyclilcalExpenses.add(Integer.toString(a)+ ". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  ListaStalychWydatkow;
+        return  NameListOfCyclilcalExpenses;
     }
 
-    ArrayList getINTstaleWydatki()
+    public ArrayList<Integer> getIdListOfCyclicalExpenses()
     {
-        ArrayList<Integer> idStalegoWydatku = new ArrayList<Integer>();
+        ArrayList<Integer> IdListOfCyclicalExpenses = new ArrayList<Integer>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_Staly_wydatek, null);
+        c = db.rawQuery("SELECT id FROM " + TABLE_Cyclical_Expenses, null);
         int a = 0;
         if(c.moveToFirst()){
             do{
                 //  bufor = c.getInt(0);
-                idStalegoWydatku.add(c.getInt(0));
+                IdListOfCyclicalExpenses.add(c.getInt(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  idStalegoWydatku;
+        return  IdListOfCyclicalExpenses;
     }
 
-    public void addStalyWydatek(String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
-                                String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    public void addCyclicalExpenses(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+                                String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,aNazwa);
-        values.put(KEY_kwota,aKwota);
-        values.put(KEY_kategoria,Integer.toString(aKategoria));
-        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_Name,aName);
+        values.put(KEY_Amount,aAmount);
+        values.put(KEY_Category,Integer.toString(aCategory));
+        values.put(KEY_Subcategory,Integer.toString(aSubcategory));
         values.put(KEY_odkiedy,aOdKiedy);
         values.put(KEY_dokiedy,aDoKiedy);
         values.put(KEY_nastepnaData,aNastepnaData);
-        values.put(KEY_czestotliwosc,czest.toString());
+        values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
-        db.insert(TABLE_Staly_wydatek, null, values);
+        db.insert(TABLE_Cyclical_Expenses, null, values);
         db.close(); // Closing database connection
 
 
     }
 
-    String getStalyWydatekName(int aID)
+    public String getCyclicalExpensesName(int aID)
     {
-        String aNazwa = "";
+        String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT Name FROM "+TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                aNazwa = c.getString(0);
+                aName = c.getString(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return aNazwa;
+        return aName;
     }
 
-    double getStalyWydatekKwota (int aID)
+    public double getCyclicalExpensesAmount (int aID)
     {
-        double kwota = 0;
+        double Amount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT Amount FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                kwota = c.getDouble(0);
+                Amount = c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
-    String getStalyWydatekOD(int aID)
+    public String getCyclicalExpensesOD(int aID)
     {
         String od_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -850,11 +814,11 @@ public class baza_danych extends SQLiteOpenHelper
         return od_kiedy;
     }
 
-    String getStalyWydatekDO(int aID)
+    public String getCyclicalExpensesDO(int aID)
     {
         String do_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -866,12 +830,12 @@ public class baza_danych extends SQLiteOpenHelper
 
         return do_kiedy;
     }
-//TODO dodać metodę która będzie aktualizowała Następny wydatek, powinna przesówać datę o iles tam dni względem tego jaka jest ustawiona czestotliwość.
-    String getStalyWydatekNastepnaData(int aID)
+
+    public String getCyclicalExpensesNastepnaData(int aID)
     {
         String nastepna_data = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -884,47 +848,47 @@ public class baza_danych extends SQLiteOpenHelper
         return nastepna_data;
     }
 
-    int getStalyWydatekKategoria (int aID)
+    public int getCyclicalExpensesCategory (int aID)
     {
-        int Kategoria = 0;
+        int Category = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_kategoria + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_Category + " FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                Kategoria = c.getInt(0);
+                Category = c.getInt(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return Kategoria;
+        return Category;
     }
 
-    int getStalyWydatekPodkategoria (int aID)
+    public int getCyclicalExpensesSubcategory (int aID)
     {
-        int Podkategoria = 0;
+        int Subcategory = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_podkategoria + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_Subcategory + " FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                Podkategoria = c.getInt(0);
+                Subcategory = c.getInt(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return Podkategoria;
+        return Subcategory;
     }
 
-    int getStalyWydatekCzestotliwosc (int aID)
+    public int getCyclicalExpensesFrequency (int aID)
     {
         String buffor = "";
 
-        int Czestotliwosc = 0;
+        int frequency = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_czestotliwosc + " FROM "+ TABLE_Staly_wydatek + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_frequency + " FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -934,51 +898,51 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        if(buffor.equals("DZIENNIE"))
+        if(buffor.equals("DAILY"))
         {
-            Czestotliwosc = 0;
-        }else if (buffor.equals("TYDZIEN"))
+            frequency = 0;
+        }else if (buffor.equals("WEEKLY"))
         {
-            Czestotliwosc = 1;
-        }else if (buffor.equals("MIESIAC"))
+            frequency = 1;
+        }else if (buffor.equals("MONTHLY"))
         {
-            Czestotliwosc = 2;
-        }else if (buffor.equals("KWARTAL"))
+            frequency = 2;
+        }else if (buffor.equals("QUARTERLY"))
         {
-            Czestotliwosc = 3;
-        }else if (buffor.equals("ROK"))
+            frequency = 3;
+        }else if (buffor.equals("YEARLY"))
         {
-            Czestotliwosc = 4;
+            frequency = 4;
         }else
         {
-            Czestotliwosc = 0;
+            frequency = 0;
         }
-        return Czestotliwosc;
+        return frequency;
     }
 
-    void EditStalyWydatek(int aID, String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
-                          String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    public void UpdateCyclicalExpenses(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+                          String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,aNazwa);
-        values.put(KEY_kwota,aKwota);
-        values.put(KEY_kategoria,Integer.toString(aKategoria));
-        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_Name,aName);
+        values.put(KEY_Amount,aAmount);
+        values.put(KEY_Category,Integer.toString(aCategory));
+        values.put(KEY_Subcategory,Integer.toString(aSubcategory));
         values.put(KEY_odkiedy,aOdKiedy);
         values.put(KEY_dokiedy,aDoKiedy);
         values.put(KEY_nastepnaData,aNastepnaData);
-        values.put(KEY_czestotliwosc,czest.toString());
+        values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
-        db.update(TABLE_Staly_wydatek, values, "id="+aID, null);
+        db.update(TABLE_Cyclical_Expenses, values, "id="+aID, null);
         db.close(); // Closing database connection
     }
 
-    void RemoveStalyWydatek(int aID)
+    public void RemoveCyclicalExpenses(int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_Staly_wydatek,"id=?",new String[]{Integer.toString(aID)});
+        db.delete(TABLE_Cyclical_Expenses,"id=?",new String[]{Integer.toString(aID)});
         db.close(); // Closing database connection
     }
 
@@ -986,106 +950,106 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-    ArrayList getStaleDochody()
+    public ArrayList<String> getNameListOfCyclicalIncome()
     {
-        ArrayList<String> ListaStalychDochodow = new ArrayList<String>();
+        ArrayList<String> NameListOfCyclicalIncome = new ArrayList<String>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM " + TABLE_Staly_dochod, null);
+        c = db.rawQuery("SELECT Name FROM " + TABLE_Cyclical_Income, null);
 
         int a = 0;
         if(c.moveToFirst()){
             do{
-                ListaStalychDochodow.add(Integer.toString(a)+ ". " + c.getString(0));
+                NameListOfCyclicalIncome.add(Integer.toString(a)+ ". " + c.getString(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  ListaStalychDochodow;
+        return  NameListOfCyclicalIncome;
     }
 
-    ArrayList getINTstaleDochody()
+    public ArrayList<Integer> getIdListOfCyclicalIncome()
     {
-        ArrayList<Integer> idStalegoDochodu = new ArrayList<Integer>();
+        ArrayList<Integer> IdListOfCyclicalIncome = new ArrayList<Integer>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_Staly_dochod, null);
+        c = db.rawQuery("SELECT id FROM " + TABLE_Cyclical_Income, null);
         int a = 0;
         if(c.moveToFirst()){
             do{
                 //  bufor = c.getInt(0);
-                idStalegoDochodu.add(c.getInt(0));
+                IdListOfCyclicalIncome.add(c.getInt(0));
                 a++;
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return  idStalegoDochodu;
+        return  IdListOfCyclicalIncome;
     }
 
-    public void addStalyDochod(String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
-                                String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    public void addCyclicalIncome(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+                                String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,aNazwa);
-        values.put(KEY_kwota,aKwota);
-        values.put(KEY_kategoria,Integer.toString(aKategoria));
-        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_Name,aName);
+        values.put(KEY_Amount,aAmount);
+        values.put(KEY_Category,Integer.toString(aCategory));
+        values.put(KEY_Subcategory,Integer.toString(aSubcategory));
         values.put(KEY_odkiedy,aOdKiedy);
         values.put(KEY_dokiedy,aDoKiedy);
         values.put(KEY_nastepnaData,aNastepnaData);
-        values.put(KEY_czestotliwosc,czest.toString());
+        values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
-        db.insert(TABLE_Staly_dochod, null, values);
+        db.insert(TABLE_Cyclical_Income, null, values);
         db.close(); // Closing database connection
 
 
     }
 
-    String getStalyDochodName(int aID)
+    public String getCyclicalIncomeName(int aID)
     {
-        String aNazwa = "";
+        String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nazwa FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT Name FROM "+TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                aNazwa = c.getString(0);
+                aName = c.getString(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return aNazwa;
+        return aName;
     }
 
-    double getStalyDochodKwota (int aID)
+    public double getCyclicalIncomeAmount (int aID)
     {
-        double kwota = 0;
+        double Amount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT Amount FROM "+ TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                kwota = c.getDouble(0);
+                Amount = c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
-    String getStalyDochodOD(int aID)
+    public String getCyclicalIncomeOD(int aID)
     {
         String od_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT od_kiedy FROM "+TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -1098,11 +1062,11 @@ public class baza_danych extends SQLiteOpenHelper
         return od_kiedy;
     }
 
-    String getStalyDochodDO(int aID)
+    public String getCyclicalIncomeDO(int aID)
     {
         String do_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT do_kiedy FROM "+TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -1114,12 +1078,12 @@ public class baza_danych extends SQLiteOpenHelper
 
         return do_kiedy;
     }
-    //TODO dodać metodę która będzie aktualizowała Następny wydatek, powinna przesówać datę o iles tam dni względem tego jaka jest ustawiona czestotliwość.
-    String getStalyDochodNastepnaData(int aID)
+
+    public String getCyclicalIncomeNastepnaData(int aID)
     {
         String nastepna_data = "";
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT nastepna_data FROM "+TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -1132,47 +1096,47 @@ public class baza_danych extends SQLiteOpenHelper
         return nastepna_data;
     }
 
-    int getStalyDochodKategoria (int aID)
+    public int getCyclicalIncomeCategory (int aID)
     {
-        int Kategoria = 0;
+        int Category = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_kategoria + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_Category + " FROM "+ TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                Kategoria = c.getInt(0);
+                Category = c.getInt(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return Kategoria;
+        return Category;
     }
 
-    int getStalyDochodPodkategoria (int aID)
+    public int getCyclicalIncomeSubcategory (int aID)
     {
-        int Podkategoria = 0;
+        int Subcategory = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_podkategoria + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_Subcategory + " FROM "+ TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
-                Podkategoria = c.getInt(0);
+                Subcategory = c.getInt(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return Podkategoria;
+        return Subcategory;
     }
 
-    int getStalyDochodCzestotliwosc (int aID)
+    public int getCyclicalIncomeFrequency (int aID)
     {
         String buffor = "";
 
-        int Czestotliwosc = 0;
+        int frequency = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_czestotliwosc + " FROM "+ TABLE_Staly_dochod + " WHERE id = " + Integer.toString(aID), null);
+        c = db.rawQuery("SELECT "+ KEY_frequency + " FROM "+ TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
         if(c.moveToFirst()){
             do{
@@ -1182,91 +1146,91 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        if(buffor.equals("DZIENNIE"))
+        if(buffor.equals("DAILY"))
         {
-            Czestotliwosc = 0;
-        }else if (buffor.equals("TYDZIEN"))
+            frequency = 0;
+        }else if (buffor.equals("WEEKLY"))
         {
-            Czestotliwosc = 1;
-        }else if (buffor.equals("MIESIAC"))
+            frequency = 1;
+        }else if (buffor.equals("MONTHLY"))
         {
-            Czestotliwosc = 2;
-        }else if (buffor.equals("KWARTAL"))
+            frequency = 2;
+        }else if (buffor.equals("QUARTERLY"))
         {
-            Czestotliwosc = 3;
-        }else if (buffor.equals("ROK"))
+            frequency = 3;
+        }else if (buffor.equals("YEARLY"))
         {
-            Czestotliwosc = 4;
+            frequency = 4;
         }else
         {
-            Czestotliwosc = 0;
+            frequency = 0;
         }
-        return Czestotliwosc;
+        return frequency;
     }
 
-    void EditStalyDochod(int aID, String aNazwa, double aKwota, int aKategoria, int aPodkategoria, String aOdKiedy,
-                          String aDoKiedy, String aNastepnaData, CZESTOTLIWOSC czest)
+    public void UpdateCyclicalIncome(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+                          String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_nazwa,aNazwa);
-        values.put(KEY_kwota,aKwota);
-        values.put(KEY_kategoria,Integer.toString(aKategoria));
-        values.put(KEY_podkategoria,Integer.toString(aPodkategoria));
+        values.put(KEY_Name,aName);
+        values.put(KEY_Amount,aAmount);
+        values.put(KEY_Category,Integer.toString(aCategory));
+        values.put(KEY_Subcategory,Integer.toString(aSubcategory));
         values.put(KEY_odkiedy,aOdKiedy);
         values.put(KEY_dokiedy,aDoKiedy);
         values.put(KEY_nastepnaData,aNastepnaData);
-        values.put(KEY_czestotliwosc,czest.toString());
+        values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
-        db.update(TABLE_Staly_dochod, values, "id="+aID, null);
+        db.update(TABLE_Cyclical_Income, values, "id="+aID, null);
         db.close(); // Closing database connection
     }
 
-    void RemoveStalyDochod(int aID)
+    public void RemoveCyclicalIncome(int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_Staly_dochod,"id=?",new String[]{Integer.toString(aID)});
+        db.delete(TABLE_Cyclical_Income,"id=?",new String[]{Integer.toString(aID)});
         db.close(); // Closing database connection
     }
 
-    float getIleWydanoWkategorii(int _kategoria)
+    public float getIleWydanoWCategory(int _Category)
     {
-        float kwota = 0.0f;
+        float Amount = 0.0f;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
         if(c.moveToFirst()){
             do{
-                kwota += c.getDouble(0);
+                Amount += c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
-    float getIleDochoduWkategorii(int _kategoria)
+    public float getHowMuchEarnInCategory(int _Category)
     {
-        float kwota = 0.0f;
+        float Amount = 0.0f;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_dochody + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
         if(c.moveToFirst()){
             do{
-                kwota += c.getDouble(0);
+                Amount += c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 //00-00-0000
-    void sprawdzanieStalychWydatkow()
+    public void CheckCyclicalExpenses()
     {
         Calendar AktualnaData = Calendar.getInstance();
         Calendar dataDoKiedy = Calendar.getInstance();
@@ -1280,49 +1244,49 @@ public class baza_danych extends SQLiteOpenHelper
 
         int ID = 0;
 
-        double  kwota = 0.0f;
+        double  Amount = 0.0f;
 
-        int     kategoria = 0,
-                podkategoria = 0;
+        int     Category = 0,
+                Subcategory = 0;
 
 
-        String  aNazwa = "",
+        String  aName = "",
                 aOdKiedy = "",
                 aDoKiedy = "",
                 aNastepnaData = "",
-                czestotliwosc = "";
+                frequency = "";
 
 
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_nazwa + "," + KEY_kwota + "," + KEY_kategoria + "," + KEY_podkategoria
-                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_czestotliwosc +
-                " FROM " + TABLE_Staly_wydatek, null);
+        c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_Name + "," + KEY_Amount + "," + KEY_Category + "," + KEY_Subcategory
+                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_frequency +
+                " FROM " + TABLE_Cyclical_Expenses, null);
 
         if(c.moveToFirst()){
             do{
                 ID = c.getInt(0);
-                aNazwa = c.getString(1);
-                kwota = c.getDouble(2);
-                kategoria = c.getInt(3);
-                podkategoria = c.getInt(4);
+                aName = c.getString(1);
+                Amount = c.getDouble(2);
+                Category = c.getInt(3);
+                Subcategory = c.getInt(4);
                 aOdKiedy = c.getString(5);
                 aDoKiedy = c.getString(6);
                 aNastepnaData = c.getString(7);
-                czestotliwosc = c.getString(8);
+                frequency = c.getString(8);
 
 
                 DAY = Integer.parseInt(aNastepnaData.substring(0, 2));
                 MONTH = Integer.parseInt(aNastepnaData.substring(3, 5));
                 YEAR = Integer.parseInt(aNastepnaData.substring(7, 10));
 
-                if(czestotliwosc.equals("DZIENNIE"))
+                if(frequency.equals("DAILY"))
                 {
                     if(DAY_N >= DAY)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1331,19 +1295,19 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
 
-                }else if(czestotliwosc.equals("TYDZIEN"))
+                }else if(frequency.equals("WEEKLY"))
                 {
                     if(DAY_N >= DAY+7)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1352,18 +1316,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.TYDZIEN);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("MIESIAC"))
+                }else if(frequency.equals("MONTHLY"))
                 {
                     if(MONTH_N >= MONTH)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1372,18 +1336,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("KWARTAL"))
+                }else if(frequency.equals("QUARTERLY"))
                 {
                     if(MONTH_N >= MONTH+3)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1392,18 +1356,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("ROK"))
+                }else if(frequency.equals("YEARLY"))
                 {
                     if(YEAR_N >= YEAR)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1412,10 +1376,10 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
                 }
@@ -1428,7 +1392,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    void sprawdzanieStalychDochodow()
+    public void CheckCyclicalIncome()
     {
         Calendar AktualnaData = Calendar.getInstance();
         Calendar dataDoKiedy = Calendar.getInstance();
@@ -1442,49 +1406,49 @@ public class baza_danych extends SQLiteOpenHelper
 
         int ID = 0;
 
-        double  kwota = 0.0f;
+        double  Amount = 0.0f;
 
-        int     kategoria = 0,
-                podkategoria = 0;
+        int     Category = 0,
+                Subcategory = 0;
 
 
-        String  aNazwa = "",
+        String  aName = "",
                 aOdKiedy = "",
                 aDoKiedy = "",
                 aNastepnaData = "",
-                czestotliwosc = "";
+                frequency = "";
 
 
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_nazwa + "," + KEY_kwota + "," + KEY_kategoria + "," + KEY_podkategoria
-                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_czestotliwosc +
-                " FROM " + TABLE_dochody, null);
+        c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_Name + "," + KEY_Amount + "," + KEY_Category + "," + KEY_Subcategory
+                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_frequency +
+                " FROM " + TABLE_Income, null);
 
         if(c.moveToFirst()){
             do{
                 ID = c.getInt(0);
-                aNazwa = c.getString(1);
-                kwota = c.getDouble(2);
-                kategoria = c.getInt(3);
-                podkategoria = c.getInt(4);
+                aName = c.getString(1);
+                Amount = c.getDouble(2);
+                Category = c.getInt(3);
+                Subcategory = c.getInt(4);
                 aOdKiedy = c.getString(5);
                 aDoKiedy = c.getString(6);
                 aNastepnaData = c.getString(7);
-                czestotliwosc = c.getString(8);
+                frequency = c.getString(8);
 
 
                 DAY = Integer.parseInt(aNastepnaData.substring(0, 2));
                 MONTH = Integer.parseInt(aNastepnaData.substring(3, 5));
                 YEAR = Integer.parseInt(aNastepnaData.substring(7, 10));
 
-                if(czestotliwosc.equals("DZIENNIE"))
+                if(frequency.equals("DAILY"))
                 {
                     if(DAY_N >= DAY)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1493,19 +1457,19 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
 
-                }else if(czestotliwosc.equals("TYDZIEN"))
+                }else if(frequency.equals("WEEKLY"))
                 {
                     if(DAY_N >= DAY+7)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1514,18 +1478,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.TYDZIEN);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("MIESIAC"))
+                }else if(frequency.equals("MONTHLY"))
                 {
                     if(MONTH_N >= MONTH)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1534,18 +1498,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("KWARTAL"))
+                }else if(frequency.equals("QUARTERLY"))
                 {
                     if(MONTH_N >= MONTH+3)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1554,18 +1518,18 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
-                }else if(czestotliwosc.equals("ROK"))
+                }else if(frequency.equals("YEARLY"))
                 {
                     if(YEAR_N >= YEAR)
                     {
                         String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        DodajWydatek(aNazwa, kwota, kategoria, podkategoria, "00:01", N_data);
+                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
                         dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
                         dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
@@ -1574,10 +1538,10 @@ public class baza_danych extends SQLiteOpenHelper
                         if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
                         {
                             N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
-                            EditStalyDochod(ID, aNazwa, kwota, kategoria, podkategoria, aOdKiedy, aDoKiedy, N_data, CZESTOTLIWOSC.DZIENNIE);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam staly wydatek
+                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
                         {
-                            RemoveStalyWydatek(ID);
+                            RemoveCyclicalExpenses(ID);
                         }
                     }
                 }
@@ -1590,25 +1554,43 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    float getIleWydanoWPodkategorii(int _podkategoria)
+    public float getHowMuchSpendInSubcategory(int _Subcategory)
     {
-        float kwota = 0.0f;
+        float Amount = 0.0f;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota FROM " + TABLE_wydatki + " WHERE " + KEY_podkategoria + " = " + Integer.toString(_podkategoria), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE " + KEY_Subcategory + " = " + Integer.toString(_Subcategory), null);
 
         if(c.moveToFirst()){
             do{
-                kwota += c.getDouble(0);
+                Amount += c.getDouble(0);
             }while(c.moveToNext());
         }
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
-    float getIleWydanoWkategorii(int _kategoria, String _OD, String _DO)
+    public float getHowMuchEarnInSubcategory(int _Subcategory)
+    {
+        float Amount = 0.0f;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE " + KEY_Subcategory + " = " + Integer.toString(_Subcategory), null);
+
+        if(c.moveToFirst()){
+            do{
+                Amount += c.getDouble(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Amount;
+    }
+
+    public float getHowMuchSpendInCategory(int _Category, String _OD, String _DO)
     {
         boolean wszystko = false;
         if(_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
@@ -1627,12 +1609,12 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-        float kwota = 0.0f;
+        float Amount = 0.0f;
 
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota, data FROM " + TABLE_wydatki + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+        c = db.rawQuery("SELECT Amount, date FROM " + TABLE_Expenses + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
         if (wszystko == false)
         {
@@ -1643,7 +1625,7 @@ public class baza_danych extends SQLiteOpenHelper
                     DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
 
                     if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
-                        kwota += c.getDouble(0);
+                        Amount += c.getDouble(0);
                     }
                 } while (c.moveToNext());
             }
@@ -1651,7 +1633,7 @@ public class baza_danych extends SQLiteOpenHelper
             if (c.moveToFirst())
             {
                 do {
-                    kwota += c.getDouble(0);
+                    Amount += c.getDouble(0);
                 } while (c.moveToNext());
             }
         }
@@ -1659,14 +1641,14 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
 
 
-    ArrayList<Integer> getListaIDKategorii(String _OD, String _DO)//nazwy kategorii w ktorych byl utworzony wyadtek w zadanej dacie
+    public ArrayList<Integer> getCategoryIdListForExpenses(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
     {
-        ArrayList<Integer> ListaIDKategorii = new ArrayList<>();
+        ArrayList<Integer> ListaIDCategory = new ArrayList<>();
 
         boolean wszystko = false;
         if(_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
@@ -1687,7 +1669,7 @@ public class baza_danych extends SQLiteOpenHelper
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kategoria, data FROM " + TABLE_wydatki, null);
+        c = db.rawQuery("SELECT Category, date FROM " + TABLE_Expenses, null);
 
 
         if(wszystko == false)
@@ -1701,8 +1683,8 @@ public class baza_danych extends SQLiteOpenHelper
                     if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
                         buffor = c.getInt(0);
 
-                        if (!ListaIDKategorii.contains(buffor)) {
-                            ListaIDKategorii.add(buffor);
+                        if (!ListaIDCategory.contains(buffor)) {
+                            ListaIDCategory.add(buffor);
                         }
                     }
                 } while (c.moveToNext());
@@ -1712,9 +1694,9 @@ public class baza_danych extends SQLiteOpenHelper
             if (c.moveToFirst()) {
                 do {
                         buffor = c.getInt(0);
-                        if (!ListaIDKategorii.contains(buffor))
+                        if (!ListaIDCategory.contains(buffor))
                         {
-                            ListaIDKategorii.add(buffor);
+                            ListaIDCategory.add(buffor);
                         }
 
                 } while (c.moveToNext());
@@ -1724,11 +1706,11 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        return  ListaIDKategorii;
+        return  ListaIDCategory;
     }
 
 
-    float getIleDochoduWkategorii(int _kategoria, String _OD, String _DO) {
+    public float getHowMuchEarnInCategory(int _Category, String _OD, String _DO) {
         boolean wszystko = false;
         if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
 
@@ -1747,11 +1729,11 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-        float kwota = 0.0f;
+        float Amount = 0.0f;
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kwota, data FROM " + TABLE_dochody + " WHERE " + KEY_kategoria + " = " + Integer.toString(_kategoria), null);
+        c = db.rawQuery("SELECT Amount, date FROM " + TABLE_Income + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
         if (wszystko == false)
         {
@@ -1762,7 +1744,7 @@ public class baza_danych extends SQLiteOpenHelper
                     DataPobrana.set(Calendar.DAY_OF_MONTH, Integer.parseInt(c.getString(1).substring(0, 2)));
 
                     if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
-                        kwota += c.getDouble(0);
+                        Amount += c.getDouble(0);
                     }
                 } while (c.moveToNext());
             }
@@ -1770,7 +1752,7 @@ public class baza_danych extends SQLiteOpenHelper
             if (c.moveToFirst())
             {
                 do {
-                    kwota += c.getDouble(0);
+                    Amount += c.getDouble(0);
                 } while (c.moveToNext());
             }
         }
@@ -1778,17 +1760,17 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        return kwota;
+        return Amount;
     }
 
 
 
-    ArrayList<Integer> getListaIDKategoriiDochod(String _OD, String _DO)//nazwy kategorii w ktorych byl utworzony wyadtek w zadanej dacie
+    public ArrayList<Integer> getCategoryIdListForIncome(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
     {
         boolean wszystko = false;
         if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
 
-        ArrayList<Integer> ListaIDKategorii = new ArrayList<>();
+        ArrayList<Integer> ListaIDCategory = new ArrayList<>();
 
         Calendar DataOD = Calendar.getInstance();
         Calendar DataDO = Calendar.getInstance();
@@ -1805,7 +1787,7 @@ public class baza_danych extends SQLiteOpenHelper
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT kategoria, data FROM " + TABLE_dochody, null);
+        c = db.rawQuery("SELECT Category, date FROM " + TABLE_Income, null);
 
         if(wszystko == false)
         {
@@ -1818,8 +1800,8 @@ public class baza_danych extends SQLiteOpenHelper
                     if (DataPobrana.getTimeInMillis() >= DataOD.getTimeInMillis() && DataPobrana.getTimeInMillis() <= DataDO.getTimeInMillis()) {
                         buffor = c.getInt(0);
 
-                        if (!ListaIDKategorii.contains(buffor)) {
-                            ListaIDKategorii.add(buffor);
+                        if (!ListaIDCategory.contains(buffor)) {
+                            ListaIDCategory.add(buffor);
                         }
                     }
                 } while (c.moveToNext());
@@ -1829,9 +1811,9 @@ public class baza_danych extends SQLiteOpenHelper
             if (c.moveToFirst()) {
                 do {
                     buffor = c.getInt(0);
-                    if (!ListaIDKategorii.contains(buffor))
+                    if (!ListaIDCategory.contains(buffor))
                     {
-                        ListaIDKategorii.add(buffor);
+                        ListaIDCategory.add(buffor);
                     }
 
                 } while (c.moveToNext());
@@ -1842,33 +1824,7 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        return  ListaIDKategorii;
+        return  ListaIDCategory;
     }
-
-
-/*
-    ArrayList getINTKategorie()
-    {
-        ArrayList<Integer> idkategorii = new ArrayList<Integer>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_kategoria, null);
-        int a = 0;
-        idkategorii.add(0);
-
-        if(c.moveToFirst()){
-            do{
-                //  bufor = c.getInt(0);
-                idkategorii.add(c.getInt(0));
-                a++;
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return  idkategorii;
-    }
-     */
-
 
 }

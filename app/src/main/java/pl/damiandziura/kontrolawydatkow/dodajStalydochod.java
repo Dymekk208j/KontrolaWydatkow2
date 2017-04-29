@@ -33,19 +33,18 @@ public class dodajStalydochod extends AppCompatActivity {
     private String buforData = "";
     private Spinner spnrCzestotliowsc, spnrKategoria, spnrPodkategoria;
     ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
-    private TextView lblNazwaOkna;
     private boolean edycja = false;
-    private int idStalegoDochodu = 0;
+    private int idCyclicalIncomeu = 0;
     private Button btUsun;
 
-    private int positionKategoria = 0, positionPodkategoria = 0, positionCzestotliwosc = 0;
+    private int positionKategoria = 0, positionPodkategoria = 0, positionFREQUENCY = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_stalydochod);
-        setTitle("Dodaj cykliczny dochod");
+        setTitle("Dodaj cykliczny Income");
         BazaDanych = new baza_danych(this);
 
         spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
@@ -58,7 +57,7 @@ public class dodajStalydochod extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        btUsun = (Button) findViewById(R.id.btDodaj);
+        btUsun = (Button) findViewById(R.id.btUsun);
         btUsun.setVisibility(View.INVISIBLE);
 
         Calendar c = Calendar.getInstance();
@@ -80,7 +79,9 @@ public class dodajStalydochod extends AppCompatActivity {
             Powrot = extras.getString("Powrot");
             buforData = extras.getString("Data");
             edycja = extras.getBoolean("edycja");
-            idStalegoDochodu = extras.getInt("IdStalegoDochodu");
+
+
+            idCyclicalIncomeu = extras.getInt("IdStalegoWydatku");
 
             if(extras.getString("data_godzina1") != null) data_godzina1 = extras.getString("data_godzina1");
             if(extras.getString("data_godzina2") != null) data_godzina2 = extras.getString("data_godzina2");
@@ -88,29 +89,31 @@ public class dodajStalydochod extends AppCompatActivity {
 
             positionKategoria = extras.getInt("KategoriaID");
             positionPodkategoria = extras.getInt("PodkategoriaID");
-            positionCzestotliwosc = extras.getInt("CzestotliwoscID");
+            positionFREQUENCY = extras.getInt("FREQUENCYID");
         }
         if(edycja == true)
         {
             btUsun.setVisibility(View.VISIBLE);
             ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
-            KategoriaIDlist = BazaDanych.getINTKategorie();
+            KategoriaIDlist = BazaDanych.getIdListOfCategory(1);
 
-            positionKategoria = KategoriaIDlist.indexOf(BazaDanych.getStalyDochodKategoria(idStalegoDochodu));
+            positionKategoria = KategoriaIDlist.indexOf(BazaDanych.getCyclicalIncomeCategory(idCyclicalIncomeu));
 
-            PodkategoriaIDlist = BazaDanych.getINTpodKategorie(KategoriaIDlist.get(positionKategoria));
+            PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(KategoriaIDlist.get(positionKategoria));
 
 
 
-            positionPodkategoria = PodkategoriaIDlist.indexOf(BazaDanych.getStalyDochodPodkategoria(idStalegoDochodu));
-            positionCzestotliwosc = BazaDanych.getStalyDochodCzestotliwosc(idStalegoDochodu);
+            positionPodkategoria = PodkategoriaIDlist.indexOf(BazaDanych.getCyclicalIncomeSubcategory(idCyclicalIncomeu));
+            positionFREQUENCY = BazaDanych.getCyclicalIncomeFrequency(idCyclicalIncomeu);
 
-            buforNazwa = BazaDanych.getStalyDochodName(idStalegoDochodu);
-            buforKwota = Double.toString(BazaDanych.getStalyDochodKwota(idStalegoDochodu));
-            setTitle("Edycja cyklicznego dochodu");
-            data_godzina1 = BazaDanych.getStalyDochodOD(idStalegoDochodu);
-            data_godzina2 = BazaDanych.getStalyDochodDO(idStalegoDochodu);
-            data_godzina3 = BazaDanych.getStalyDochodNastepnaData(idStalegoDochodu);
+            buforNazwa = BazaDanych.getCyclicalIncomeName(idCyclicalIncomeu);
+            buforKwota = Double.toString(BazaDanych.getCyclicalIncomeAmount(idCyclicalIncomeu));
+            setTitle("Edycja cyklicznego Incomeu");
+
+            int test = idCyclicalIncomeu;
+            data_godzina1 = BazaDanych.getCyclicalIncomeOD(idCyclicalIncomeu);
+            data_godzina2 = BazaDanych.getCyclicalIncomeDO(idCyclicalIncomeu);
+            data_godzina3 = BazaDanych.getCyclicalIncomeNastepnaData(idCyclicalIncomeu);
 
         }
 
@@ -121,16 +124,17 @@ public class dodajStalydochod extends AppCompatActivity {
         if(data_godzina2 != null)txt2.setText(data_godzina2);
         if(data_godzina3 != null)txt3.setText(data_godzina3);
 
-        spnrCzestotliowsc.setSelection(positionCzestotliwosc);
+        spnrCzestotliowsc.setSelection(positionFREQUENCY);
+String test = data_godzina1;
 
         if(Powrot != null) {
-            if (Powrot.equals("nowyStalyDochod1")) {
+            if (Powrot.equals("nowyCyclicalIncome1")) {
                 data_godzina1 = buforData;
                 txt1.setText(buforData);
-            } else if (Powrot.equals("nowyStalyDochod2")) {
+            } else if (Powrot.equals("nowyCyclicalIncome2")) {
                 data_godzina2 = buforData;
                 txt2.setText(buforData);
-            } else if (Powrot.equals("nowyStalyDochod3")) {
+            } else if (Powrot.equals("nowyCyclicalIncome3")) {
                 data_godzina3 = buforData;
                 txt3.setText(buforData);
             }
@@ -177,7 +181,7 @@ public class dodajStalydochod extends AppCompatActivity {
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
             txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
-            Toast.makeText(this, "Termin końca dochodu musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Termin końca Incomeu musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
             poprawnoscDanych = false;
         }else
         {
@@ -222,31 +226,31 @@ public class dodajStalydochod extends AppCompatActivity {
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
-                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
+                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
-                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.TYDZIEN);
-                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.WEEKLY);
+                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
-                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.MIESIAC);
-                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.MONTHLY);
+                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.KWARTAL);
-                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.QUARTERLY);
+                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        BazaDanych.addStalyDochod(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.ROK);
-                        Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.YEARLY);
+                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd dodawania stałego dochodu", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd dodawania stałego Incomeu", Toast.LENGTH_LONG);
                         break;
                 }
             }
@@ -254,36 +258,36 @@ public class dodajStalydochod extends AppCompatActivity {
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
-                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
+                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
-                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.WEEKLY);
+                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
-                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.MONTHLY);
+                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.QUARTERLY);
+                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
-                        BazaDanych.EditStalyDochod(idStalegoDochodu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-                        Toast.makeText(this, "Uaktualniono staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.YEARLY);
+                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd aktualizacji stałego dochodu", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd aktualizacji stałego Incomeu", Toast.LENGTH_LONG);
                         break;
                 }
             }
-            // BazaDanych.addStalyDochod(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.CZESTOTLIWOSC.DZIENNIE);
-            //Toast.makeText(this, "Dodaje staly dochod o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+            // BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
+            //Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
             intent = new Intent(this, CyklicznyDochod.class);
             startActivity(intent);
         }
@@ -307,16 +311,16 @@ public class dodajStalydochod extends AppCompatActivity {
         txt3.setText(data_godzina3);
         positionKategoria = 0;
         positionPodkategoria = 0;
-        positionCzestotliwosc = 0;
-        spnrCzestotliowsc.setSelection(positionCzestotliwosc);
+        positionFREQUENCY = 0;
+        spnrCzestotliowsc.setSelection(positionFREQUENCY);
         spnrKategoria.setSelection(positionKategoria);
         spnrPodkategoria.setSelection(positionPodkategoria);
 
     }
 
     private void kategoria()    {
-        ArrayList<String> lista = BazaDanych.getKategorie();
-        KategoriaIDlist = BazaDanych.getINTKategorie();
+        ArrayList<String> lista = BazaDanych.getCategory(1);
+        KategoriaIDlist = BazaDanych.getIdListOfCategory(1);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -343,8 +347,8 @@ public class dodajStalydochod extends AppCompatActivity {
     private void Podkategoria()    {
 
         int kat = KategoriaIDlist.get(spinKategorie.getSelectedItemPosition());
-        ArrayList<String> lista = BazaDanych.getpodKategorie(kat);
-        PodkategoriaIDlist = BazaDanych.getINTpodKategorie(kat);
+        ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(kat);
+        PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(kat);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -358,15 +362,15 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyDochod1");
+        intent.putExtra("Klasa", "nowyCyclicalIncome1");
         //data_godzina3
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
         intent.putExtra("data_godzina3", data_godzina3);
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
-        intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
+        intent.putExtra("FREQUENCYID", spnrCzestotliowsc.getSelectedItemPosition());
+        intent.putExtra("IdStalegoWydatku", idCyclicalIncomeu);
         intent.putExtra("edycja", edycja);
         startActivity(intent);
 
@@ -377,14 +381,14 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyDochod2");
+        intent.putExtra("Klasa", "nowyCyclicalIncome2");
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
         intent.putExtra("data_godzina3", data_godzina3);
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
-        intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
+        intent.putExtra("FREQUENCYID", spnrCzestotliowsc.getSelectedItemPosition());
+        intent.putExtra("IdStalegoWydatku", idCyclicalIncomeu);
         intent.putExtra("edycja", edycja);
         startActivity(intent);
 
@@ -395,14 +399,14 @@ public class dodajStalydochod extends AppCompatActivity {
 
         intent.putExtra("Nazwa", txtNazwa.getText().toString());
         intent.putExtra("Kwota", txtKwota.getText().toString());
-        intent.putExtra("Klasa", "nowyStalyDochod3");
+        intent.putExtra("Klasa", "nowyCyclicalIncome3");
         intent.putExtra("data_godzina1", data_godzina1);
         intent.putExtra("data_godzina2", data_godzina2);
         intent.putExtra("data_godzina3", data_godzina3);
         intent.putExtra("KategoriaID", spnrKategoria.getSelectedItemPosition());
         intent.putExtra("PodkategoriaID", spnrPodkategoria.getSelectedItemPosition());
-        intent.putExtra("CzestotliwoscID", spnrCzestotliowsc.getSelectedItemPosition());
-        intent.putExtra("IdStalegoDochodu", idStalegoDochodu);
+        intent.putExtra("FREQUENCYID", spnrCzestotliowsc.getSelectedItemPosition());
+        intent.putExtra("IdStalegoWydatku", idCyclicalIncomeu);
         intent.putExtra("edycja", edycja);
 
         startActivity(intent);
@@ -454,7 +458,7 @@ public class dodajStalydochod extends AppCompatActivity {
 
     public void usun(View view)
     {
-        BazaDanych.RemoveStalyDochod(idStalegoDochodu);
+        BazaDanych.RemoveCyclicalIncome(idCyclicalIncomeu);
         intent = new Intent(this, CykliczneWydatki.class);
         startActivity(intent);
     }

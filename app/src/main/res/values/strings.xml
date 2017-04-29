@@ -66,4 +66,24 @@
         <item>Rok</item>
     </string-array>
 
+
+    <string name="str_skrot_waluty">zł</string>
+    <string name="str_dodawno_nowy_wydatek">Dodano nowy wydatek</string>
+    <string name="str_kwota_wieksza_od_0">Kwota musi być większa od 0!</string>
+    <string name="str_musisz_wpisac_kwote">Musisz wpisać kwote!</string>
+    <string name="str_musisz_wpisac_nazwe">Musisz wpisać nazwe!</string>
+
+    <string name="str_dodaj_nowy_wydatek">Dodaj nowy wydatek</string>
+    <string name="str_lista_cykl_wydatkow">Lista cyklicznych wydatków</string>
+
+    <string name="str_edycja_cyklicznego_wydatku">Edycja cyklicznego wydatku</string>
+    <string name="str_dodaj_cykliczny_wydatek">Dodaj nowy cykliczny wydatek</string>
+
+    <string name="str_edycja_cyklicznego_dochodu">Edycja cyklicznego dochodu</string>
+    <string name="str_dodaj_cykliczny_dochod">Dodaj nowy cykliczny dochód</string>
+    <string name="str_lista_cykl_dochodow">Lista cyklicznych dochodów</string>
+
+    <string name="str_wybierz_date_i_godzine">Wybierz date i godzine</string>
+    <string name="str_wybierz_date">Wybierz date</string>
+
 </resources>

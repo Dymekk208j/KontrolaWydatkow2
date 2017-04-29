@@ -39,11 +39,6 @@ public class dataPicker extends AppCompatActivity {
     boolean edycja = false;
     int IdStalegoWydatku = 0;
 
-    /*
-    intent.putExtra("data_godzina1", data_godzina1);
-        intent.putExtra("data_godzina2", data_godzina2);
-        intent.putExtra("data_godzina3", data_godzina3);
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,23 +72,23 @@ public class dataPicker extends AppCompatActivity {
         if(Powrot.equals("nowyPrzychod"))
         {
             intent = new Intent(this, nowyPrzychod.class);
-            setTitle("Wybierz date i godzine");
+            setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
         }else if(Powrot.equals("nowyWydatek"))
         {
             intent = new Intent(this, AddNewExpenses.class);
-            setTitle("Wybierz date i godzine");
-        }else if(Powrot.equals("nowyStalyWydatek1") || Powrot.equals("nowyStalyWydatek2") || Powrot.equals("nowyStalyWydatek3"))
+            setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
+        }else if(Powrot.equals("nowyCyclicalExpenses1") || Powrot.equals("nowyCyclicalExpenses2") || Powrot.equals("nowyCyclicalExpenses3"))
         {
             intent = new Intent(this, dodajStalyWydatek.class);
             czas.setVisibility(View.INVISIBLE);
             lblGodzina.setVisibility(View.INVISIBLE);
-            setTitle("Wybierz date");
-        }else if(Powrot.equals("nowyStalyDochod1") || Powrot.equals("nowyStalyDochod2") || Powrot.equals("nowyStalyDochod3"))
+            setTitle(getResources().getString(R.string.str_wybierz_date));
+        }else if(Powrot.equals("nowyCyclicalIncome1") || Powrot.equals("nowyCyclicalIncome2") || Powrot.equals("nowyCyclicalIncome3"))
         {
             intent = new Intent(this, dodajStalydochod.class);
             czas.setVisibility(View.INVISIBLE);
             lblGodzina.setVisibility(View.INVISIBLE);
-            setTitle("Wybierz date");
+            setTitle(getResources().getString(R.string.str_wybierz_date));
         }
 
     }
@@ -111,10 +106,10 @@ public class dataPicker extends AppCompatActivity {
         }else if(Powrot.equals("nowyWydatek") || Powrot.equals("nowyDochod"))
         {
             sprawdzDateZogarniczeniem();
-        }else if(Powrot.equals("nowyStalyWydatek1") || Powrot.equals("nowyStalyWydatek2") || Powrot.equals("nowyStalyWydatek3"))
+        }else if(Powrot.equals("nowyCyclicalExpenses1") || Powrot.equals("nowyCyclicalExpenses2") || Powrot.equals("nowyCyclicalExpenses3"))
         {
             sprawdzDateBezogarniczenia();
-        }else if(Powrot.equals("nowyStalyDochod1") || Powrot.equals("nowyStalyDochod2") || Powrot.equals("nowyStalyDochod3"))
+        }else if(Powrot.equals("nowyCyclicalIncome1") || Powrot.equals("nowyCyclicalIncome2") || Powrot.equals("nowyCyclicalIncome3"))
         {
             sprawdzDateBezogarniczenia();
         }
@@ -196,75 +191,6 @@ public class dataPicker extends AppCompatActivity {
         else
         {
             Toast.makeText(this, "Data nie może być z przyszłości!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void sprawdzDateZogarniczeniem(int aYear, int aMonth, int aDay)
-    {
-       Calendar DataGraniczna = Calendar.getInstance();
-        DataGraniczna.set(YEAR, aYear);
-        DataGraniczna.set(MONTH, aMonth);
-        DataGraniczna.set(DAY_OF_MONTH, aDay);
-
-        dataPobrana = Calendar.getInstance();
-
-        dataPobrana.set(YEAR, data.getYear());
-        dataPobrana.set(MONTH, data.getMonth());
-        dataPobrana.set(DAY_OF_MONTH, data.getDayOfMonth());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
-        {
-            dataPobrana.set(HOUR_OF_DAY, czas.getHour());
-            dataPobrana.set(MINUTE, czas.getMinute());
-        }
-        else
-        {
-            dataPobrana.set(HOUR_OF_DAY, czas.getCurrentHour());
-            dataPobrana.set(MINUTE, czas.getCurrentMinute());
-        }
-
-
-
-        if (DataGraniczna.getTimeInMillis() >= dataPobrana.getTimeInMillis())
-        {
-            String dzien = Integer.toString(data.getDayOfMonth());
-            if(data.getDayOfMonth() <= 9) dzien = "0" + Integer.toString(data.getDayOfMonth());
-            String miesiac = Integer.toString(data.getDayOfMonth()+1);
-            if((data.getMonth()+1) <= 9) miesiac = "0" + Integer.toString(data.getMonth()+1);
-
-            DATA = dzien + "-" + miesiac + "-" + Integer.toString(data.getYear());
-            String minuty, godziny;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
-            {
-                if(czas.getMinute() <= 9) {
-                    minuty = "0" + Integer.toString(czas.getMinute());
-                }else minuty = Integer.toString(czas.getMinute());
-                if(czas.getHour() <= 9) {
-                    godziny = "0" + Integer.toString(czas.getHour());
-                }else godziny = Integer.toString(czas.getHour());
-            }
-            else
-            {
-                if(czas.getCurrentMinute() <= 9) {
-                    minuty = "0" + Integer.toString(czas.getCurrentMinute());
-                }else minuty = Integer.toString(czas.getCurrentMinute());
-                if(czas.getCurrentHour() <= 9) {
-                    godziny = "0" + Integer.toString(czas.getCurrentHour());
-                }else godziny = Integer.toString(czas.getCurrentHour());
-            }
-
-            GODZINA = godziny + ":" + minuty;
-            intent.putExtra("Data", DATA);
-            intent.putExtra("Godzina", GODZINA);
-            intent.putExtra("Kwota", buforKwota);
-            intent.putExtra("Nazwa", buforNazwa);
-
-            startActivity(intent);
-        }
-        else
-        {
-            Toast.makeText(this, "Data nie może być większa od " + aDay + "-" + aMonth + "-" + aYear, Toast.LENGTH_SHORT).show();
         }
     }
 
