@@ -9,6 +9,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListaWydatkow extends AppCompatActivity {
 
@@ -18,13 +19,12 @@ public class ListaWydatkow extends AppCompatActivity {
 
     private int LAST_LP = 0;
 
-    private baza_danych BazaDanych;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_wydatkow);
-        BazaDanych = new baza_danych(this);
+        baza_danych BazaDanych = new baza_danych(this);
         Bundle extras = getIntent().getExtras();
 
         if(extras != null)
@@ -49,7 +49,7 @@ public class ListaWydatkow extends AppCompatActivity {
         ArrayList<String> ListaDat;
         ArrayList<Double> ListaKwot;
 
-        if(WydatekDochod == false)
+        if(!WydatekDochod)
         {
             ListaNazwa = BazaDanych.getExpensesNames(ID_KATEGORII, ID_PODKATEGORI);
             ListaDat = BazaDanych.getExpensesDates(ID_KATEGORII, ID_PODKATEGORI);
@@ -95,7 +95,7 @@ public class ListaWydatkow extends AppCompatActivity {
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         /* Create a Button to be the row-content. */
         b = new TextView(this);
-        b.setText(Integer.toString(LAST_LP) + "." );
+        b.setText(String.format(Locale.getDefault(), "%d.", LAST_LP));
         LAST_LP++;
         b.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         /* Add Button to row. */
@@ -111,7 +111,10 @@ public class ListaWydatkow extends AppCompatActivity {
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         /* Create a Button to be the row-content. */
         b = new TextView(this);
-        b.setText(Double.toString(_kwota) + " zł");
+
+        String buffor = "%.2f" + getResources().getString(R.string.str_skrot_waluty);
+        b.setText(String.format(Locale.getDefault(), buffor, _kwota));
+
         b.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         /* Add Button to row. */
         tr.addView(b);

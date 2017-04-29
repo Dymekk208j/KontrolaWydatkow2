@@ -1,6 +1,7 @@
 package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,6 @@ import static java.util.Calendar.YEAR;
 public class dodajStalyWydatek extends AppCompatActivity {
 
     private Intent intent;
-    private Spinner spinKategorie, spinPodkategorie;
     private baza_danych BazaDanych;
     private String buforNazwa = "";
     private String buforKwota = "";
@@ -35,7 +35,6 @@ public class dodajStalyWydatek extends AppCompatActivity {
     private ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
     private boolean edycja = false;
     private int idCyclicalWydatku = 0;
-    private Button btUsun;
 
     private int positionKategoria = 0, positionPodkategoria = 0, positionFREQUENCY = 0;
 
@@ -46,9 +45,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
         setContentView(R.layout.activity_dodaj_staly_wydatek);
         setTitle("Dodaj cykliczny Expenses");
         BazaDanych = new baza_danych(this);
-
-        spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
-        spinPodkategorie = (Spinner) findViewById(R.id.SpinnerPodKategoria);
+        
         txtNazwa = (EditText) findViewById(R.id.txtNazwa);
         txtKwota = (EditText) findViewById(R.id.txtKwota);
         txt1 = (TextView) findViewById(R.id.txt1);
@@ -58,7 +55,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        btUsun = (Button) findViewById(R.id.btWyczysc);
+        Button btUsun = (Button) findViewById(R.id.btWyczysc);
 
         btUsun.setVisibility(View.INVISIBLE);
 
@@ -91,7 +88,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
             positionPodkategoria = extras.getInt("PodkategoriaID");
             positionFREQUENCY = extras.getInt("FREQUENCYID");
         }
-        if(edycja == true)
+        if(edycja)
         {
             btUsun.setVisibility(View.VISIBLE);
             ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
@@ -124,25 +121,29 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         spnrCzestotliowsc.setSelection(positionFREQUENCY);
 
-        if(Powrot != null) {
-            if (Powrot.equals("nowyCyclicalExpenses1")) {
-                data_godzina1 = buforData;
-                txt1.setText(buforData);
-            } else if (Powrot.equals("nowyCyclicalExpenses2")) {
-                data_godzina2 = buforData;
-                txt2.setText(buforData);
-            } else if (Powrot.equals("nowyCyclicalExpenses3")) {
-                data_godzina3 = buforData;
-                txt3.setText(buforData);
+        if(Powrot != null)
+        {
+            switch(Powrot)
+            {
+                case "nowyCyclicalExpenses1":
+                    data_godzina1 = buforData;
+                    txt1.setText(buforData);
+                    break;
+
+                case "nowyCyclicalExpenses2":
+                    data_godzina2 = buforData;
+                    txt2.setText(buforData);
+                    break;
+
+                case "nowyCyclicalExpenses3":
+                    data_godzina3 = buforData;
+                    txt3.setText(buforData);
+                    break;
             }
         }
-
-
-
-
         kategoria();
 
-        spinKategorie.setSelection(positionKategoria);
+        spnrKategoria.setSelection(positionKategoria);
 
 
         poprawnoscDat();
@@ -177,22 +178,22 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
-            txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
             Toast.makeText(this, "Termin końca wydatku musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
             poprawnoscDanych = false;
         }else
         {
-            txt2.setTextColor(getResources().getColor(R.color.Normalny));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }
 
 
         if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
                 cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
         {
-            txt3.setTextColor(getResources().getColor(R.color.Normalny));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }else
         {
-            txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
             poprawnoscDanych = false;
 
             if(cTxt1.getTimeInMillis() == cTxt2.getTimeInMillis())
@@ -215,11 +216,11 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         }
 
-        if(poprawnoscDanych == true)
+        if(poprawnoscDanych)
         {
             int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(spnrKategoria.getSelectedItemPosition());
             int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(spnrPodkategoria.getSelectedItemPosition());
-            if(edycja == false)
+            if(!edycja)
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
@@ -279,7 +280,7 @@ public class dodajStalyWydatek extends AppCompatActivity {
                         Toast.makeText(this, "Uaktualniono Cyclical Expenses o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd aktualizacji stałego wydatku", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd aktualizacji stałego wydatku", Toast.LENGTH_LONG).show();
                         break;
                 }
             }
@@ -319,11 +320,11 @@ public class dodajStalyWydatek extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getCategory(0);
         KategoriaIDlist = BazaDanych.getIdListOfCategory(0);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinKategorie.setAdapter(adapter);
-        spinKategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnrKategoria.setAdapter(adapter);
+        spnrKategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -343,14 +344,14 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
     private void Podkategoria()    {
 
-        int kat = KategoriaIDlist.get(spinKategorie.getSelectedItemPosition());
+        int kat = KategoriaIDlist.get(spnrKategoria.getSelectedItemPosition());
         ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(kat);
         PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(kat);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinPodkategorie.setAdapter(adapter);
-        spinPodkategorie.setSelection(positionPodkategoria);
+        spnrPodkategoria.setAdapter(adapter);
+        spnrPodkategoria.setSelection(positionPodkategoria);
 
     }
 
@@ -432,20 +433,20 @@ public class dodajStalyWydatek extends AppCompatActivity {
 
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
-            txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
         }else
         {
-            txt2.setTextColor(getResources().getColor(R.color.Normalny));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }
 
 
         if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
                 cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
         {
-            txt3.setTextColor(getResources().getColor(R.color.Normalny));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }else
         {
-            txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
         }
 
 

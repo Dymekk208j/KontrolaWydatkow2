@@ -1,27 +1,21 @@
 package pl.damiandziura.kontrolawydatkow;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
+
 
 public class nowyPrzychod extends AppCompatActivity {
 
@@ -30,9 +24,7 @@ public class nowyPrzychod extends AppCompatActivity {
     private String NAZWA = "", DATA = "", GODZINA = "";
     private double KWOTA = 0;
 
-    private String strData, strGodzina;
     private Intent intent;
-    private Calendar c;
     TextView txtData;
     EditText txtNazwa, txtKwota;
     Spinner SpinnerListaKategorii, SpinnerListaPodKategorii;
@@ -85,7 +77,8 @@ public class nowyPrzychod extends AppCompatActivity {
         kategoria();
 
         txtKwota.setText("");
-        if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
+        //if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
+        if(KWOTA > 0.0) txtKwota.setText(String.format(Locale.getDefault(), "%.2f", KWOTA));
         txtNazwa.setText(NAZWA);
 
         txtData.setText(DATA + " " + GODZINA);
@@ -135,7 +128,7 @@ public class nowyPrzychod extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getCategory(1);
         KategoriaIDlist = BazaDanych.getIdListOfCategory(1);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         SpinnerListaKategorii.setAdapter(adapter);
@@ -166,7 +159,7 @@ public class nowyPrzychod extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(numer);
         PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(numer);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
@@ -201,7 +194,7 @@ public class nowyPrzychod extends AppCompatActivity {
 
                     BazaDanych.AddIncome(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
 
-                    Toast.makeText(this, "Dodano nowy dochod " + NAZWA.toString() + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Dodano nowy dochod " + NAZWA + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
 
                     BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
 
@@ -245,7 +238,7 @@ public class nowyPrzychod extends AppCompatActivity {
 
     private void setDataAndHour()
     {
-        c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
 
         String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
         if(c.get(Calendar.DAY_OF_MONTH) <= 9) dzien = "0" + Integer.toString(c.get(Calendar.DAY_OF_MONTH));

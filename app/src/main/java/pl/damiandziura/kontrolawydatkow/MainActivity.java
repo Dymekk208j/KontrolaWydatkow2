@@ -2,7 +2,6 @@ package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -25,6 +22,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     Random r = new Random();
     int Low = 65;
     int High = 255;
-    private Spinner SpinnerCzestotliwosc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
         PosiadaneSrodki = (TextView) findViewById(R.id.textView);
-        String kwotaa = String.format("%.2f",BazaDanych.getWalletBalance());
+        String kwotaa = String.format(Locale.getDefault(), "%.2f",BazaDanych.getWalletBalance());
         PosiadaneSrodki.setText("Saldo konta: " + kwotaa + "zł");
 
         LastWydatek[0] = (TextView) findViewById(R.id.TxtLastExp0);
@@ -221,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
         String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
 
-        if(wszystko == true)
+        if(wszystko)
         {
             DataOd = "33-33-3333";
             AktualnaData = "33-33-3333";

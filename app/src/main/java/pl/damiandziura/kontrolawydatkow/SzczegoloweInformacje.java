@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -29,8 +27,6 @@ public class SzczegoloweInformacje extends AppCompatActivity {
     private baza_danych BazaDanych;
     private ArrayList<Integer> colors;
     private Random r = new Random();
-    private int Low = 0;
-    private int High = 255;
     boolean WydatekDochod = false; //0 wydatek, 1 dochod
 
     private ArrayList<Integer> IdWydatku;
@@ -39,6 +35,9 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int Low = 0;
+        int High = 255;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_szczegolowe_informacje);
         BazaDanych = new baza_danych(this);
@@ -110,7 +109,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
         for(int a = 0; a < intPodkat.size(); a++)
         {
-            if(WydatekDochod == false)
+            if(!WydatekDochod)
             {
                 bufor = BazaDanych.getHowMuchSpendInSubcategory(intPodkat.get(a));
             }else

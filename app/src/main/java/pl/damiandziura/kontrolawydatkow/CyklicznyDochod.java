@@ -12,14 +12,14 @@ import java.util.ArrayList;
 
 public class CyklicznyDochod extends AppCompatActivity {
 
-    private baza_danych BazaDanych;
-    private ListView listView;
-    private Intent intent;
+
     private ArrayList<Integer> idListCyclicalIncome;
     private int idCyclicalIncomeu = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        baza_danych BazaDanych;
+        ListView listView;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cykliczny_dochod);
         setTitle(getResources().getString(R.string.str_lista_cykl_dochodow));
@@ -31,7 +31,7 @@ public class CyklicznyDochod extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getNameListOfCyclicalIncome();
         idListCyclicalIncome = BazaDanych.getIdListOfCyclicalIncome();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
 
         listView.setAdapter(adapter);
@@ -49,7 +49,7 @@ public class CyklicznyDochod extends AppCompatActivity {
 
     private void edytujCyclicalIncome()
     {
-        intent = new Intent(this, dodajStalydochod.class);
+        Intent intent = new Intent(this, dodajStalydochod.class);
         intent.putExtra("IdStalegoWydatku", idCyclicalIncomeu);
         intent.putExtra("edycja", true);
         intent.putExtra("nazwa_okna", getResources().getString(R.string.str_edycja_cyklicznego_dochodu));

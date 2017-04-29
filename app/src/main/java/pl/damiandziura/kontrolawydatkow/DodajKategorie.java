@@ -21,16 +21,14 @@ public class DodajKategorie extends AppCompatActivity
     private Intent intent;
     private baza_danych BazaDanych;
     private EditText editName;
-    private ListView listView ;
+
     private ArrayList<String> listaPodKat;
     private int IdKategorii = 0;
-    private int IdPodKategorii = 0;
     private ArrayList<Integer> PodkategoriaIdList;
     private String Nazwa_okna = "";
     private String Nazwa_kategorii;
     private  Boolean EdycjaKategorii = false;
     private ArrayList<String> ListaPodkategori;
-    private  Button btUsun;
     private int KatWydatekDochod = 0; //0 - wydatek; 1 dochod
     private RadioButton RadioWydatek;
     RadioGroup radioWydatekDochod;
@@ -38,6 +36,9 @@ public class DodajKategorie extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Button btUsun;
+        ListView listView ;
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dodaj_kategorie);
@@ -67,11 +68,11 @@ public class DodajKategorie extends AppCompatActivity
 
             if(Buffor == null)
             {
-                ListaPodkategori = new ArrayList<String>();
+                ListaPodkategori = new ArrayList<>();
                 ListaPodkategori.add(0, "(Domyślna)");
             }else
             {
-                ListaPodkategori = new ArrayList<String>(Arrays.asList(Buffor));
+                ListaPodkategori = new ArrayList<>(Arrays.asList(Buffor));
                 ListaPodkategori.add(0, "(Domyślna)");
             }
 
@@ -86,7 +87,7 @@ public class DodajKategorie extends AppCompatActivity
 
         listView = (ListView) findViewById(R.id.LVlistaPodkategorii);
 
-        if(EdycjaKategorii == true)//edycja kategorii
+        if(EdycjaKategorii)//edycja kategorii
         {
             listaPodKat = BazaDanych.getNameListOfSubcategory(IdKategorii);
             listaPodKat.remove(0);
@@ -117,7 +118,7 @@ public class DodajKategorie extends AppCompatActivity
 
         if(Nazwa_kategorii != null) editName.setText(Nazwa_kategorii);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listaPodKat);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listaPodKat);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -125,10 +126,7 @@ public class DodajKategorie extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id)
             {
-
-                int bufor = position;
-
-                    edytujPodKat(bufor);
+                    edytujPodKat(position);
 
 
             }
@@ -154,7 +152,7 @@ public class DodajKategorie extends AppCompatActivity
             Toast.makeText(this, "Dochod", Toast.LENGTH_SHORT).show();
         }*/
 
-        if(EdycjaKategorii == true)
+        if(EdycjaKategorii)
         {
             BazaDanych.UpdateCategory(editName.getText().toString(), IdKategorii, KatWydatekDochod);
             Toast.makeText(this, "Kategoria " + editName.getText().toString() + " została zaktualizowana.", Toast.LENGTH_SHORT).show();
@@ -196,7 +194,7 @@ public class DodajKategorie extends AppCompatActivity
 
         intent.putExtra("KatWydatekDochod", KatWydatekDochod);
 
-        if(EdycjaKategorii == true)
+        if(EdycjaKategorii)
         {
             intent.putExtra("NumerKategorii", IdKategorii);
             intent.putExtra("NumerPodKategorii", 0);
@@ -222,7 +220,7 @@ public class DodajKategorie extends AppCompatActivity
 
     public void edytujPodKat(int IdPodkategorii)
     {
-        if(EdycjaKategorii == true)
+        if(EdycjaKategorii)
         {
             Intent intent = new Intent(this, Dodajpodkategorie.class);
             intent.putExtra("KatWydatekDochod", KatWydatekDochod);

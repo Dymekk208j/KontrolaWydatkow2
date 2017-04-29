@@ -12,14 +12,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class CykliczneWydatki extends AppCompatActivity {
-    private baza_danych BazaDanych;
-    private ListView listView;
-    private Intent intent;
+
     private ArrayList<Integer> idListCyclicalWydatkow;
     private int idCyclicalWydatku = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        baza_danych BazaDanych;
+        ListView listView;
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cykliczne_wydatki);
         setTitle(getResources().getString(R.string.str_lista_cykl_wydatkow));
@@ -31,7 +33,7 @@ public class CykliczneWydatki extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getNameListOfCyclilcalExpenses();
         idListCyclicalWydatkow = BazaDanych.getIdListOfCyclicalExpenses();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
 
         listView.setAdapter(adapter);
@@ -49,7 +51,7 @@ public class CykliczneWydatki extends AppCompatActivity {
 
     private void edytujStalyWydatek()
     {
-        intent = new Intent(this, dodajStalyWydatek.class);
+        Intent intent = new Intent(this, dodajStalyWydatek.class);
         intent.putExtra("IdStalegoWydatku", idCyclicalWydatku);
         intent.putExtra("edycja", true);
         intent.putExtra("nazwa_okna", getResources().getString(R.string.str_edycja_cyklicznego_wydatku));

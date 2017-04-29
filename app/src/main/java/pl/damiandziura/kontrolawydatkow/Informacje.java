@@ -8,9 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -21,10 +18,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -34,7 +27,6 @@ public class Informacje extends AppCompatActivity {
     private Intent intent;
     PieChart pieChart, pieChart2;
     private baza_danych BazaDanych;
-    private ArrayList<Integer> colors;
     Random r = new Random();
     int Low = 0;
     int High = 255;
@@ -61,7 +53,7 @@ public class Informacje extends AppCompatActivity {
 
 
 
-        colors = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
         for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
@@ -234,7 +226,7 @@ public class Informacje extends AppCompatActivity {
 
         String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
 
-        if(wszystko == true)
+        if(wszystko)
         {
             DataOd = "33-33-3333";
             AktualnaData = "33-33-3333";
@@ -353,7 +345,7 @@ public class Informacje extends AppCompatActivity {
 
         String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
 
-        if(wszystko == true)
+        if(wszystko)
         {
             DataOd = "33-33-3333";
             AktualnaData = "33-33-3333";

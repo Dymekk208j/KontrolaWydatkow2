@@ -5,11 +5,8 @@ import java.util.TimerTask;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
 
 public class MyService extends Service {
-    private Toast toast;
     private Timer timer;
     private TimerTask timerTask;
     private baza_danych BazaDanych;

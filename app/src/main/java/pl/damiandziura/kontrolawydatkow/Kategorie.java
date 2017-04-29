@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+
 
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class Kategorie extends AppCompatActivity {
     private baza_danych BazaDanych;
     private ListView listView;
-    private Intent intent;
     private ArrayList<Integer> idListKategorii;
     private int idKategorii = 0;
     private int KatWydatekDochod = 0; // 0-wydatek; 1-dochod
@@ -51,7 +50,7 @@ public class Kategorie extends AppCompatActivity {
 
         idListKategorii = BazaDanych.getIdListOfCategory(KatWydatekDochod);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
 
         listView.setAdapter(adapter);
@@ -60,15 +59,15 @@ public class Kategorie extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 idKategorii = idListKategorii.get(position+1);
-                edytujKat(position);
+                edytujKat();
             }
 
         });
     }
 
-    private void edytujKat(int pozycja)
+    private void edytujKat()
     {
-        intent = new Intent(this, DodajKategorie.class);
+        Intent intent = new Intent(this, DodajKategorie.class);
         intent.putExtra("IdKategorii", idKategorii);
         intent.putExtra("edycja", true);
         intent.putExtra("nazwa_okna", "Edycja kategorii:");
@@ -104,7 +103,7 @@ public class Kategorie extends AppCompatActivity {
 
         idListKategorii = BazaDanych.getIdListOfCategory(KatWydatekDochod);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
 
 
         listView.setAdapter(adapter);
@@ -113,7 +112,7 @@ public class Kategorie extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 idKategorii = idListKategorii.get(position+1);
-                edytujKat(position);
+                edytujKat();
             }
 
         });

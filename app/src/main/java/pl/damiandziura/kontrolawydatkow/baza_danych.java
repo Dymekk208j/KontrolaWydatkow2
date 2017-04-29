@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class baza_danych extends SQLiteOpenHelper
+ class baza_danych extends SQLiteOpenHelper
 {
     private Cursor c;
     private static final int DATABASE_VERSION = 1;
@@ -40,7 +40,7 @@ public class baza_danych extends SQLiteOpenHelper
     private static final String KEY_frequency = "frequency";
     private static final String KEY_Type = "Type"; // 0- Expenses; 1- Income// Do czego przypisana jest Category.
 
-    public baza_danych(Context context )
+     baza_danych(Context context )
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -56,7 +56,7 @@ public class baza_danych extends SQLiteOpenHelper
 
         private final String text;
 
-        private FREQUENCY(final String text) {
+        FREQUENCY(final String text) {
             this.text = text;
         }
 
@@ -67,7 +67,7 @@ public class baza_danych extends SQLiteOpenHelper
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+     public void onCreate(SQLiteDatabase db) {
         //All necessary tables you like to create will create here
         String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_Expenses  + "("
                 + KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
@@ -149,7 +149,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void AddExpenses(String Name, Double Amount, int Category, int Subcategory, String hour, String Date)
+    void AddExpenses(String Name, Double Amount, int Category, int Subcategory, String hour, String Date)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
@@ -199,9 +199,9 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public ArrayList<String> getExpensesNames(int _IdCategory, int _IdSubcategory)
+     ArrayList<String> getExpensesNames(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<String> ListOfExpensesNames = new ArrayList<String>();
+        ArrayList<String> ListOfExpensesNames = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Name FROM Expenses WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
@@ -217,18 +217,16 @@ public class baza_danych extends SQLiteOpenHelper
         return  ListOfExpensesNames;
     }
 
-    public ArrayList<Double> getExpensesAmount(int _IdCategory, int _IdSubcategory)
+     ArrayList<Double> getExpensesAmount(int _IdCategory, int _IdSubcategory)
     {
         ArrayList<Double> ListOfExpensesAmounts = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
 
-        int a = 0;
         if(c.moveToFirst()){
             do{
                 ListOfExpensesAmounts.add(c.getDouble(0));
-                a++;
             }while(c.moveToNext());
         }
         c.close();
@@ -237,7 +235,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  ListOfExpensesAmounts;
     }
 
-    public ArrayList<String> getExpensesDates(int _IdCategory, int _IdSubcategory)
+     ArrayList<String> getExpensesDates(int _IdCategory, int _IdSubcategory)
     {
         ArrayList<String> ListOfExpensesDates = new ArrayList<>();
 
@@ -273,9 +271,9 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
 
     }
-    public ArrayList<String> getIncomeNames(int _IdCategory, int _IdSubcategory)
+     ArrayList<String> getIncomeNames(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<String> ListOfIncomeNames = new ArrayList<String>();
+        ArrayList<String> ListOfIncomeNames = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Name FROM Income WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
@@ -291,18 +289,16 @@ public class baza_danych extends SQLiteOpenHelper
         return  ListOfIncomeNames;
     }
 
-    public ArrayList<Double> getIncomeAmounts(int _IdCategory, int _IdSubcategory)
+     ArrayList<Double> getIncomeAmounts(int _IdCategory, int _IdSubcategory)
     {
         ArrayList<Double> ListOfIncomeAmounts = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
 
-        int a = 0;
         if(c.moveToFirst()){
             do{
                 ListOfIncomeAmounts.add(c.getDouble(0));
-                a++;
             }while(c.moveToNext());
         }
         c.close();
@@ -311,9 +307,9 @@ public class baza_danych extends SQLiteOpenHelper
         return  ListOfIncomeAmounts;
     }
 
-    public ArrayList<String> getIncomeDates(int _IdCategory, int _IdSubcategory)
+     ArrayList<String> getIncomeDates(int _IdCategory, int _IdSubcategory)
     {
-        ArrayList<String> ListOfIncomeDates = new ArrayList<String>();
+        ArrayList<String> ListOfIncomeDates = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT date FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
@@ -328,28 +324,8 @@ public class baza_danych extends SQLiteOpenHelper
 
         return  ListOfIncomeDates;
     }
-    
-    public int getExpensesMaxId()
-    {
-        int maxID = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT id FROM " + TABLE_Expenses + " ORDER BY id DESC LIMIT 1", null);
 
-        if(c.moveToFirst()){
-            do{
-                maxID = c.getInt(0);
-
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return maxID;
-    }
-
-
-
-    public String[] getLastExpenses()
+    String[] getLastExpenses()
     {
         String LastExpenses[] = new String[10];
         double AmountLastExpenses[] = new double[10];
@@ -376,7 +352,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public String[] getLastIncome()
+     String[] getLastIncome()
     {
         String LastIncome[] = new String[10];
         double AmountLastIncome[] = new double[10];
@@ -438,7 +414,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void WalletSetBalance(Double Amount)
+     void WalletSetBalance(Double Amount)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -450,7 +426,7 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
-    public double getWalletBalance()
+     double getWalletBalance()
     {
         double Amount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -468,9 +444,9 @@ public class baza_danych extends SQLiteOpenHelper
     }
 
 
-    public ArrayList<String> getCategory(int RodzKat)
+     ArrayList<String> getCategory(int RodzKat)
     {
-        ArrayList<String> ListOfCategoryName = new ArrayList<String>();
+        ArrayList<String> ListOfCategoryName = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Name, Type FROM " + TABLE_Category, null);
@@ -492,22 +468,20 @@ public class baza_danych extends SQLiteOpenHelper
         return  ListOfCategoryName;
     }
 
-    public ArrayList<Integer> getIdListOfCategory(int RodzKat)
+     ArrayList<Integer> getIdListOfCategory(int Type)
     {
-        ArrayList<Integer> idCategory = new ArrayList<Integer>();
+        ArrayList<Integer> idCategory = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT id, Type FROM " + TABLE_Category, null);
-        int a = 0;
         idCategory.add(0);
 
         if(c.moveToFirst()){
             do{
-                if(RodzKat == c.getInt(1))
+                if(Type == c.getInt(1))
                 {
                     idCategory.add(c.getInt(0));
-                    a++;
-                }
+                                }
             }while(c.moveToNext());
         }
         c.close();
@@ -516,7 +490,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  idCategory;
     }
 
-    public void AddCategory(String Name, int RodzKat)
+     void AddCategory(String Name, int RodzKat)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
@@ -530,7 +504,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void RemoveCategory(int idCategory)
+     void RemoveCategory(int idCategory)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_Category,"id=?",new String[]{Integer.toString(idCategory)});
@@ -549,7 +523,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public String getCategoryName(int aID)
+     String getCategoryName(int aID)
     {
         String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -566,7 +540,7 @@ public class baza_danych extends SQLiteOpenHelper
         return aName;
     }
 
-    public int getTypeOfCategory(int aID)
+     int getTypeOfCategory(int aID)
     {
         int KatExpensesIncome = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -584,7 +558,7 @@ public class baza_danych extends SQLiteOpenHelper
     }
 
 
-    public void UpdateCategory(String Name, int idCategory, int Type)
+     void UpdateCategory(String Name, int idCategory, int Type)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -595,7 +569,7 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
-    public void AddSubcategory(String Name, int idCategory)
+     void AddSubcategory(String Name, int idCategory)
     {
         //Open connection to write data
         SQLiteDatabase db = this.getWritableDatabase();
@@ -610,24 +584,14 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void UpdateSubcategory(String Name, int idCategory, int idSubcategory)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_Name, Name);
-
-        db.update(TABLE_Subcategory, values, "id="+idSubcategory, null);
-        db.close(); // Closing database connection
-    }
-
-    public void RemoveSubcategory(int idSubcategory)
+     void RemoveSubcategory(int idSubcategory)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_Subcategory,"id=?",new String[]{Integer.toString(idSubcategory)});
         db.close(); // Closing database connection
     }
 
-    public String getSubcategoryName(int aID)
+     String getSubcategoryName(int aID)
     {
         String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -644,7 +608,7 @@ public class baza_danych extends SQLiteOpenHelper
         return aName;
     }
 
-    public ArrayList<Integer> getIdListOfSubcategory(int idCategory)
+     ArrayList<Integer> getIdListOfSubcategory(int idCategory)
     {
         ArrayList<Integer> IdListOfSubcategory = new ArrayList<>();
 
@@ -666,7 +630,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  IdListOfSubcategory;
     }
 
-    public ArrayList<String> getNameListOfSubcategory(int idCategory)
+     ArrayList<String> getNameListOfSubcategory(int idCategory)
     {
         ArrayList<String> NameListOfSubcategory = new ArrayList<>();
 
@@ -688,7 +652,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  NameListOfSubcategory;
     }
 
-    public void updateSubcategoryName(String name, int aID)
+     void updateSubcategoryName(String name, int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -702,9 +666,9 @@ public class baza_danych extends SQLiteOpenHelper
        // UPDATE Subcategory SET Name = "dupa" WHERE ID = 1;
     }
 
-    public ArrayList<String> getNameListOfCyclilcalExpenses()
+     ArrayList<String> getNameListOfCyclilcalExpenses()
     {
-        ArrayList<String> NameListOfCyclilcalExpenses = new ArrayList<String>();
+        ArrayList<String> NameListOfCyclilcalExpenses = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Name FROM " + TABLE_Cyclical_Expenses, null);
@@ -722,18 +686,16 @@ public class baza_danych extends SQLiteOpenHelper
         return  NameListOfCyclilcalExpenses;
     }
 
-    public ArrayList<Integer> getIdListOfCyclicalExpenses()
+     ArrayList<Integer> getIdListOfCyclicalExpenses()
     {
-        ArrayList<Integer> IdListOfCyclicalExpenses = new ArrayList<Integer>();
+        ArrayList<Integer> IdListOfCyclicalExpenses = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT id FROM " + TABLE_Cyclical_Expenses, null);
-        int a = 0;
         if(c.moveToFirst()){
             do{
                 //  bufor = c.getInt(0);
                 IdListOfCyclicalExpenses.add(c.getInt(0));
-                a++;
             }while(c.moveToNext());
         }
         c.close();
@@ -742,7 +704,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  IdListOfCyclicalExpenses;
     }
 
-    public void addCyclicalExpenses(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+     void addCyclicalExpenses(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -763,7 +725,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public String getCyclicalExpensesName(int aID)
+     String getCyclicalExpensesName(int aID)
     {
         String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -780,24 +742,7 @@ public class baza_danych extends SQLiteOpenHelper
         return aName;
     }
 
-    public double getCyclicalExpensesAmount (int aID)
-    {
-        double Amount = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Amount FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                Amount = c.getDouble(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return Amount;
-    }
-
-    public String getCyclicalExpensesOD(int aID)
+     String getCyclicalExpensesOD(int aID)
     {
         String od_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -814,7 +759,7 @@ public class baza_danych extends SQLiteOpenHelper
         return od_kiedy;
     }
 
-    public String getCyclicalExpensesDO(int aID)
+    String getCyclicalExpensesDO(int aID)
     {
         String do_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -831,7 +776,7 @@ public class baza_danych extends SQLiteOpenHelper
         return do_kiedy;
     }
 
-    public String getCyclicalExpensesNastepnaData(int aID)
+     String getCyclicalExpensesNastepnaData(int aID)
     {
         String nastepna_data = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -848,7 +793,7 @@ public class baza_danych extends SQLiteOpenHelper
         return nastepna_data;
     }
 
-    public int getCyclicalExpensesCategory (int aID)
+     int getCyclicalExpensesCategory (int aID)
     {
         int Category = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -865,62 +810,7 @@ public class baza_danych extends SQLiteOpenHelper
         return Category;
     }
 
-    public int getCyclicalExpensesSubcategory (int aID)
-    {
-        int Subcategory = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_Subcategory + " FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                Subcategory = c.getInt(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return Subcategory;
-    }
-
-    public int getCyclicalExpensesFrequency (int aID)
-    {
-        String buffor = "";
-
-        int frequency = 0;
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT "+ KEY_frequency + " FROM "+ TABLE_Cyclical_Expenses + " WHERE id = " + Integer.toString(aID), null);
-
-        if(c.moveToFirst()){
-            do{
-                buffor = c.getString(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        if(buffor.equals("DAILY"))
-        {
-            frequency = 0;
-        }else if (buffor.equals("WEEKLY"))
-        {
-            frequency = 1;
-        }else if (buffor.equals("MONTHLY"))
-        {
-            frequency = 2;
-        }else if (buffor.equals("QUARTERLY"))
-        {
-            frequency = 3;
-        }else if (buffor.equals("YEARLY"))
-        {
-            frequency = 4;
-        }else
-        {
-            frequency = 0;
-        }
-        return frequency;
-    }
-
-    public void UpdateCyclicalExpenses(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+     void UpdateCyclicalExpenses(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
                           String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -939,7 +829,7 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
-    public void RemoveCyclicalExpenses(int aID)
+     void RemoveCyclicalExpenses(int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_Cyclical_Expenses,"id=?",new String[]{Integer.toString(aID)});
@@ -950,9 +840,9 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-    public ArrayList<String> getNameListOfCyclicalIncome()
+     ArrayList<String> getNameListOfCyclicalIncome()
     {
-        ArrayList<String> NameListOfCyclicalIncome = new ArrayList<String>();
+        ArrayList<String> NameListOfCyclicalIncome = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Name FROM " + TABLE_Cyclical_Income, null);
@@ -970,18 +860,16 @@ public class baza_danych extends SQLiteOpenHelper
         return  NameListOfCyclicalIncome;
     }
 
-    public ArrayList<Integer> getIdListOfCyclicalIncome()
+     ArrayList<Integer> getIdListOfCyclicalIncome()
     {
-        ArrayList<Integer> IdListOfCyclicalIncome = new ArrayList<Integer>();
+        ArrayList<Integer> IdListOfCyclicalIncome = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT id FROM " + TABLE_Cyclical_Income, null);
-        int a = 0;
         if(c.moveToFirst()){
             do{
                 //  bufor = c.getInt(0);
                 IdListOfCyclicalIncome.add(c.getInt(0));
-                a++;
             }while(c.moveToNext());
         }
         c.close();
@@ -990,7 +878,7 @@ public class baza_danych extends SQLiteOpenHelper
         return  IdListOfCyclicalIncome;
     }
 
-    public void addCyclicalIncome(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+     void addCyclicalIncome(String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
                                 String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1011,7 +899,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public String getCyclicalIncomeName(int aID)
+     String getCyclicalIncomeName(int aID)
     {
         String aName = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1028,7 +916,7 @@ public class baza_danych extends SQLiteOpenHelper
         return aName;
     }
 
-    public double getCyclicalIncomeAmount (int aID)
+     double getCyclicalIncomeAmount (int aID)
     {
         double Amount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1045,7 +933,7 @@ public class baza_danych extends SQLiteOpenHelper
         return Amount;
     }
 
-    public String getCyclicalIncomeOD(int aID)
+     String getCyclicalIncomeOD(int aID)
     {
         String od_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1062,7 +950,7 @@ public class baza_danych extends SQLiteOpenHelper
         return od_kiedy;
     }
 
-    public String getCyclicalIncomeDO(int aID)
+     String getCyclicalIncomeDO(int aID)
     {
         String do_kiedy = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1079,7 +967,7 @@ public class baza_danych extends SQLiteOpenHelper
         return do_kiedy;
     }
 
-    public String getCyclicalIncomeNastepnaData(int aID)
+     String getCyclicalIncomeNastepnaData(int aID)
     {
         String nastepna_data = "";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1096,7 +984,7 @@ public class baza_danych extends SQLiteOpenHelper
         return nastepna_data;
     }
 
-    public int getCyclicalIncomeCategory (int aID)
+     int getCyclicalIncomeCategory (int aID)
     {
         int Category = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1113,7 +1001,7 @@ public class baza_danych extends SQLiteOpenHelper
         return Category;
     }
 
-    public int getCyclicalIncomeSubcategory (int aID)
+     int getCyclicalIncomeSubcategory (int aID)
     {
         int Subcategory = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1130,11 +1018,11 @@ public class baza_danych extends SQLiteOpenHelper
         return Subcategory;
     }
 
-    public int getCyclicalIncomeFrequency (int aID)
+     int getCyclicalIncomeFrequency (int aID)
     {
         String buffor = "";
 
-        int frequency = 0;
+        int frequency;
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT "+ KEY_frequency + " FROM "+ TABLE_Cyclical_Income + " WHERE id = " + Integer.toString(aID), null);
 
@@ -1146,29 +1034,38 @@ public class baza_danych extends SQLiteOpenHelper
         c.close();
         db.close();
 
-        if(buffor.equals("DAILY"))
+        switch(buffor)
         {
-            frequency = 0;
-        }else if (buffor.equals("WEEKLY"))
-        {
-            frequency = 1;
-        }else if (buffor.equals("MONTHLY"))
-        {
-            frequency = 2;
-        }else if (buffor.equals("QUARTERLY"))
-        {
-            frequency = 3;
-        }else if (buffor.equals("YEARLY"))
-        {
-            frequency = 4;
-        }else
-        {
-            frequency = 0;
+            case "DAILY":
+                frequency = 0;
+                break;
+
+            case "WEEKLY":
+                frequency = 1;
+                break;
+
+            case "MONTHLY":
+                frequency = 2;
+                break;
+
+            case "QUARTERLY":
+                frequency = 3;
+                break;
+
+            case "YEARLY":
+                frequency = 4;
+                break;
+
+            default:
+                frequency = 0;
+                break;
+
         }
+
         return frequency;
     }
 
-    public void UpdateCyclicalIncome(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
+     void UpdateCyclicalIncome(int aID, String aName, double aAmount, int aCategory, int aSubcategory, String aOdKiedy,
                           String aDoKiedy, String aNastepnaData, FREQUENCY czest)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1187,50 +1084,14 @@ public class baza_danych extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
-    public void RemoveCyclicalIncome(int aID)
+     void RemoveCyclicalIncome(int aID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_Cyclical_Income,"id=?",new String[]{Integer.toString(aID)});
         db.close(); // Closing database connection
     }
 
-    public float getIleWydanoWCategory(int _Category)
-    {
-        float Amount = 0.0f;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
-
-        if(c.moveToFirst()){
-            do{
-                Amount += c.getDouble(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return Amount;
-    }
-
-    public float getHowMuchEarnInCategory(int _Category)
-    {
-        float Amount = 0.0f;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
-
-        if(c.moveToFirst()){
-            do{
-                Amount += c.getDouble(0);
-            }while(c.moveToNext());
-        }
-        c.close();
-        db.close();
-
-        return Amount;
-    }
-//00-00-0000
-    public void CheckCyclicalExpenses()
+     void CheckCyclicalExpenses()
     {
         Calendar AktualnaData = Calendar.getInstance();
         Calendar dataDoKiedy = Calendar.getInstance();
@@ -1242,19 +1103,19 @@ public class baza_danych extends SQLiteOpenHelper
         // data pobierana z bazy
         int YEAR, DAY, MONTH;
 
-        int ID = 0;
+        int ID;
 
-        double  Amount = 0.0f;
+        double  Amount;
 
-        int     Category = 0,
-                Subcategory = 0;
+        int     Category,
+                Subcategory;
 
 
-        String  aName = "",
-                aOdKiedy = "",
-                aDoKiedy = "",
-                aNastepnaData = "",
-                frequency = "";
+        String  aName,
+                aOdKiedy,
+                aDoKiedy,
+                aNastepnaData,
+                frequency;
 
 
 
@@ -1265,7 +1126,7 @@ public class baza_danych extends SQLiteOpenHelper
                 " FROM " + TABLE_Cyclical_Expenses, null);
 
         if(c.moveToFirst()){
-            do{
+            do {
                 ID = c.getInt(0);
                 aName = c.getString(1);
                 Amount = c.getDouble(2);
@@ -1281,110 +1142,111 @@ public class baza_danych extends SQLiteOpenHelper
                 MONTH = Integer.parseInt(aNastepnaData.substring(3, 5));
                 YEAR = Integer.parseInt(aNastepnaData.substring(7, 10));
 
-                if(frequency.equals("DAILY"))
+                switch (frequency)
                 {
-                    if(DAY_N >= DAY)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                    case "DAILY":
+                        if (DAY_N >= DAY) {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY + 1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            } else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
+                        break;
 
-                }else if(frequency.equals("WEEKLY"))
-                {
-                    if(DAY_N >= DAY+7)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                    case "WEEKLY":
+                        if (DAY_N >= DAY + 7) {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY + 7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
+                            } else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("MONTHLY"))
-                {
-                    if(MONTH_N >= MONTH)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                        break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "MONTHLY":
+                        if (MONTH_N >= MONTH) {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH + 1) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            } else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("QUARTERLY"))
-                {
-                    if(MONTH_N >= MONTH+3)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                        break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "QUARTERLY":
+                        if (MONTH_N >= MONTH + 3) {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH + 3) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            } else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("YEARLY"))
-                {
-                    if(YEAR_N >= YEAR)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                        break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "YEARLY":
+                        if (YEAR_N >= YEAR) {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR + 1);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            } else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
+                        break;
+
+                    default:
+                        break;
                 }
-
-
             }while(c.moveToNext());
         }
         c.close();
@@ -1392,7 +1254,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public void CheckCyclicalIncome()
+     void CheckCyclicalIncome()
     {
         Calendar AktualnaData = Calendar.getInstance();
         Calendar dataDoKiedy = Calendar.getInstance();
@@ -1404,19 +1266,19 @@ public class baza_danych extends SQLiteOpenHelper
         // data pobierana z bazy
         int YEAR, DAY, MONTH;
 
-        int ID = 0;
+        int ID;
 
-        double  Amount = 0.0f;
+        double  Amount;
 
-        int     Category = 0,
-                Subcategory = 0;
+        int     Category,
+                Subcategory;
 
 
-        String  aName = "",
-                aOdKiedy = "",
-                aDoKiedy = "",
-                aNastepnaData = "",
-                frequency = "";
+        String  aName,
+                aOdKiedy,
+                aDoKiedy,
+                aNastepnaData,
+                frequency;
 
 
 
@@ -1443,107 +1305,112 @@ public class baza_danych extends SQLiteOpenHelper
                 MONTH = Integer.parseInt(aNastepnaData.substring(3, 5));
                 YEAR = Integer.parseInt(aNastepnaData.substring(7, 10));
 
-                if(frequency.equals("DAILY"))
+                switch(frequency)
                 {
-                    if(DAY_N >= DAY)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
-
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
-
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                    case "DAILY":
+                        if(DAY_N >= DAY)
                         {
-                            N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY+1) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
+                        break;
 
-                }else if(frequency.equals("WEEKLY"))
-                {
-                    if(DAY_N >= DAY+7)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
-
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
-
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                    case "WEEKLY":
+                        if(DAY_N >= DAY+7)
                         {
-                            N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY+7) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.WEEKLY);
+                            }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("MONTHLY"))
-                {
-                    if(MONTH_N >= MONTH)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                    break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "MONTHLY":
+                        if(MONTH_N >= MONTH)
+                        {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+1) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("QUARTERLY"))
-                {
-                    if(MONTH_N >= MONTH+3)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                    break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "QUARTERLY":
+                        if(MONTH_N >= MONTH+3)
+                        {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH+3) + "-" + Integer.toString(YEAR);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
-                }else if(frequency.equals("YEARLY"))
-                {
-                    if(YEAR_N >= YEAR)
-                    {
-                        String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
-                        AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
+                    break;
 
-                        dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
-                        dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
-                        dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+                    case "YEARLY":
+                        if(YEAR_N >= YEAR)
+                        {
+                            String N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR);
+                            AddExpenses(aName, Amount, Category, Subcategory, "00:01", N_data);
 
-                        if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
-                        {
-                            N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
-                            UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
-                        }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
-                        {
-                            RemoveCyclicalExpenses(ID);
+                            dataDoKiedy.set(Calendar.YEAR, Integer.parseInt(aDoKiedy.substring(7, 10)));
+                            dataDoKiedy.set(Calendar.MONTH, Integer.parseInt(aDoKiedy.substring(3, 5)));
+                            dataDoKiedy.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aDoKiedy.substring(0, 2)));
+
+                            if (AktualnaData.getTimeInMillis() >= dataDoKiedy.getTimeInMillis())//Aktualna data jest mniejsza badz rowna dacie koncowej to aktualizuje nastepna date
+                            {
+                                N_data = Integer.toString(DAY) + "-" + Integer.toString(MONTH) + "-" + Integer.toString(YEAR+1);
+                                UpdateCyclicalIncome(ID, aName, Amount, Category, Subcategory, aOdKiedy, aDoKiedy, N_data, FREQUENCY.DAILY);
+                            }else // data aktualna jest wieksza od daty koncowej, usuwam Cyclical Expenses
+                            {
+                                RemoveCyclicalExpenses(ID);
+                            }
                         }
-                    }
+                    break;
                 }
 
 
@@ -1554,7 +1421,7 @@ public class baza_danych extends SQLiteOpenHelper
 
     }
 
-    public float getHowMuchSpendInSubcategory(int _Subcategory)
+     float getHowMuchSpendInSubcategory(int _Subcategory)
     {
         float Amount = 0.0f;
 
@@ -1572,7 +1439,7 @@ public class baza_danych extends SQLiteOpenHelper
         return Amount;
     }
 
-    public float getHowMuchEarnInSubcategory(int _Subcategory)
+     float getHowMuchEarnInSubcategory(int _Subcategory)
     {
         float Amount = 0.0f;
 
@@ -1590,7 +1457,7 @@ public class baza_danych extends SQLiteOpenHelper
         return Amount;
     }
 
-    public float getHowMuchSpendInCategory(int _Category, String _OD, String _DO)
+     float getHowMuchSpendInCategory(int _Category, String _OD, String _DO)
     {
         boolean wszystko = false;
         if(_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
@@ -1616,7 +1483,7 @@ public class baza_danych extends SQLiteOpenHelper
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Amount, date FROM " + TABLE_Expenses + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
-        if (wszystko == false)
+        if (!wszystko)
         {
             if (c.moveToFirst()) {
                 do {
@@ -1646,7 +1513,7 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-    public ArrayList<Integer> getCategoryIdListForExpenses(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
+     ArrayList<Integer> getCategoryIdListForExpenses(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
     {
         ArrayList<Integer> ListaIDCategory = new ArrayList<>();
 
@@ -1672,7 +1539,7 @@ public class baza_danych extends SQLiteOpenHelper
         c = db.rawQuery("SELECT Category, date FROM " + TABLE_Expenses, null);
 
 
-        if(wszystko == false)
+        if(!wszystko)
         {
             if (c.moveToFirst()) {
                 do {
@@ -1710,7 +1577,7 @@ public class baza_danych extends SQLiteOpenHelper
     }
 
 
-    public float getHowMuchEarnInCategory(int _Category, String _OD, String _DO) {
+     float getHowMuchEarnInCategory(int _Category, String _OD, String _DO) {
         boolean wszystko = false;
         if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
 
@@ -1735,7 +1602,7 @@ public class baza_danych extends SQLiteOpenHelper
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Amount, date FROM " + TABLE_Income + " WHERE " + KEY_Category + " = " + Integer.toString(_Category), null);
 
-        if (wszystko == false)
+        if (!wszystko)
         {
             if (c.moveToFirst()) {
                 do {
@@ -1765,7 +1632,7 @@ public class baza_danych extends SQLiteOpenHelper
 
 
 
-    public ArrayList<Integer> getCategoryIdListForIncome(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
+     ArrayList<Integer> getCategoryIdListForIncome(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
     {
         boolean wszystko = false;
         if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
@@ -1789,7 +1656,7 @@ public class baza_danych extends SQLiteOpenHelper
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT Category, date FROM " + TABLE_Income, null);
 
-        if(wszystko == false)
+        if(!wszystko)
         {
             if (c.moveToFirst()) {
                 do {

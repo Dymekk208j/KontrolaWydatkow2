@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AddNewExpenses extends AppCompatActivity {
 
@@ -24,7 +25,6 @@ public class AddNewExpenses extends AppCompatActivity {
     private double KWOTA = 0;
 
     private Intent intent;
-    private Calendar c;
     TextView txtData;
     EditText txtNazwa, txtKwota;
     Spinner SpinnerListaKategorii, SpinnerListaPodKategorii;
@@ -75,9 +75,12 @@ public class AddNewExpenses extends AppCompatActivity {
         }
 
         kategoria();
-
+// textView.setText(String.format("%d", getIntent().getExtras().getInt("level"))));
+//String.format()
+        //"%d", getIntent().getExtras().getInt("level"))
         txtKwota.setText("");
-        if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
+        if(KWOTA > 0.0) txtKwota.setText(String.format(Locale.getDefault(), "%.2f", KWOTA));
+        //if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
         txtNazwa.setText(NAZWA);
 
         txtData.setText(DATA + " " + GODZINA);
@@ -127,7 +130,7 @@ public class AddNewExpenses extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getCategory(0);
         KategoriaIDlist = BazaDanych.getIdListOfCategory(0);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         SpinnerListaKategorii.setAdapter(adapter);
@@ -158,7 +161,7 @@ public class AddNewExpenses extends AppCompatActivity {
         ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(numer);
         PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(numer);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
@@ -235,6 +238,7 @@ public class AddNewExpenses extends AppCompatActivity {
 
     private void setDataAndHour()
     {
+        Calendar c;
         c = Calendar.getInstance();
 
         String dzien = Integer.toString(c.get(Calendar.DAY_OF_MONTH));

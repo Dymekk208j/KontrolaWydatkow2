@@ -1,6 +1,7 @@
 package pl.damiandziura.kontrolawydatkow;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,7 @@ import static java.util.Calendar.YEAR;
 public class dodajStalydochod extends AppCompatActivity {
 
     private Intent intent;
-    private Spinner spinKategorie, spinPodkategorie;
+
     private baza_danych BazaDanych;
     private String buforNazwa = "";
     private String buforKwota = "";
@@ -35,7 +36,6 @@ public class dodajStalydochod extends AppCompatActivity {
     ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
     private boolean edycja = false;
     private int idCyclicalIncomeu = 0;
-    private Button btUsun;
 
     private int positionKategoria = 0, positionPodkategoria = 0, positionFREQUENCY = 0;
 
@@ -47,8 +47,6 @@ public class dodajStalydochod extends AppCompatActivity {
         setTitle("Dodaj cykliczny Income");
         BazaDanych = new baza_danych(this);
 
-        spinKategorie = (Spinner) findViewById(R.id.SpinnerKategoria);
-        spinPodkategorie = (Spinner) findViewById(R.id.SpinnerPodKategoria);
         txtNazwa = (EditText) findViewById(R.id.txtNazwa);
         txtKwota = (EditText) findViewById(R.id.txtKwota);
         txt1 = (TextView) findViewById(R.id.txt1);
@@ -57,7 +55,7 @@ public class dodajStalydochod extends AppCompatActivity {
         spnrCzestotliowsc = (Spinner) findViewById(R.id.SpinnerCzestotliwosc);
         spnrKategoria = (Spinner) findViewById(R.id.SpinnerKategoria);
         spnrPodkategoria = (Spinner) findViewById(R.id.SpinnerPodKategoria);
-        btUsun = (Button) findViewById(R.id.btUsun);
+        Button btUsun = (Button) findViewById(R.id.btUsun);
         btUsun.setVisibility(View.INVISIBLE);
 
         Calendar c = Calendar.getInstance();
@@ -91,7 +89,7 @@ public class dodajStalydochod extends AppCompatActivity {
             positionPodkategoria = extras.getInt("PodkategoriaID");
             positionFREQUENCY = extras.getInt("FREQUENCYID");
         }
-        if(edycja == true)
+        if(edycja)
         {
             btUsun.setVisibility(View.VISIBLE);
             ArrayList<Integer> KategoriaIDlist, PodkategoriaIDlist;
@@ -110,7 +108,6 @@ public class dodajStalydochod extends AppCompatActivity {
             buforKwota = Double.toString(BazaDanych.getCyclicalIncomeAmount(idCyclicalIncomeu));
             setTitle("Edycja cyklicznego Incomeu");
 
-            int test = idCyclicalIncomeu;
             data_godzina1 = BazaDanych.getCyclicalIncomeOD(idCyclicalIncomeu);
             data_godzina2 = BazaDanych.getCyclicalIncomeDO(idCyclicalIncomeu);
             data_godzina3 = BazaDanych.getCyclicalIncomeNastepnaData(idCyclicalIncomeu);
@@ -125,18 +122,25 @@ public class dodajStalydochod extends AppCompatActivity {
         if(data_godzina3 != null)txt3.setText(data_godzina3);
 
         spnrCzestotliowsc.setSelection(positionFREQUENCY);
-String test = data_godzina1;
 
-        if(Powrot != null) {
-            if (Powrot.equals("nowyCyclicalIncome1")) {
-                data_godzina1 = buforData;
-                txt1.setText(buforData);
-            } else if (Powrot.equals("nowyCyclicalIncome2")) {
-                data_godzina2 = buforData;
-                txt2.setText(buforData);
-            } else if (Powrot.equals("nowyCyclicalIncome3")) {
-                data_godzina3 = buforData;
-                txt3.setText(buforData);
+        if(Powrot != null)
+        {
+            switch(Powrot)
+            {
+                case "nowyCyclicalIncome1":
+                    data_godzina1 = buforData;
+                    txt1.setText(buforData);
+                    break;
+
+                case "nowyCyclicalIncome2":
+                    data_godzina2 = buforData;
+                    txt2.setText(buforData);
+                    break;
+
+                case "nowyCyclicalIncome3":
+                    data_godzina3 = buforData;
+                    txt3.setText(buforData);
+                    break;
             }
         }
 
@@ -145,7 +149,7 @@ String test = data_godzina1;
 
         kategoria();
 
-        spinKategorie.setSelection(positionKategoria);
+        spnrKategoria.setSelection(positionKategoria);
 
 
         poprawnoscDat();
@@ -180,22 +184,22 @@ String test = data_godzina1;
 
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
-            txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
             Toast.makeText(this, "Termin końca Incomeu musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
             poprawnoscDanych = false;
         }else
         {
-            txt2.setTextColor(getResources().getColor(R.color.Normalny));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }
 
 
         if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
                 cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
         {
-            txt3.setTextColor(getResources().getColor(R.color.Normalny));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }else
         {
-            txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
             poprawnoscDanych = false;
 
             if(cTxt1.getTimeInMillis() == cTxt2.getTimeInMillis())
@@ -218,11 +222,11 @@ String test = data_godzina1;
 
         }
 
-        if(poprawnoscDanych == true)
+        if(poprawnoscDanych)
         {
             int ID_WYBRANEJ_KATEGORII = KategoriaIDlist.get(spnrKategoria.getSelectedItemPosition());
             int ID_WYBRANEJ_PODKATEGORII = PodkategoriaIDlist.get(spnrPodkategoria.getSelectedItemPosition());
-            if(edycja == false)
+            if(!edycja)
             {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
@@ -282,7 +286,7 @@ String test = data_godzina1;
                         Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd aktualizacji stałego Incomeu", Toast.LENGTH_LONG);
+                        Toast.makeText(this, "Błąd aktualizacji stałego Incomeu", Toast.LENGTH_LONG).show();
                         break;
                 }
             }
@@ -322,11 +326,11 @@ String test = data_godzina1;
         ArrayList<String> lista = BazaDanych.getCategory(1);
         KategoriaIDlist = BazaDanych.getIdListOfCategory(1);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinKategorie.setAdapter(adapter);
-        spinKategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnrKategoria.setAdapter(adapter);
+        spnrKategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -346,14 +350,14 @@ String test = data_godzina1;
 
     private void Podkategoria()    {
 
-        int kat = KategoriaIDlist.get(spinKategorie.getSelectedItemPosition());
+        int kat = KategoriaIDlist.get(spnrKategoria.getSelectedItemPosition());
         ArrayList<String> lista = BazaDanych.getNameListOfSubcategory(kat);
         PodkategoriaIDlist = BazaDanych.getIdListOfSubcategory(kat);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinPodkategorie.setAdapter(adapter);
-        spinPodkategorie.setSelection(positionPodkategoria);
+        spnrPodkategoria.setAdapter(adapter);
+        spnrPodkategoria.setSelection(positionPodkategoria);
 
     }
 
@@ -435,20 +439,20 @@ String test = data_godzina1;
 
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
-            txt2.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
         }else
         {
-            txt2.setTextColor(getResources().getColor(R.color.Normalny));
+            txt2.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }
 
 
         if(cTxt3.getTimeInMillis() <= cTxt2.getTimeInMillis() &&
                 cTxt3.getTimeInMillis() >= cTxt1.getTimeInMillis())
         {
-            txt3.setTextColor(getResources().getColor(R.color.Normalny));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.Normalny));
         }else
         {
-            txt3.setTextColor(getResources().getColor(R.color.RedAsFuck));
+            txt3.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
         }
 
 
