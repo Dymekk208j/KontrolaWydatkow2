@@ -63,26 +63,31 @@ public class dataPicker extends AppCompatActivity {
         czas = (TimePicker) findViewById(R.id.timePicker3);
         czas.setIs24HourView(true);
 
-        if(Powrot.equals("nowyPrzychod"))
-        {
-            intent = new Intent(this, nowyPrzychod.class);
-            setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
-        }else if(Powrot.equals("nowyWydatek"))
-        {
-            intent = new Intent(this, AddNewExpenses.class);
-            setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
-        }else if(Powrot.equals("nowyCyclicalExpenses1") || Powrot.equals("nowyCyclicalExpenses2") || Powrot.equals("nowyCyclicalExpenses3"))
-        {
-            intent = new Intent(this, dodajStalyWydatek.class);
-            czas.setVisibility(View.INVISIBLE);
-            lblGodzina.setVisibility(View.INVISIBLE);
-            setTitle(getResources().getString(R.string.str_wybierz_date));
-        }else if(Powrot.equals("nowyCyclicalIncome1") || Powrot.equals("nowyCyclicalIncome2") || Powrot.equals("nowyCyclicalIncome3"))
-        {
-            intent = new Intent(this, dodajStalydochod.class);
-            czas.setVisibility(View.INVISIBLE);
-            lblGodzina.setVisibility(View.INVISIBLE);
-            setTitle(getResources().getString(R.string.str_wybierz_date));
+        switch (Powrot) {
+            case "nowyPrzychod":
+                intent = new Intent(this, nowyPrzychod.class);
+                setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
+                break;
+            case "nowyWydatek":
+                intent = new Intent(this, AddNewExpenses.class);
+                setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
+                break;
+            case "nowyCyclicalExpenses1":
+            case "nowyCyclicalExpenses2":
+            case "nowyCyclicalExpenses3":
+                intent = new Intent(this, dodajStalyWydatek.class);
+                czas.setVisibility(View.INVISIBLE);
+                lblGodzina.setVisibility(View.INVISIBLE);
+                setTitle(getResources().getString(R.string.str_wybierz_date));
+                break;
+            case "nowyCyclicalIncome1":
+            case "nowyCyclicalIncome2":
+            case "nowyCyclicalIncome3":
+                intent = new Intent(this, dodajStalydochod.class);
+                czas.setVisibility(View.INVISIBLE);
+                lblGodzina.setVisibility(View.INVISIBLE);
+                setTitle(getResources().getString(R.string.str_wybierz_date));
+                break;
         }
 
     }
@@ -94,18 +99,24 @@ public class dataPicker extends AppCompatActivity {
     public void btZatwierdz(View view)
     {
 
-        if(Powrot.equals("nowyPrzychod"))
-        {
-            sprawdzDateZogarniczeniem();
-        }else if(Powrot.equals("nowyWydatek") || Powrot.equals("nowyDochod"))
-        {
-            sprawdzDateZogarniczeniem();
-        }else if(Powrot.equals("nowyCyclicalExpenses1") || Powrot.equals("nowyCyclicalExpenses2") || Powrot.equals("nowyCyclicalExpenses3"))
-        {
-            sprawdzDateBezogarniczenia();
-        }else if(Powrot.equals("nowyCyclicalIncome1") || Powrot.equals("nowyCyclicalIncome2") || Powrot.equals("nowyCyclicalIncome3"))
-        {
-            sprawdzDateBezogarniczenia();
+        switch (Powrot) {
+            case "nowyPrzychod":
+                sprawdzDateZogarniczeniem();
+                break;
+            case "nowyWydatek":
+            case "nowyDochod":
+                sprawdzDateZogarniczeniem();
+                break;
+            case "nowyCyclicalExpenses1":
+            case "nowyCyclicalExpenses2":
+            case "nowyCyclicalExpenses3":
+                sprawdzDateBezogarniczenia();
+                break;
+            case "nowyCyclicalIncome1":
+            case "nowyCyclicalIncome2":
+            case "nowyCyclicalIncome3":
+                sprawdzDateBezogarniczenia();
+                break;
         }
 
     }
