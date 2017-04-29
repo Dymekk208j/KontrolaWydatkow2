@@ -116,6 +116,7 @@ public class dataPicker extends AppCompatActivity {
             case "nowyCyclicalIncome2":
             case "nowyCyclicalIncome3":
                 sprawdzDateBezogarniczenia();
+
                 break;
         }
 
