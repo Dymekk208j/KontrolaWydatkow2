@@ -75,12 +75,9 @@ public class AddNewExpenses extends AppCompatActivity {
         }
 
         kategoria();
-// textView.setText(String.format("%d", getIntent().getExtras().getInt("level"))));
-//String.format()
-        //"%d", getIntent().getExtras().getInt("level"))
+
         txtKwota.setText("");
         if(KWOTA > 0.0) txtKwota.setText(String.format(Locale.getDefault(), "%.2f", KWOTA));
-        //if(KWOTA > 0.0) txtKwota.setText(Double.toString(KWOTA));
         txtNazwa.setText(NAZWA);
 
         txtData.setText(DATA + " " + GODZINA);

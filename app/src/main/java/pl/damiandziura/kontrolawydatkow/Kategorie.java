@@ -28,7 +28,7 @@ public class Kategorie extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kategorie);
-        setTitle("Lista kategori");
+        setTitle(getResources().getString(R.string.str_lista_kat));
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
         RadioWydatek = (RadioButton) findViewById(R.id.RadioWydatki);
@@ -70,7 +70,7 @@ public class Kategorie extends AppCompatActivity {
         Intent intent = new Intent(this, DodajKategorie.class);
         intent.putExtra("IdKategorii", idKategorii);
         intent.putExtra("edycja", true);
-        intent.putExtra("nazwa_okna", "Edycja kategorii:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_edycja_kat));
         startActivity(intent);
     }
 
@@ -81,9 +81,8 @@ public class Kategorie extends AppCompatActivity {
 
     public void dodaj(View view) {
         Intent intent = new Intent(this, DodajKategorie.class);
-        intent.putExtra("nazwa_okna", "Dodaj nową kategorie:");
+        intent.putExtra("nazwa_okna", getResources().getString(R.string.str_dodaj_kat));
         intent.putExtra("edycja", false);
-        intent.putExtra("nazwa_okna", "Dodaj kategorie:");
         startActivity(intent);
     }
 

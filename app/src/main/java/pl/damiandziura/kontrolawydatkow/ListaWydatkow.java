@@ -37,11 +37,11 @@ public class ListaWydatkow extends AppCompatActivity {
         String Nazwa_id_kategorii, Nazwa_id_podkategorii;
         if(ID_KATEGORII != 0) {
             Nazwa_id_kategorii = BazaDanych.getCategoryName(ID_KATEGORII);
-        }else{ Nazwa_id_kategorii = "Domyślna kategoria";}
+        }else{ Nazwa_id_kategorii = getResources().getString(R.string.str_domyslna_kategoria);}
 
         if(ID_PODKATEGORI != 0) {
             Nazwa_id_podkategorii = BazaDanych.getSubcategoryName(ID_PODKATEGORI);
-        }else{ Nazwa_id_podkategorii = "Domyślna podkategoria";}
+        }else{ Nazwa_id_podkategorii = getResources().getString(R.string.str_domyślna_podkategoria);}
 
         setTitle(Nazwa_id_kategorii + "/" + Nazwa_id_podkategorii + "/*");
 

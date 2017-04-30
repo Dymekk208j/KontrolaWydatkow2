@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         BazaDanych = new baza_danych(this);
         super.onCreate(savedInstanceState);
-        setTitle("Aplikacja do kontroli wydatków");
+        setTitle(getResources().getString(R.string.app_name));
         setContentView(R.layout.activity_main);
 
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
         PosiadaneSrodki = (TextView) findViewById(R.id.textView);
         String kwotaa = String.format(Locale.getDefault(), "%.2f",BazaDanych.getWalletBalance());
-        PosiadaneSrodki.setText("Saldo konta: " + kwotaa + "zł");
+        PosiadaneSrodki.setText(getResources().getString(R.string.str_saldo) + ": " + kwotaa + getResources().getString(R.string.str_skrot_waluty));
 
         LastWydatek[0] = (TextView) findViewById(R.id.TxtLastExp0);
         LastWydatek[1] = (TextView) findViewById(R.id.TxtLastExp1);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             LastDochod[a].setText(sLastDochod[a]);
         }
         Description desc = new Description();
-        desc.setText("Expenses względem kategorii");
+        desc.setText(getResources().getString(R.string.str_wyd_wzg_kat));
 
         pieChart = (PieChart) findViewById(R.id.idPieChart);
         pieChart.setRotationEnabled(true);
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(intKategorie.get(a) == 0)
                 {
-                    NazwyKategorii.add("Domyślna kategoria");
+                    NazwyKategorii.add(getResources().getString(R.string.str_domyslna_kategoria));
                 }
                 else
                 {

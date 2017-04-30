@@ -35,7 +35,7 @@ public class Informacje extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setTitle("Szczegółowe informacje");
+        setTitle(getResources().getString(R.string.str_szczeg_info));
         setContentView(R.layout.activity_informacje);
 
         BazaDanych = new baza_danych(this);
@@ -246,7 +246,7 @@ public class Informacje extends AppCompatActivity {
 
                 if(IdWydatku.get(a) == 0)
                 {
-                    NazwyKategorii.add("Domyślna kategoria");
+                    NazwyKategorii.add(getResources().getString(R.string.str_domyslna_kategoria));
                 }
                 else
                 {
@@ -365,7 +365,7 @@ public class Informacje extends AppCompatActivity {
 
                 if(IdIncomeu.get(a) == 0)
                 {
-                    NazwyKategorii.add("Domyślna kategoria");
+                    NazwyKategorii.add(getResources().getString(R.string.str_domyslna_kategoria));
                 }
                 else
                 {

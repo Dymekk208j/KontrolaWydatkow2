@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KontrolaWydatkow</string>
+    <string name="app_name">Aplikacja do kontroli wydatków</string>
     <string name="stre_back">Cofnij</string>
     <string name="str_data">Data:</string>
     <string name="str_add">Dodaj</string>
@@ -8,6 +8,7 @@
     <string name="str_dodaj_wydatek">Dodaj wydatek</string>
     <string name="str_dodaj_dochod">Dodaj dochód</string>
     <string name="str_kategorie">Kategorie</string>
+    <string name="str_kategoria">Kategoria</string>
     <string name="str_informacje">Informacje</string>
     <string name="str_posSrodki">Posiadane środki</string>
     <string name="str_srwydatkinadzien">Srednie wydatki na dzień</string>
@@ -75,6 +76,7 @@
 
     <string name="str_dodaj_nowy_wydatek">Dodaj nowy wydatek</string>
     <string name="str_lista_cykl_wydatkow">Lista cyklicznych wydatków</string>
+    <string name="str_do2">do</string>
 
     <string name="str_edycja_cyklicznego_wydatku">Edycja cyklicznego wydatku</string>
     <string name="str_dodaj_cykliczny_wydatek">Dodaj nowy cykliczny wydatek</string>
@@ -85,5 +87,40 @@
 
     <string name="str_wybierz_date_i_godzine">Wybierz date i godzine</string>
     <string name="str_wybierz_date">Wybierz date</string>
+    <string name="str_data_z_przyszlosci">Data nie może być z przyszłości!</string>
+
+    <string name="str_domyslna_kategoria">Domyślna kategoria</string>
+    <string name="str_domyślna_podkategoria">Domyślna podkategoria</string>
+    <string name="str_zostala_zaktualizowana">została zaktualizowana</string>
+    <string name="str_nowa_kategoria">Nowa kategoria</string>
+    <string name="str_zostala_dodana">została dodana</string>
+    <string name="str_pomyslnie_usunieto_kategorie">Pomyślnie usunięto kategorie </string>
+    <string name="str_dodana_nowa_podkategorie">Dodano nową podkategorie</string>
+    <string name="str_zmieniono_nazwe_podkat">Zmienione nazwe podkategorii na </string>
+    <string name="str_pomyslnie_usunieto_podkat">Pomyślnie usunięto podkategorie</string>
+
+    <string name="str_dodano_nowy_cykliczny_dochod">Pomyślnie dodano cykliczny dochod </string>
+    <string name="str_blad_dodawania_cykl_doch">Błąd przy dodawaniu cyklicznego dochodu.</string>
+    <string name="str_uaktualniono_cyk_doch">Pomyślnie zaktualizowano cykliczny dochod </string>
+    <string name="str_blad_aktu_cykl_doch">Błąd przy aktualizacji cyklicznego dochodu.</string>
+
+    <string name="str_dodano_nowy_cykliczny_wyd">Pomyślnie dodano cykliczny wydatek </string>
+    <string name="str_blad_dodawania_cykl_wyd">Błąd przy dodawaniu cyklicznego wydatku.</string>
+    <string name="str_uaktualniono_cyk_wyd">Pomyślnie zaktualizowano cykliczny wydatek </string>
+    <string name="str_blad_aktu_cykl_wyd">Błąd przy aktualizacji cyklicznego wydatku.</string>
+
+    <string name="str_blad_daty_1">Data początku oraz końca muszą być od siebie różne!</string>
+    <string name="str_blad_daty_2">Data pierwszego pobrania musi być w przedziale od </string>
+    <string name="str_blad_daty_3">Termin końca musi być większy od </string>
+
+    <string name="str_szczeg_info">Szczegółowe informacje</string>
+    <string name="str_dodaj_kat">Dodaj nową kategorie</string>
+    <string name="str_edycja_kat">Edytuj kategorie</string>
+    <string name="str_lista_kat">Lista kategorii</string>
+    <string name="str_saldo">Saldo konta</string>
+
+    <string name="str_wyd_wzg_kat">Wydatki posortowane po kategoriach</string>
+    <string name="str_nowy_dochod">Dodano nowy dochód </string>
+
 
 </resources>

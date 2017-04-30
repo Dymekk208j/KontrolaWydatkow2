@@ -49,7 +49,6 @@ public class nowyPrzychod extends AppCompatActivity {
         txtKwota.setText("");
         SpinnerListaKategorii = (Spinner) findViewById(R.id.SpinnerKategoriaWydatki);
         SpinnerListaPodKategorii = (Spinner) findViewById(R.id.SpinnerPodKategoriaWydatki);
-        setTitle("Dodaj nowy dochod");
         setDataAndHour();
 
         // podkategoria();
@@ -194,17 +193,17 @@ public class nowyPrzychod extends AppCompatActivity {
 
                     BazaDanych.AddIncome(NAZWA, KWOTA, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, GODZINA, DATA);
 
-                    Toast.makeText(this, "Dodano nowy dochod " + NAZWA + " " + Double.toString(KWOTA) + "zł", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.str_nowy_dochod) + NAZWA + " " + Double.toString(KWOTA) + getResources().getString(R.string.str_skrot_waluty), Toast.LENGTH_SHORT).show();
 
                     BazaDanych.WalletSetBalance(BazaDanych.WalletRecalculate());
 
                     intent = new Intent(this, MainActivity.class);
 
                     startActivity(intent);
-                } else Toast.makeText(this, "Kwota musi być większa od 0!", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(this, "Musisz wpisać kwote!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, getResources().getString(R.string.str_kwota_wieksza_od_0), Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_kwote), Toast.LENGTH_SHORT).show();
 
-        }else{Toast.makeText(this, "Musisz wpisać nazwe!", Toast.LENGTH_SHORT).show();}
+        }else{Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_nazwe), Toast.LENGTH_SHORT).show();}
 
 
 

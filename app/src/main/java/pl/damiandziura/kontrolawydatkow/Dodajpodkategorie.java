@@ -154,9 +154,9 @@ public class Dodajpodkategorie extends AppCompatActivity {
                 if (!NazwaPodkat.getText().toString().equals("")) {
                     ListaPodkategorii.add(NazwaPodkat.getText().toString());
                     BufforList = ListaPodkategorii.toArray(new String[0]);
-                    Toast.makeText(this, "Dodano nową podkategorie " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.str_dodana_nowa_podkategorie) + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_nazwe), Toast.LENGTH_SHORT).show();
                 }
             }
             else//edytuje istniejaca podkategorie
@@ -164,9 +164,9 @@ public class Dodajpodkategorie extends AppCompatActivity {
                 if (!NazwaPodkat.getText().toString().equals("")) {
                     ListaPodkategorii.set(IdPodKategorii-1, NazwaPodkat.getText().toString());//-1 jest potrzebne po to zebym mogl operowac na tablicy o numerze 0
                     BufforList = ListaPodkategorii.toArray(new String[0]);
-                    Toast.makeText(this, "Zmienione nazwe podkategorii na " + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.str_zmieniono_nazwe_podkat) + NazwaPodkat.getText().toString(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Pole nazwy nie może być puste!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_nazwe), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -182,7 +182,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         if(EdycjaKategorii) //dzialam na istniejacej kategorii
         {
             BazaDanych.RemoveSubcategory(IdPodKategorii);
-            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + BazaDanych.getSubcategoryName(IdPodKategorii), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_pomyslnie_usunieto_podkat) + " " + BazaDanych.getSubcategoryName(IdPodKategorii), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, DodajKategorie.class);
             intent.putExtra("IdKategorii", IdKategorii);
             intent.putExtra("nazwa_okna", "Edycja kategorii:");
@@ -193,7 +193,7 @@ public class Dodajpodkategorie extends AppCompatActivity {
         }
         else // dzialam na jeszcze nie istniejacej kategorii
         {
-            Toast.makeText(this, "Pomyślnie usunięto podkategorie " + ListaPodkategorii.get(IdPodKategorii-1), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_pomyslnie_usunieto_podkat) + " " + BazaDanych.getSubcategoryName(IdPodKategorii), Toast.LENGTH_SHORT).show();
             ListaPodkategorii.remove(IdPodKategorii-1);
             BufforList = ListaPodkategorii.toArray(new String[0]);
             Intent intent = new Intent(this, DodajKategorie.class);

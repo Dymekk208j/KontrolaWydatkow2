@@ -116,7 +116,6 @@ public class dataPicker extends AppCompatActivity {
             case "nowyCyclicalIncome2":
             case "nowyCyclicalIncome3":
                 sprawdzDateBezogarniczenia();
-
                 break;
         }
 
@@ -196,7 +195,7 @@ public class dataPicker extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "Data nie może być z przyszłości!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_data_z_przyszlosci), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -69,11 +69,11 @@ public class DodajKategorie extends AppCompatActivity
             if(Buffor == null)
             {
                 ListaPodkategori = new ArrayList<>();
-                ListaPodkategori.add(0, "(Domyślna)");
+                ListaPodkategori.add(0, "(" + getResources().getString(R.string.str_domyślna_podkategoria)+ ")");
             }else
             {
                 ListaPodkategori = new ArrayList<>(Arrays.asList(Buffor));
-                ListaPodkategori.add(0, "(Domyślna)");
+                ListaPodkategori.add(0, "(" + getResources().getString(R.string.str_domyślna_podkategoria)+ ")");
             }
 
         }
@@ -142,32 +142,22 @@ public class DodajKategorie extends AppCompatActivity
 
     public void dodaj(View view)
     {
-        /*if(RadioWydatek.isChecked())
-        {
-            KatWydatekDochod = 0;
-            Toast.makeText(this, "Wydatek", Toast.LENGTH_SHORT).show();
-        }else
-        {
-            KatWydatekDochod = 1;
-            Toast.makeText(this, "Dochod", Toast.LENGTH_SHORT).show();
-        }*/
 
         if(EdycjaKategorii)
         {
             BazaDanych.UpdateCategory(editName.getText().toString(), IdKategorii, KatWydatekDochod);
-            Toast.makeText(this, "Kategoria " + editName.getText().toString() + " została zaktualizowana.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_kategoria) + editName.getText().toString() + " " + getResources().getString(R.string.str_zostala_zaktualizowana) + ".", Toast.LENGTH_SHORT).show();
             intent = new Intent(this, Kategorie.class);
             startActivity(intent);
         }
         else
         {
             BazaDanych.AddCategory(editName.getText().toString(), KatWydatekDochod);
-            //SELECT id FROM Kategoria ORDER BY id DESC LIMIT 1
             for(int a = 0; a < listaPodKat.size(); a++)
             {
                 BazaDanych.AddSubcategory(listaPodKat.get(a), BazaDanych.getCategoryMaxId());
             }
-            Toast.makeText(this, "Nowa kategoria " + editName.getText().toString() + " została dodana.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_nowa_kategoria) + editName.getText().toString() + " " + getResources().getString(R.string.str_zostala_dodana) + ".", Toast.LENGTH_SHORT).show();
             intent = new Intent(this, Kategorie.class);
             startActivity(intent);
         }
@@ -176,7 +166,7 @@ public class DodajKategorie extends AppCompatActivity
 
     public void usun(View view)
     {
-        Toast.makeText(this, "Pomyślnie usunięto kategorie " + BazaDanych.getCategoryName(IdKategorii), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.str_pomyslnie_usunieto_kategorie) + BazaDanych.getCategoryName(IdKategorii), Toast.LENGTH_SHORT).show();
         PodkategoriaIdList = BazaDanych.getIdListOfSubcategory(IdKategorii);
         for(int a = 0; a < PodkategoriaIdList.size(); a++)
         {

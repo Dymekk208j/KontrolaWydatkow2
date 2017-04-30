@@ -44,7 +44,7 @@ public class dodajStalydochod extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_stalydochod);
-        setTitle("Dodaj cykliczny Income");
+        setTitle(getResources().getString(R.string.str_dodaj_cykliczny_dochod));
         BazaDanych = new baza_danych(this);
 
         txtNazwa = (EditText) findViewById(R.id.txtNazwa);
@@ -106,7 +106,7 @@ public class dodajStalydochod extends AppCompatActivity {
 
             buforNazwa = BazaDanych.getCyclicalIncomeName(idCyclicalIncomeu);
             buforKwota = Double.toString(BazaDanych.getCyclicalIncomeAmount(idCyclicalIncomeu));
-            setTitle("Edycja cyklicznego Incomeu");
+            setTitle(getResources().getString(R.string.str_edycja_cyklicznego_dochodu));
 
             data_godzina1 = BazaDanych.getCyclicalIncomeOD(idCyclicalIncomeu);
             data_godzina2 = BazaDanych.getCyclicalIncomeDO(idCyclicalIncomeu);
@@ -185,7 +185,7 @@ public class dodajStalydochod extends AppCompatActivity {
         if(cTxt1.getTimeInMillis() >= cTxt2.getTimeInMillis())
         {
             txt2.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
-            Toast.makeText(this, "Termin końca Incomeu musi być większy od " + data_godzina1, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.str_blad_daty_3) + data_godzina1, Toast.LENGTH_LONG).show();
             poprawnoscDanych = false;
         }else
         {
@@ -204,21 +204,21 @@ public class dodajStalydochod extends AppCompatActivity {
 
             if(cTxt1.getTimeInMillis() == cTxt2.getTimeInMillis())
             {
-                Toast.makeText(this, "Data początku oraz końca muszą być od siebie różne.", Toast.LENGTH_SHORT).show();
-            }else Toast.makeText(this, "Data pierwszego pobrania musi być w przedziale od " + data_godzina1 + " do " + data_godzina2, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.str_blad_daty_1), Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(this, getResources().getString(R.string.str_blad_daty_2) + data_godzina1 + " " + getResources().getString(R.string.str_do2)+" " + data_godzina2, Toast.LENGTH_LONG).show();
         }
 
         if(txtNazwa.getText().toString().equals(""))
         {
             poprawnoscDanych = false;
-            Toast.makeText(this, "Nazwa nie może być pusta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_musisz_wpisac_nazwe), Toast.LENGTH_SHORT).show();
 
         }
 
         if(txtKwota.getText().toString().equals("") || Double.parseDouble(txtKwota.getText().toString()) <= 0.0)
         {
             poprawnoscDanych = false;
-            Toast.makeText(this, "Kwota musi być większa od 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.str_kwota_wieksza_od_0), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -231,30 +231,30 @@ public class dodajStalydochod extends AppCompatActivity {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
                         BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
-                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_dodano_nowy_cykliczny_dochod) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
                         BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.WEEKLY);
-                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_dodano_nowy_cykliczny_dochod) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
                         BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.MONTHLY);
-                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_dodano_nowy_cykliczny_dochod) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
                         BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.QUARTERLY);
-                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_dodano_nowy_cykliczny_dochod) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
                         BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.YEARLY);
-                        Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_dodano_nowy_cykliczny_dochod) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd dodawania stałego Incomeu", Toast.LENGTH_LONG);
+                        Toast.makeText(this, getResources().getString(R.string.str_blad_dodawania_cykl_doch), Toast.LENGTH_LONG);
                         break;
                 }
             }
@@ -263,35 +263,33 @@ public class dodajStalydochod extends AppCompatActivity {
                 switch (spnrCzestotliowsc.getSelectedItemPosition()) {
                     case 0:
                         BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
-                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_uaktualniono_cyk_doch) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 1:
                         BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.WEEKLY);
-                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_uaktualniono_cyk_doch) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
                         BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.MONTHLY);
-                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_uaktualniono_cyk_doch) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
                         BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.QUARTERLY);
-                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_uaktualniono_cyk_doch) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 4:
                         BazaDanych.UpdateCyclicalIncome(idCyclicalIncomeu,txtNazwa.getText().toString(), Double.parseDouble(txtKwota.getText().toString()), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.YEARLY);
-                        Toast.makeText(this, "Uaktualniono Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_uaktualniono_cyk_doch) + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(this, "Błąd aktualizacji stałego Incomeu", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.str_blad_aktu_cykl_doch), Toast.LENGTH_LONG).show();
                         break;
                 }
             }
-            // BazaDanych.addCyclicalIncome(txtNazwa.getText().toString(), ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_KATEGORII, data_godzina1, data_godzina2, data_godzina3, baza_danych.FREQUENCY.DAILY);
-            //Toast.makeText(this, "Dodaje Cyclical Income o nazwie " + txtNazwa.getText().toString(), Toast.LENGTH_SHORT).show();
             intent = new Intent(this, CyklicznyDochod.class);
             startActivity(intent);
         }
@@ -420,7 +418,7 @@ public class dodajStalydochod extends AppCompatActivity {
 
 
     private void poprawnoscDat()
-    {//DD-MM-YYYY
+    {
         Calendar cTxt1, cTxt2, cTxt3;
         cTxt1 = Calendar.getInstance();
         cTxt1.set(YEAR, Integer.parseInt(data_godzina1.substring(6, 10)));
@@ -454,10 +452,6 @@ public class dodajStalydochod extends AppCompatActivity {
         {
             txt3.setTextColor(ContextCompat.getColor(this, R.color.RedAsFuck));
         }
-
-
-        //Toast.makeText(this, data_godzina1.substring(0, 2) + "-" + data_godzina1.substring(3, 5) + "-" + data_godzina1.substring(6, 10), Toast.LENGTH_SHORT).show();
-
     }
 
     public void usun(View view)

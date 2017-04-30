@@ -52,7 +52,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         String Nazwa_id_kategorii;
         if(ID_KATEGORII != 0) {
             Nazwa_id_kategorii = BazaDanych.getCategoryName(ID_KATEGORII);
-        }else{ Nazwa_id_kategorii = "Domyślna kategoria";}
+        }else{ Nazwa_id_kategorii = getResources().getString(R.string.str_domyslna_kategoria);}
 
         setTitle(Nazwa_id_kategorii);
 
@@ -104,9 +104,6 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         IdWydatku = new ArrayList<>();
         float bufor;
 
-      //  ArrayList<Integer> intPodKategorie = BazaDanych.getINTpodKategorie(ID_KATEGORII);
-
-
         for(int a = 0; a < intPodkat.size(); a++)
         {
             if(!WydatekDochod)
@@ -123,7 +120,7 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
                 if(intPodkat.get(a) == 0)
                 {
-                    NazwyPodKategorii.add("Domyślna podkategoria");
+                    NazwyPodKategorii.add(getResources().getString(R.string.str_domyślna_podkategoria));
                     IdWydatku.add(0);
                 }
                 else
