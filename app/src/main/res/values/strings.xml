@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aplikacja do kontroli wydatków</string>
+    <string name="app_name">Analizator budżetu domowego</string>
     <string name="stre_back">Cofnij</string>
     <string name="str_data">Data:</string>
     <string name="str_add">Dodaj</string>

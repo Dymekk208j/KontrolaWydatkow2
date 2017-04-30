@@ -178,7 +178,7 @@
         android:text="@string/str_clear" />
 
     <Button
-        android:id="@+id/btWyczysc"
+        android:id="@+id/btUsun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btCofnij"
@@ -194,12 +194,12 @@
         android:id="@+id/btDodaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dummyview"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/dummyview"
-        android:layout_alignTop="@+id/btWyczysc"
         android:onClick="dodaj"
-        android:text="@string/str_Zapisz" />
+        android:text="@string/str_Zapisz"
+        android:layout_above="@+id/btWyczysc"
+        android:layout_alignLeft="@+id/SpinnerPodKategoria"
+        android:layout_alignStart="@+id/SpinnerPodKategoria"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

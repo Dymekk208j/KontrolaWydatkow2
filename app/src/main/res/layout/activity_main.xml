@@ -30,7 +30,7 @@
                 android:id="@+id/TxtLastExpenses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/darker_gray"
+                android:background="@drawable/back2"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/str_ostatnie_wydatki" />
 
@@ -39,70 +39,82 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"
+               />
+
 
             <TextView
                 android:id="@+id/TxtLastExp1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastExp9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ostatniwydatek" />
+                android:text="@string/str_ostatniwydatek"
+                android:background="@drawable/back"/>
 
         </LinearLayout>
     </ScrollView>
@@ -129,7 +141,7 @@
                 android:id="@+id/TxtLastDochod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/darker_gray"
+                android:background="@drawable/back2"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/str_ostatni_dochod" />
 
@@ -138,70 +150,80 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
             <TextView
                 android:id="@+id/TxtLastDochod9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/str_ost_doch" />
+                android:text="@string/str_ost_doch"
+                android:background="@drawable/back"/>
 
         </LinearLayout>
     </ScrollView>
@@ -288,7 +310,6 @@
         android:entries="@array/czestotliwosc2"
         android:foregroundGravity="right"
         android:gravity="right"
-        android:textAlignment="viewEnd"
         android:layout_alignTop="@+id/idPieChart"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
