@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.damiandziura.kontrolawydatkow.AddNewExpenses">
+    tools:context="pl.damiandziura.kontrolawydatkow.addExpense">
 
     <TextView
-        android:id="@+id/lblNazwa"
+        android:id="@+id/lblName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/str_nazwaa" />
+        android:text="@string/str_nazwaa"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
     <EditText
-        android:id="@+id/txtNazwa2"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtCyclicalIncomeName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblNazwa"
+        android:layout_below="@+id/lblName"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_alignRight="@+id/txtEditAmount2"
+        android:layout_alignEnd="@+id/txtEditAmount2" />
 
     <TextView
-        android:id="@+id/lblKwota"
+        android:id="@+id/lblCyclicalIncomeAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/txtNazwa2"
+        android:layout_below="@+id/txtCyclicalIncomeName"
         android:text="@string/str_kwota" />
 
     <EditText
@@ -42,12 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblKwota"
+        android:layout_below="@+id/lblCyclicalIncomeAmount"
         android:ems="10"
         android:inputType="numberDecimal" />
 
     <Spinner
-        android:id="@+id/SpinnerKategoriaWydatki"
+        android:id="@+id/SpinnerCategoryExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -55,75 +57,72 @@
         android:layout_below="@+id/txtEditAmount2"
         android:layout_marginTop="29dp" />
 
+
     <Spinner
-        android:id="@+id/SpinnerPodKategoriaWydatki"
+        android:id="@+id/SpinerSubCategoryExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/SpinnerKategoriaWydatki"
+        android:layout_below="@+id/SpinnerCategoryExpense"
         android:layout_marginTop="18dp" />
 
     <TextView
-        android:id="@+id/lbldata"
+        android:id="@+id/lblDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/str_data"
-        android:layout_above="@+id/btDodaj"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp" />
+        android:layout_below="@+id/SpinerSubCategoryExpense" />
 
     <TextView
         android:id="@+id/txtDate2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/lbldata"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_toEndOf="@+id/lblNazwa"
-        android:layout_toRightOf="@+id/lblNazwa"
-        android:onClick="WybierzDateGodzine"
-        android:text="@string/str_data_new" />
+        android:onClick="SelectDateAndHour"
+        android:text="@string/str_data_new"
+        android:layout_alignBaseline="@+id/lblDate"
+        android:layout_alignBottom="@+id/lblDate"
+        android:layout_toRightOf="@+id/lblDate"
+        android:layout_toEndOf="@+id/lblDate" />
 
     <Button
-        android:id="@+id/btDodaj"
+        android:id="@+id/btAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btClear"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:onClick="dodaj"
+        android:onClick="add"
         android:text="@string/str_Zapisz" />
 
     <Button
         android:id="@+id/btClear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btAdd"
+        android:onClick="clean"
+        android:text="@string/str_clear"
+        android:layout_above="@+id/btCyclicalIncomeConfirm"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="wyczysc"
-        android:text="@string/str_clear" />
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:id="@+id/btAdd"
+        android:id="@+id/btCyclicalIncomeConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btCofnij"
+        android:layout_above="@+id/btCyclicalIncomeBack"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="DodajStalyWydatek"
+        android:onClick="CyclicalExpenses"
         android:text="@string/str_cykliczne" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btCyclicalIncomeBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:onClick="cofnij"
+        android:onClick="back"
         android:text="@string/stre_back" />
 
 </RelativeLayout>

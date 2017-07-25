@@ -11,36 +11,36 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
- class baza_danych extends SQLiteOpenHelper
+ class Database extends SQLiteOpenHelper
 {
     private Cursor c;
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "baza2.db";
+    private static final String DATABASE_NAME = "Database.db";
 
-    // Name tabeli
+    // Tables names
     private static final String TABLE_Expenses = "Expenses";
     private static final String TABLE_Income = "Income";
     private static final String TABLE_Wallet = "Wallet";
-    private static final String TABLE_Category = "Category";
+    private static final String TABLE_Category = "Categories";
     private static final String TABLE_Subcategory = "Subcategory";
     private static final String TABLE_Cyclical_Expenses = "CyclicalExpenses";
     private static final String TABLE_Cyclical_Income = "CyclicalIncome";
 
-    // Name kolumn
+    // Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_Name = "Name";
     private static final String KEY_Amount = "Amount";
     private static final String KEY_Subcategory = "Subcategory";
-    private static final String KEY_Category = "Category";
+    private static final String KEY_Category = "Categories";
     private static final String KEY_date = "date";
     private static final String KEY_hour = "hour";
-    private static final String KEY_odkiedy = "od_kiedy";
-    private static final String KEY_dokiedy = "do_kiedy";
-    private static final String KEY_nastepnaData = "nastepna_data";
+    private static final String KEY_start = "start";
+    private static final String KEY_end = "end";
+    private static final String KEY_next = "next";
     private static final String KEY_frequency = "frequency";
-    private static final String KEY_Type = "Type"; // 0- Expenses; 1- Income// Do czego przypisana jest Category.
+    private static final String KEY_Type = "type"; // 0- Expenses; 1- Income// Do czego przypisana jest Categories.
 
-     baza_danych(Context context )
+     Database(Context context )
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -113,9 +113,9 @@ import java.util.Calendar;
                 + KEY_Amount  + " DOUBLE, "
                 + KEY_Category  + " INTEGER, "
                 + KEY_Subcategory  + " INTEGER, "
-                + KEY_odkiedy  + " TEXT, "
-                + KEY_dokiedy  + " TEXT, "
-                + KEY_nastepnaData  + " TEXT, "
+                + KEY_start + " TEXT, "
+                + KEY_end  + " TEXT, "
+                + KEY_next  + " TEXT, "
                 + KEY_frequency + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
@@ -125,9 +125,9 @@ import java.util.Calendar;
                 + KEY_Amount  + " DOUBLE, "
                 + KEY_Category  + " INTEGER, "
                 + KEY_Subcategory  + " INTEGER, "
-                + KEY_odkiedy  + " TEXT, "
-                + KEY_dokiedy  + " TEXT, "
-                + KEY_nastepnaData  + " TEXT, "
+                + KEY_start + " TEXT, "
+                + KEY_end  + " TEXT, "
+                + KEY_next  + " TEXT, "
                 + KEY_frequency + " TEXT )";
         db.execSQL(CREATE_TABLE_STUDENT);
 
@@ -204,7 +204,7 @@ import java.util.Calendar;
         ArrayList<String> ListOfExpensesNames = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Name FROM Expenses WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT Name FROM Expenses WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -222,7 +222,7 @@ import java.util.Calendar;
         ArrayList<Double> ListOfExpensesAmounts = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -240,7 +240,7 @@ import java.util.Calendar;
         ArrayList<String> ListOfExpensesDates = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT date FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT date FROM " + TABLE_Expenses + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -276,7 +276,7 @@ import java.util.Calendar;
         ArrayList<String> ListOfIncomeNames = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Name FROM Income WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT Name FROM Income WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -294,7 +294,7 @@ import java.util.Calendar;
         ArrayList<Double> ListOfIncomeAmounts = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT Amount FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -312,7 +312,7 @@ import java.util.Calendar;
         ArrayList<String> ListOfIncomeDates = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT date FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Category = " + Integer.toString(_IdCategory), null);
+        c = db.rawQuery("SELECT date FROM " + TABLE_Income + " WHERE Subcategory = " + Integer.toString(_IdSubcategory) + " AND Categories = " + Integer.toString(_IdCategory), null);
 
         if(c.moveToFirst()){
             do{
@@ -452,7 +452,7 @@ import java.util.Calendar;
         c = db.rawQuery("SELECT Name, Type FROM " + TABLE_Category, null);
 
         int a = 1;
-        ListOfCategoryName.add("0. (Domyślna Category)");
+        ListOfCategoryName.add("0. (Domyślna Categories)");
         if(c.moveToFirst()){
             do{
                 if(RodzKat == c.getInt(1))
@@ -713,9 +713,9 @@ import java.util.Calendar;
         values.put(KEY_Amount,aAmount);
         values.put(KEY_Category,Integer.toString(aCategory));
         values.put(KEY_Subcategory,Integer.toString(aSubcategory));
-        values.put(KEY_odkiedy,aOdKiedy);
-        values.put(KEY_dokiedy,aDoKiedy);
-        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_start,aOdKiedy);
+        values.put(KEY_end,aDoKiedy);
+        values.put(KEY_next,aNastepnaData);
         values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
@@ -819,9 +819,9 @@ import java.util.Calendar;
         values.put(KEY_Amount,aAmount);
         values.put(KEY_Category,Integer.toString(aCategory));
         values.put(KEY_Subcategory,Integer.toString(aSubcategory));
-        values.put(KEY_odkiedy,aOdKiedy);
-        values.put(KEY_dokiedy,aDoKiedy);
-        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_start,aOdKiedy);
+        values.put(KEY_end,aDoKiedy);
+        values.put(KEY_next,aNastepnaData);
         values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
@@ -887,9 +887,9 @@ import java.util.Calendar;
         values.put(KEY_Amount,aAmount);
         values.put(KEY_Category,Integer.toString(aCategory));
         values.put(KEY_Subcategory,Integer.toString(aSubcategory));
-        values.put(KEY_odkiedy,aOdKiedy);
-        values.put(KEY_dokiedy,aDoKiedy);
-        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_start,aOdKiedy);
+        values.put(KEY_end,aDoKiedy);
+        values.put(KEY_next,aNastepnaData);
         values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
@@ -1074,9 +1074,9 @@ import java.util.Calendar;
         values.put(KEY_Amount,aAmount);
         values.put(KEY_Category,Integer.toString(aCategory));
         values.put(KEY_Subcategory,Integer.toString(aSubcategory));
-        values.put(KEY_odkiedy,aOdKiedy);
-        values.put(KEY_dokiedy,aDoKiedy);
-        values.put(KEY_nastepnaData,aNastepnaData);
+        values.put(KEY_start,aOdKiedy);
+        values.put(KEY_end,aDoKiedy);
+        values.put(KEY_next,aNastepnaData);
         values.put(KEY_frequency,czest.toString());
 
         // Inserting Row
@@ -1122,7 +1122,7 @@ import java.util.Calendar;
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_Name + "," + KEY_Amount + "," + KEY_Category + "," + KEY_Subcategory
-                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_frequency +
+                + "," + KEY_start + "," + KEY_end + "," + KEY_next + "," + KEY_frequency +
                 " FROM " + TABLE_Cyclical_Expenses, null);
 
         if(c.moveToFirst()){
@@ -1285,7 +1285,7 @@ import java.util.Calendar;
 
         SQLiteDatabase db = this.getReadableDatabase();
         c = db.rawQuery("SELECT " + KEY_ID + "," + KEY_Name + "," + KEY_Amount + "," + KEY_Category + "," + KEY_Subcategory
-                + "," + KEY_odkiedy + "," + KEY_dokiedy + "," + KEY_nastepnaData + "," + KEY_frequency +
+                + "," + KEY_start + "," + KEY_end + "," + KEY_next + "," + KEY_frequency +
                 " FROM " + TABLE_Income, null);
 
         if(c.moveToFirst()){
@@ -1513,7 +1513,7 @@ import java.util.Calendar;
 
 
 
-     ArrayList<Integer> getCategoryIdListForExpenses(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
+     ArrayList<Integer> getCategoryIdListForExpenses(String _OD, String _DO)//Name Categories w ktorych byl utworzony wyadtek w zadanej dacie
     {
         ArrayList<Integer> ListaIDCategory = new ArrayList<>();
 
@@ -1536,7 +1536,7 @@ import java.util.Calendar;
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Category, date FROM " + TABLE_Expenses, null);
+        c = db.rawQuery("SELECT Categories, date FROM " + TABLE_Expenses, null);
 
 
         if(!wszystko)
@@ -1632,7 +1632,7 @@ import java.util.Calendar;
 
 
 
-     ArrayList<Integer> getCategoryIdListForIncome(String _OD, String _DO)//Name Category w ktorych byl utworzony wyadtek w zadanej dacie
+     ArrayList<Integer> getCategoryIdListForIncome(String _OD, String _DO)//Name Categories w ktorych byl utworzony wyadtek w zadanej dacie
     {
         boolean wszystko = false;
         if (_OD.equals("33-33-3333") && _DO.equals("33-33-3333")) wszystko = true;
@@ -1654,7 +1654,7 @@ import java.util.Calendar;
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        c = db.rawQuery("SELECT Category, date FROM " + TABLE_Income, null);
+        c = db.rawQuery("SELECT Categories, date FROM " + TABLE_Income, null);
 
         if(!wszystko)
         {

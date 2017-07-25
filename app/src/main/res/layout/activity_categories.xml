@@ -6,48 +6,48 @@
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.damiandziura.kontrolawydatkow.Kategorie">
+    tools:context="pl.damiandziura.kontrolawydatkow.Categories">
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btCyclicalIncomeBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="cofnij"
+        android:onClick="back"
         android:text="@string/stre_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
-        android:id="@+id/btDodaj"
+        android:id="@+id/btCyclicalIncomeConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btCofnij"
+        android:layout_above="@+id/btCyclicalIncomeBack"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="dodaj"
+        android:onClick="addCategory"
         android:text="@string/str_add"
-        app:layout_constraintBottom_toTopOf="@+id/btCofnij"
+        app:layout_constraintBottom_toTopOf="@+id/btCyclicalIncomeBack"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <RadioGroup
         android:id="@+id/RadioGrup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btDodaj"
-        android:checkedButton="@+id/RadioWydatki"
+        android:layout_above="@+id/btCyclicalIncomeConfirm"
+        android:checkedButton="@+id/RadioExpense"
         android:orientation="vertical">
 
         <RadioButton
-            android:id="@+id/RadioWydatki"
+            android:id="@+id/RadioExpense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/str_name1" />
 
         <RadioButton
-            android:id="@+id/RadioDochody"
+            android:id="@+id/RadioIncome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/strName2" />
@@ -60,9 +60,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/RadioGrup"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/RadioGrup" />
 
 
 </RelativeLayout>

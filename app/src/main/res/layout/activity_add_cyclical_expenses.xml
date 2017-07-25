@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="pl.damiandziura.kontrolawydatkow.dodajStalydochod">
+    tools:context="pl.damiandziura.kontrolawydatkow.addCyclicalExpenses">
 
     <TextView
         android:id="@+id/dummyview"
@@ -17,7 +16,7 @@
         />
 
     <TextView
-        android:id="@+id/lblStalyWydatekNazwa"
+        android:id="@+id/lblCyclicalExpensesName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -26,73 +25,73 @@
         android:text="@string/str_nazwaa" />
 
     <EditText
-        android:id="@+id/txtNazwa"
+        android:id="@+id/txtCyclicalIncomeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblStalyWydatekNazwa"
+        android:layout_below="@+id/lblCyclicalExpensesName"
         android:ems="10"
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/lblKwota"
+        android:id="@+id/lblCyclicalIncomeAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/txtNazwa"
+        android:layout_below="@+id/txtCyclicalIncomeName"
         android:text="@string/str_kwota" />
 
     <EditText
-        android:id="@+id/txtKwota"
+        android:id="@+id/txtCyclicalIncomeAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblKwota"
+        android:layout_below="@+id/lblCyclicalIncomeAmount"
         android:ems="10"
         android:inputType="numberDecimal" />
 
     <TextView
-        android:id="@+id/lblczestotliwosc"
+        android:id="@+id/lblCyclicalIncomeFreq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/txtKwota"
+        android:layout_below="@+id/txtCyclicalIncomeAmount"
         android:layout_marginTop="19dp"
         android:text="@string/str_staly_wydatek" />
 
     <Spinner
-        android:id="@+id/SpinnerCzestotliwosc"
+        android:id="@+id/SpinnerMainFreq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/lblczestotliwosc"
-        android:layout_toRightOf="@+id/lblczestotliwosc"
-        android:layout_toEndOf="@+id/lblczestotliwosc"
+        android:layout_alignTop="@+id/lblCyclicalIncomeFreq"
+        android:layout_toRightOf="@+id/lblCyclicalIncomeFreq"
+        android:layout_toEndOf="@+id/lblCyclicalIncomeFreq"
         android:entries="@array/czestotliwosc"/>
 
     <Spinner
-        android:id="@+id/SpinnerKategoria"
+        android:id="@+id/SpinnerCyclicalIncomeCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/SpinnerCzestotliwosc"
+        android:layout_below="@+id/SpinnerMainFreq"
         android:layout_marginTop="16dp"
         android:layout_toLeftOf="@+id/dummyview"
         android:layout_toStartOf="@+id/dummyview" />
 
     <Spinner
-        android:id="@+id/SpinnerPodKategoria"
+        android:id="@+id/SpinnerCyclicalIncomeSubCateogry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/SpinnerKategoria"
+        android:layout_alignTop="@+id/SpinnerCyclicalIncomeCategory"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/SpinnerCzestotliwosc"
-        android:layout_alignStart="@+id/SpinnerCzestotliwosc" />
+        android:layout_alignLeft="@+id/SpinnerMainFreq"
+        android:layout_alignStart="@+id/SpinnerMainFreq" />
 
     <TextView
         android:id="@+id/lbl1"
@@ -127,7 +126,7 @@
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="WybierzDateGodzine1"
+        android:onClick="SelectDate1"
         android:text="@string/str_data_new"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/dummyview"
@@ -140,7 +139,7 @@
         android:layout_alignLeft="@+id/dummyview"
         android:layout_alignStart="@+id/dummyview"
         android:layout_alignTop="@+id/lbl2"
-        android:onClick="WybierzDateGodzine2"
+        android:onClick="SelectDate2"
         android:text="@string/str_data_new" />
 
     <TextView
@@ -150,11 +149,11 @@
         android:layout_alignBaseline="@+id/lbl3"
         android:layout_alignLeft="@+id/dummyview"
         android:layout_alignStart="@+id/dummyview"
-        android:onClick="WybierzDateGodzine3"
+        android:onClick="SelectDate3"
         android:text="@string/str_data_new" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btCyclicalIncomeBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/dummyview"
@@ -162,44 +161,44 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
-        android:onClick="cofnij"
+        android:onClick="back"
         android:text="@string/stre_back" />
 
     <Button
-        android:id="@+id/btDodaj"
+        android:id="@+id/btCyclicalIncomeClean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="dodaj"
-        android:text="@string/str_Zapisz"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/SpinnerPodKategoria"
-        android:layout_alignStart="@+id/SpinnerPodKategoria"
+        android:layout_alignLeft="@+id/dummyview"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/dummyview"
+        android:layout_alignTop="@+id/btCyclicalIncomeBack"
+        android:onClick="clean"
+        android:text="@string/str_clear" />
 
     <Button
-        android:id="@+id/btWyczysc"
+        android:id="@+id/btDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btCofnij"
+        android:layout_above="@+id/btCyclicalIncomeBack"
         android:layout_alignEnd="@+id/dummyview"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
-        android:onClick="wyczysc"
-        android:text="@string/str_clear" />
+        android:backgroundTint="@color/Red2"
+        android:onClick="delete"
+        android:text="@string/str_usun" />
 
     <Button
-        android:id="@+id/btUsun"
+        android:id="@+id/btCyclicalIncomeConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btDodaj"
+        android:layout_above="@+id/btCyclicalIncomeClean"
+        android:layout_alignLeft="@+id/SpinnerCyclicalIncomeSubCateogry"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/btDodaj"
-        android:layout_alignTop="@+id/btWyczysc"
-        android:backgroundTint="@color/RedAsFuck"
-        android:onClick="usun"
-        android:text="@string/str_usun" />
+        android:layout_alignStart="@+id/SpinnerCyclicalIncomeSubCateogry"
+        android:onClick="add"
+        android:text="@string/str_Zapisz" />
 
 </RelativeLayout>

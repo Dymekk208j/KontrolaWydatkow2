@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="pl.damiandziura.kontrolawydatkow.DodajKategorie">
+    tools:context="pl.damiandziura.kontrolawydatkow.addCategory">
 
     <TextView
         android:id="@+id/dummyview"
@@ -16,7 +15,7 @@
         android:visibility="invisible"
         />
     <TextView
-        android:id="@+id/lblNazwa"
+        android:id="@+id/lblName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -30,12 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblNazwa"
+        android:layout_below="@+id/lblName"
         android:ems="10"
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btCyclicalIncomeBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/dummyview"
@@ -43,15 +42,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
-        android:onClick="cofnij"
+        android:onClick="back"
         android:text="@string/stre_back" />
 
     <Button
-        android:id="@+id/btUsun"
+        android:id="@+id/btDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/RedAsFuck"
-        android:onClick="usun"
+        android:backgroundTint="@color/Red2"
+        android:onClick="delete"
         android:text="@string/str_usun"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/dummyview"
@@ -59,30 +58,30 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:id="@+id/btWyczysc"
+        android:id="@+id/btCyclicalIncomeClean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="dodajPodKat"
+        android:onClick="addSubcategory"
         android:text="@string/str_dodaj_podk"
-        android:layout_above="@+id/btCofnij"
-        android:layout_toLeftOf="@+id/btDodaj"
+        android:layout_above="@+id/btCyclicalIncomeBack"
+        android:layout_toLeftOf="@+id/btCyclicalIncomeConfirm"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
-        android:id="@+id/btDodaj"
+        android:id="@+id/btCyclicalIncomeConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/btWyczysc"
-        android:layout_toEndOf="@+id/btCofnij"
-        android:layout_toRightOf="@+id/btCofnij"
-        android:onClick="dodaj"
+        android:layout_alignTop="@+id/btCyclicalIncomeClean"
+        android:layout_toEndOf="@+id/btCyclicalIncomeBack"
+        android:layout_toRightOf="@+id/btCyclicalIncomeBack"
+        android:onClick="confirm"
         android:text="@string/str_Zapisz" />
 
     <TextView
-        android:id="@+id/lblListaPodkat"
+        android:id="@+id/lblSubCategoryList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -91,16 +90,16 @@
         android:text="@string/strPodkat" />
 
     <ListView
-        android:id="@+id/LVlistaPodkategorii"
+        android:id="@+id/SubcategoryList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btWyczysc"
-        android:layout_below="@+id/radioWydatekDochod" />
+        android:layout_above="@+id/btCyclicalIncomeClean"
+        android:layout_below="@+id/lblSubCategoryList" />
 
     <RadioGroup
-        android:id="@+id/radioWydatekDochod"
+        android:id="@+id/radioIncomeExpanse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -110,7 +109,7 @@
         android:layout_alignParentEnd="true">
 
         <RadioButton
-            android:id="@+id/radioWydatek"
+            android:id="@+id/radioExpanse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -118,7 +117,7 @@
             android:text="@string/str_name1" />
 
         <RadioButton
-            android:id="@+id/radioDochod"
+            android:id="@+id/radioIncome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

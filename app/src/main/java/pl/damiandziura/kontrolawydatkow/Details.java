@@ -19,17 +19,17 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class SzczegoloweInformacje extends AppCompatActivity {
+public class Details extends AppCompatActivity {
 
     private Intent intent;
-    private int ID_KATEGORII;
+    private int Category_ID;
     private PieChart pieChart;
-    private baza_danych BazaDanych;
+    private Database database;
     private ArrayList<Integer> colors;
     private Random r = new Random();
-    boolean WydatekDochod = false; //0 wydatek, 1 dochod
+    boolean IncomeExpanse = false; //0 wydatek, 1 dochod
 
-    private ArrayList<Integer> IdWydatku;
+    private ArrayList<Integer> ExpenseIDs;
 
 
 
@@ -39,22 +39,22 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         int High = 255;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_szczegolowe_informacje);
-        BazaDanych = new baza_danych(this);
+        setContentView(R.layout.activity_details);
+        database = new Database(this);
         Bundle extras = getIntent().getExtras();
 
         if(extras != null)
         {
-            WydatekDochod = extras.getBoolean("WydatekDochod");
-            ID_KATEGORII = extras.getInt("IdKategorii");
+            IncomeExpanse = extras.getBoolean("IncomeExpanse");
+            Category_ID = extras.getInt("CategoryID");
         }
 
-        String Nazwa_id_kategorii;
-        if(ID_KATEGORII != 0) {
-            Nazwa_id_kategorii = BazaDanych.getCategoryName(ID_KATEGORII);
-        }else{ Nazwa_id_kategorii = getResources().getString(R.string.str_domyslna_kategoria);}
+        String sIdCategory;
+        if(Category_ID != 0) {
+            sIdCategory = database.getCategoryName(Category_ID);
+        }else{ sIdCategory = getResources().getString(R.string.str_domyslna_kategoria);}
 
-        setTitle(Nazwa_id_kategorii);
+        setTitle(sIdCategory);
 
 
 
@@ -78,12 +78,12 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         }
 
 
-            dodajDanePodkategorii();
+            addSubcategoryData();
 
             pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                 @Override
                 public void onValueSelected(Entry e, Highlight h) {
-                    SzczegolyPodKategoriiWydatku(h);
+                    SubcategoryDetails(h);
                 }
 
                 @Override
@@ -95,47 +95,47 @@ public class SzczegoloweInformacje extends AppCompatActivity {
 
     }
 
-    private void dodajDanePodkategorii()
+    private void addSubcategoryData()
     {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
-        ArrayList<String> NazwyPodKategorii = new ArrayList<>();
-        ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        ArrayList<Integer> intPodkat = BazaDanych.getIdListOfSubcategory(ID_KATEGORII);
-        IdWydatku = new ArrayList<>();
-        float bufor;
+        ArrayList<String> SubcategoriesNames = new ArrayList<>();
+        ArrayList<Float> Costs = new ArrayList<>();
+        ArrayList<Integer> SubcategoryInt = database.getIdListOfSubcategory(Category_ID);
+        ExpenseIDs = new ArrayList<>();
+        float buffor;
 
-        for(int a = 0; a < intPodkat.size(); a++)
+        for(int a = 0; a < SubcategoryInt.size(); a++)
         {
-            if(!WydatekDochod)
+            if(!IncomeExpanse)
             {
-                bufor = BazaDanych.getHowMuchSpendInSubcategory(intPodkat.get(a));
+                buffor = database.getHowMuchSpendInSubcategory(SubcategoryInt.get(a));
             }else
             {
-                bufor = BazaDanych.getHowMuchEarnInSubcategory(intPodkat.get(a));
+                buffor = database.getHowMuchEarnInSubcategory(SubcategoryInt.get(a));
             }
 
-            if(bufor > 0)
+            if(buffor > 0)
             {
-                WydanePieniadze.add(bufor);
+                Costs.add(buffor);
 
-                if(intPodkat.get(a) == 0)
+                if(SubcategoryInt.get(a) == 0)
                 {
-                    NazwyPodKategorii.add(getResources().getString(R.string.str_domyślna_podkategoria));
-                    IdWydatku.add(0);
+                    SubcategoriesNames.add(getResources().getString(R.string.str_domyślna_podkategoria));
+                    ExpenseIDs.add(0);
                 }
                 else
                 {
-                    NazwyPodKategorii.add(BazaDanych.getSubcategoryName(intPodkat.get(a)));
-                    IdWydatku.add(intPodkat.get(a));
+                    SubcategoriesNames.add(database.getSubcategoryName(SubcategoryInt.get(a)));
+                    ExpenseIDs.add(SubcategoryInt.get(a));
                 }
             }
 
         }
 
 
-        for(int i = 0; i < NazwyPodKategorii.size(); i++)
+        for(int i = 0; i < SubcategoriesNames.size(); i++)
         {
-            yEntrys.add(new PieEntry(WydanePieniadze.get(i), NazwyPodKategorii.get(i)));
+            yEntrys.add(new PieEntry(Costs.get(i), SubcategoriesNames.get(i)));
         }
 
 
@@ -159,8 +159,8 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         pieChart.invalidate();
     }
 
-    public void cofnij(View view) {
-        intent = new Intent(this, Informacje.class);
+    public void back(View view) {
+        intent = new Intent(this, Informations.class);
         startActivity(intent);
     }
 
@@ -170,13 +170,13 @@ public class SzczegoloweInformacje extends AppCompatActivity {
         startActivity(intent);
     }
 
-    void SzczegolyPodKategoriiWydatku(Highlight he)
+    void SubcategoryDetails(Highlight he)
     {
         intent = new Intent(this, ListaWydatkow.class);
-        intent.putExtra("IdKategorii", ID_KATEGORII);
-        int bufor =  IdWydatku.get((int)he.getX());
-        intent.putExtra("IdPodKategorii", bufor);
-        intent.putExtra("WydatekDochod", WydatekDochod);
+        intent.putExtra("CategoryID", Category_ID);
+        int buffor =  ExpenseIDs.get((int)he.getX());
+        intent.putExtra("SubCategoryID", buffor);
+        intent.putExtra("IncomeExpanse", IncomeExpanse);
 
         startActivity(intent);
     }

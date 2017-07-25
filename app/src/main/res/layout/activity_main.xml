@@ -245,7 +245,7 @@
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/dummyview"
         android:layout_toStartOf="@+id/dummyview"
-        android:onClick="Informacje"
+        android:onClick="Informations"
         android:text="@string/str_informacje" />
 
     <Button
@@ -257,7 +257,7 @@
         android:layout_alignParentRight="true"
         android:layout_toEndOf="@+id/dummyview"
         android:layout_toRightOf="@+id/dummyview"
-        android:onClick="kategorie"
+        android:onClick="Categories"
         android:text="@string/str_kategorie" />
 
     <Button
@@ -269,7 +269,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/dummyview"
-        android:onClick="dodajWydatek"
+        android:onClick="addExpense"
         android:text="@string/str_dodaj_wydatek" />
 
     <Button
@@ -281,7 +281,7 @@
         android:layout_alignTop="@+id/BtMainAdd"
         android:layout_toRightOf="@+id/dummyview"
         android:layout_toEndOf="@+id/dummyview"
-        android:onClick="dodajdochod"
+        android:onClick="addIncome"
         android:text="@string/str_dodaj_dochod" />
 
     <TextView
@@ -301,15 +301,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView"></com.github.mikephil.charting.charts.PieChart>
+        android:layout_below="@+id/textView"/>
 
     <Spinner
-        android:id="@+id/SpinnerCzestotliwosc"
+        android:id="@+id/SpinnerMainFreq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:entries="@array/czestotliwosc2"
         android:foregroundGravity="right"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_alignTop="@+id/idPieChart"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

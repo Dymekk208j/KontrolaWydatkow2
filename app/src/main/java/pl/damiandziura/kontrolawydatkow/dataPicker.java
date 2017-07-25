@@ -16,22 +16,22 @@ import static java.util.Calendar.*;
 
 public class dataPicker extends AppCompatActivity {
 
-    private String buforNazwa = "", buforKwota = "";
+    private String bufforName = "", bufforAmount = "";
 
-    private String Powrot;
-    private String DATA, GODZINA;
+    private String onBack;
+    private String txtDate, txtHour;
     private Intent intent;
-    private TimePicker czas;
-    private DatePicker data;
-    private Calendar AktualnaData, dataPobrana;
+    private TimePicker time;
+    private DatePicker date;
+    private Calendar nowDate, selectedDate;
 
-    TextView lblGodzina, lblData;
-    String data_godzina1 = "", data_godzina2 = "", data_godzina3 = "";
-    int positionKategoria = 0;
-    int positionPodkategoria = 0;
-    int positionCzestotliwosc = 0;
-    boolean edycja = false;
-    int IdStalegoWydatku = 0;
+    private TextView lblHour, lblDate;
+    private String date1 = "", date2 = "", date3 = "";
+    private int posCategory = 0;
+    private int posSubCategory = 0;
+    private int posFreq = 0;
+    private boolean editing = false;
+    private int IdCyclicalExpenses = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,153 +41,153 @@ public class dataPicker extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null)
         {
-            buforNazwa = extras.getString("Nazwa");
-            buforKwota = extras.getString("Kwota");
-            Powrot = extras.getString("Klasa");
+            bufforName = extras.getString("Name");
+            bufforAmount = extras.getString("Amount");
+            onBack = extras.getString("Class");
 
-            data_godzina1 = extras.getString("data_godzina1");
-            data_godzina2 = extras.getString("data_godzina2");
-            data_godzina3 = extras.getString("data_godzina3");
+            date1 = extras.getString("date1");
+            date2 = extras.getString("date2");
+            date3 = extras.getString("date3");
 
-            positionKategoria = extras.getInt("KategoriaID");
-            positionPodkategoria = extras.getInt("PodkategoriaID");
-            positionCzestotliwosc = extras.getInt("CzestotliwoscID");
-            IdStalegoWydatku = extras.getInt("IdStalegoWydatku");
-            edycja = extras.getBoolean("edycja");
+            posCategory = extras.getInt("CategoryID");
+            posSubCategory = extras.getInt("SubCategoryID");
+            posFreq = extras.getInt("FREQUENCYID");
+            IdCyclicalExpenses = extras.getInt("IdCyclicalExpenses");
+            editing = extras.getBoolean("editing");
 
         }
 
-        lblGodzina = (TextView) findViewById(R.id.lblGodzina);
-        lblData = (TextView) findViewById(R.id.lblData);
-        data = (DatePicker) findViewById(R.id.datePicker2);
-        czas = (TimePicker) findViewById(R.id.timePicker3);
-        czas.setIs24HourView(true);
+        lblHour = (TextView) findViewById(R.id.lblGodzina);
+        lblDate = (TextView) findViewById(R.id.lblData);
+        date = (DatePicker) findViewById(R.id.datePicker2);
+        time = (TimePicker) findViewById(R.id.timePicker3);
+        time.setIs24HourView(true);
 
-        switch (Powrot) {
-            case "nowyPrzychod":
-                intent = new Intent(this, nowyPrzychod.class);
+        switch (onBack) {
+            case "addIncome":
+                intent = new Intent(this, addIncome.class);
                 setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
                 break;
-            case "nowyWydatek":
-                intent = new Intent(this, AddNewExpenses.class);
+            case "addExpense":
+                intent = new Intent(this, addExpense.class);
                 setTitle(getResources().getString(R.string.str_wybierz_date_i_godzine));
                 break;
-            case "nowyCyclicalExpenses1":
-            case "nowyCyclicalExpenses2":
-            case "nowyCyclicalExpenses3":
-                intent = new Intent(this, dodajStalyWydatek.class);
-                czas.setVisibility(View.INVISIBLE);
-                lblGodzina.setVisibility(View.INVISIBLE);
+            case "NewCyclicalExpenses1":
+            case "NewCyclicalExpenses2":
+            case "NewCyclicalExpenses3":
+                intent = new Intent(this, addCyclicalExpenses.class);
+                time.setVisibility(View.INVISIBLE);
+                lblHour.setVisibility(View.INVISIBLE);
                 setTitle(getResources().getString(R.string.str_wybierz_date));
                 break;
-            case "nowyCyclicalIncome1":
-            case "nowyCyclicalIncome2":
-            case "nowyCyclicalIncome3":
-                intent = new Intent(this, dodajStalydochod.class);
-                czas.setVisibility(View.INVISIBLE);
-                lblGodzina.setVisibility(View.INVISIBLE);
+            case "NewCyclicalIncome1":
+            case "NewCyclicalIncome2":
+            case "NewCyclicalIncome3":
+                intent = new Intent(this, addCyclicalIncome.class);
+                time.setVisibility(View.INVISIBLE);
+                lblHour.setVisibility(View.INVISIBLE);
                 setTitle(getResources().getString(R.string.str_wybierz_date));
                 break;
         }
 
     }
 
-    public void btCofnij(View view) {
+    public void btBack(View view) {
         onBackPressed();
     }
     
-    public void btZatwierdz(View view)
+    public void btConfirm(View view)
     {
 
-        switch (Powrot) {
-            case "nowyPrzychod":
-                sprawdzDateZogarniczeniem();
+        switch (onBack) {
+            case "addIncome":
+                validateDate();
                 break;
-            case "nowyWydatek":
-            case "nowyDochod":
-                sprawdzDateZogarniczeniem();
+            case "newExpense":
+            case "newIncome":
+                validateDate();
                 break;
-            case "nowyCyclicalExpenses1":
-            case "nowyCyclicalExpenses2":
-            case "nowyCyclicalExpenses3":
-                sprawdzDateBezogarniczenia();
+            case "NewCyclicalExpenses1":
+            case "NewCyclicalExpenses2":
+            case "NewCyclicalExpenses3":
+                validateDate2();
                 break;
-            case "nowyCyclicalIncome1":
-            case "nowyCyclicalIncome2":
-            case "nowyCyclicalIncome3":
-                sprawdzDateBezogarniczenia();
+            case "NewCyclicalIncome1":
+            case "NewCyclicalIncome2":
+            case "NewCyclicalIncome3":
+                validateDate2();
                 break;
         }
 
     }
 
-    public void btTeraz(View view)
+    public void btNow(View view)
     {
-        AktualnaData = Calendar.getInstance();
-        data.updateDate(AktualnaData.get(Calendar.YEAR), AktualnaData.get(Calendar.MONTH), AktualnaData.get(Calendar.DAY_OF_MONTH));
+        nowDate = Calendar.getInstance();
+        date.updateDate(nowDate.get(Calendar.YEAR), nowDate.get(Calendar.MONTH), nowDate.get(Calendar.DAY_OF_MONTH));
     }
 
-    private void sprawdzDateZogarniczeniem()
+    private void validateDate()
     {
-        AktualnaData = Calendar.getInstance();
-        dataPobrana = Calendar.getInstance();
+        nowDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance();
 
-        dataPobrana.set(YEAR, data.getYear());
-        dataPobrana.set(MONTH, data.getMonth());
-        dataPobrana.set(DAY_OF_MONTH, data.getDayOfMonth());
+        selectedDate.set(YEAR, date.getYear());
+        selectedDate.set(MONTH, date.getMonth());
+        selectedDate.set(DAY_OF_MONTH, date.getDayOfMonth());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
         {
-            dataPobrana.set(HOUR_OF_DAY, czas.getHour());
-            dataPobrana.set(MINUTE, czas.getMinute());
+            selectedDate.set(HOUR_OF_DAY, time.getHour());
+            selectedDate.set(MINUTE, time.getMinute());
         }
         else
         {
-            dataPobrana.set(HOUR_OF_DAY, czas.getCurrentHour());
-            dataPobrana.set(MINUTE, czas.getCurrentMinute());
+            selectedDate.set(HOUR_OF_DAY, time.getCurrentHour());
+            selectedDate.set(MINUTE, time.getCurrentMinute());
         }
 
 
 
-        if (AktualnaData.getTimeInMillis() >= dataPobrana.getTimeInMillis())
+        if (nowDate.getTimeInMillis() >= selectedDate.getTimeInMillis())
         {
-            String dzien = Integer.toString(data.getDayOfMonth());
-            if(data.getDayOfMonth() <= 9) dzien = "0" + Integer.toString(data.getDayOfMonth());
-            String miesiac = Integer.toString(data.getDayOfMonth()+1);
-            if((data.getMonth()+1) <= 9) miesiac = "0" + Integer.toString(data.getMonth()+1);
+            String day = Integer.toString(date.getDayOfMonth());
+            if(date.getDayOfMonth() <= 9) day = "0" + Integer.toString(date.getDayOfMonth());
+            String month = Integer.toString(date.getDayOfMonth()+1);
+            if((date.getMonth()+1) <= 9) month = "0" + Integer.toString(date.getMonth()+1);
 
-            DATA = dzien + "-" + miesiac + "-" + Integer.toString(data.getYear());
-            String minuty, godziny;
+            txtDate = day + "-" + month + "-" + Integer.toString(date.getYear());
+            String minutes, hours;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
             {
-                if(czas.getMinute() <= 9) {
-                    minuty = "0" + Integer.toString(czas.getMinute());
-                }else minuty = Integer.toString(czas.getMinute());
-                if(czas.getHour() <= 9) {
-                    godziny = "0" + Integer.toString(czas.getHour());
-                }else godziny = Integer.toString(czas.getHour());
+                if(time.getMinute() <= 9) {
+                    minutes = "0" + Integer.toString(time.getMinute());
+                }else minutes = Integer.toString(time.getMinute());
+                if(time.getHour() <= 9) {
+                    hours = "0" + Integer.toString(time.getHour());
+                }else hours = Integer.toString(time.getHour());
             }
             else
             {
-                if(czas.getCurrentMinute() <= 9) {
-                    minuty = "0" + Integer.toString(czas.getCurrentMinute());
-                }else minuty = Integer.toString(czas.getCurrentMinute());
-                if(czas.getCurrentHour() <= 9) {
-                    godziny = "0" + Integer.toString(czas.getCurrentHour());
-                }else godziny = Integer.toString(czas.getCurrentHour());
+                if(time.getCurrentMinute() <= 9) {
+                    minutes = "0" + Integer.toString(time.getCurrentMinute());
+                }else minutes = Integer.toString(time.getCurrentMinute());
+                if(time.getCurrentHour() <= 9) {
+                    hours = "0" + Integer.toString(time.getCurrentHour());
+                }else hours = Integer.toString(time.getCurrentHour());
             }
 
-            GODZINA = godziny + ":" + minuty;
-            intent.putExtra("Data", DATA);
-            intent.putExtra("Godzina", GODZINA);
-            intent.putExtra("Kwota", buforKwota);
-            intent.putExtra("Nazwa", buforNazwa);
+            txtHour = hours + ":" + minutes;
+            intent.putExtra("Date", txtDate);
+            intent.putExtra("Hour", txtHour);
+            intent.putExtra("Amount", bufforAmount);
+            intent.putExtra("Name", bufforName);
 
-            intent.putExtra("KategoriaID", positionKategoria);
-            intent.putExtra("PodkategoriaID", positionPodkategoria);
+            intent.putExtra("CategoryID", posCategory);
+            intent.putExtra("SubCategoryID", posSubCategory);
 
-            intent.putExtra("IdStalegoWydatku", IdStalegoWydatku);
+            intent.putExtra("IdCyclicalExpenses", IdCyclicalExpenses);
 
 
 
@@ -199,67 +199,67 @@ public class dataPicker extends AppCompatActivity {
         }
     }
 
-    private void sprawdzDateBezogarniczenia()
+    private void validateDate2()
     {
-        dataPobrana = Calendar.getInstance();
-        dataPobrana.set(YEAR, data.getYear());
-        dataPobrana.set(MONTH, data.getMonth());
-        dataPobrana.set(DAY_OF_MONTH, data.getDayOfMonth());
+        selectedDate = Calendar.getInstance();
+        selectedDate.set(YEAR, date.getYear());
+        selectedDate.set(MONTH, date.getMonth());
+        selectedDate.set(DAY_OF_MONTH, date.getDayOfMonth());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
         {
-            dataPobrana.set(HOUR_OF_DAY, czas.getHour());
-            dataPobrana.set(MINUTE, czas.getMinute());
+            selectedDate.set(HOUR_OF_DAY, time.getHour());
+            selectedDate.set(MINUTE, time.getMinute());
         }
         else
         {
-            dataPobrana.set(HOUR_OF_DAY, czas.getCurrentHour());
-            dataPobrana.set(MINUTE, czas.getCurrentMinute());
+            selectedDate.set(HOUR_OF_DAY, time.getCurrentHour());
+            selectedDate.set(MINUTE, time.getCurrentMinute());
         }
 
 
 
 
-        String dzien = Integer.toString(data.getDayOfMonth());
-        if(data.getDayOfMonth() <= 9) dzien = "0" + Integer.toString(data.getDayOfMonth());
-        String miesiac = Integer.toString(data.getDayOfMonth()+1);
-        if((data.getMonth()+1) <= 9) miesiac = "0" + Integer.toString(data.getMonth()+1);
+        String day = Integer.toString(date.getDayOfMonth());
+        if(date.getDayOfMonth() <= 9) day = "0" + Integer.toString(date.getDayOfMonth());
+        String month = Integer.toString(date.getDayOfMonth()+1);
+        if((date.getMonth()+1) <= 9) month = "0" + Integer.toString(date.getMonth()+1);
 
-        DATA = dzien + "-" + miesiac + "-" + Integer.toString(data.getYear());
-        String minuty, godziny;
+        txtDate = day + "-" + month + "-" + Integer.toString(date.getYear());
+        String minutes, hours;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) //Metoda dla API >=23
         {
-            if(czas.getMinute() <= 9) {
-                minuty = "0" + Integer.toString(czas.getMinute());
-            }else minuty = Integer.toString(czas.getMinute());
-            if(czas.getHour() <= 9) {
-                godziny = "0" + Integer.toString(czas.getHour());
-            }else godziny = Integer.toString(czas.getHour());
+            if(time.getMinute() <= 9) {
+                minutes = "0" + Integer.toString(time.getMinute());
+            }else minutes = Integer.toString(time.getMinute());
+            if(time.getHour() <= 9) {
+                hours = "0" + Integer.toString(time.getHour());
+            }else hours = Integer.toString(time.getHour());
         }
         else
         {
-            if(czas.getCurrentMinute() <= 9) {
-                minuty = "0" + Integer.toString(czas.getCurrentMinute());
-            }else minuty = Integer.toString(czas.getCurrentMinute());
-            if(czas.getCurrentHour() <= 9) {
-                godziny = "0" + Integer.toString(czas.getCurrentHour());
-            }else godziny = Integer.toString(czas.getCurrentHour());
+            if(time.getCurrentMinute() <= 9) {
+                minutes = "0" + Integer.toString(time.getCurrentMinute());
+            }else minutes = Integer.toString(time.getCurrentMinute());
+            if(time.getCurrentHour() <= 9) {
+                hours = "0" + Integer.toString(time.getCurrentHour());
+            }else hours = Integer.toString(time.getCurrentHour());
         }
-            GODZINA = godziny + ":" + minuty;
-            intent.putExtra("Data", DATA);
-            intent.putExtra("Godzina", GODZINA);
-            intent.putExtra("Kwota", buforKwota);
-            intent.putExtra("Nazwa", buforNazwa);
-            intent.putExtra("Powrot", Powrot);
-            intent.putExtra("data_godzina1", data_godzina1);
-            intent.putExtra("data_godzina2", data_godzina2);
-            intent.putExtra("data_godzina3", data_godzina3);
-            intent.putExtra("KategoriaID", positionKategoria);
-            intent.putExtra("PodkategoriaID", positionPodkategoria);
-            intent.putExtra("CzestotliwoscID", positionCzestotliwosc);
-            intent.putExtra("IdStalegoWydatku", IdStalegoWydatku);
-            intent.putExtra("edycja", edycja);
+            txtHour = hours + ":" + minutes;
+            intent.putExtra("Date", txtDate);
+            intent.putExtra("Hour", txtHour);
+            intent.putExtra("Amount", bufforAmount);
+            intent.putExtra("Name", bufforName);
+            intent.putExtra("onBack", onBack);
+            intent.putExtra("date1", date1);
+            intent.putExtra("date2", date2);
+            intent.putExtra("date3", date3);
+            intent.putExtra("CategoryID", posCategory);
+            intent.putExtra("SubCategoryID", posSubCategory);
+            intent.putExtra("FREQUENCYID", posFreq);
+            intent.putExtra("IdCyclicalExpenses", IdCyclicalExpenses);
+            intent.putExtra("editing", editing);
 
             startActivity(intent);
         }

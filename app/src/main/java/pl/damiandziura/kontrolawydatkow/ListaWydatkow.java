@@ -24,14 +24,14 @@ public class ListaWydatkow extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_wydatkow);
-        baza_danych BazaDanych = new baza_danych(this);
+        Database BazaDanych = new Database(this);
         Bundle extras = getIntent().getExtras();
 
         if(extras != null)
         {
             ID_PODKATEGORI = extras.getInt("IdPodKategorii");
             ID_KATEGORII = extras.getInt("IdKategorii");
-            WydatekDochod = extras.getBoolean("WydatekDochod");
+            WydatekDochod = extras.getBoolean("IncomeExpanse");
         }
 
         String Nazwa_id_kategorii, Nazwa_id_podkategorii;
@@ -141,8 +141,8 @@ public class ListaWydatkow extends AppCompatActivity {
 
     public void Cofnij(View view)
     {
-        Intent intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("WydatekDochod", WydatekDochod); // wydatek
+        Intent intent = new Intent(this, Details.class);
+        intent.putExtra("IncomeExpanse", WydatekDochod); // wydatek
         intent.putExtra("IdKategorii", ID_KATEGORII);
         startActivity(intent);
     }

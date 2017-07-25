@@ -22,23 +22,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-public class Informacje extends AppCompatActivity {
+public class Informations extends AppCompatActivity {
 
     private Intent intent;
     PieChart pieChart, pieChart2;
-    private baza_danych BazaDanych;
+    private Database database;
     Random r = new Random();
     int Low = 0;
     int High = 255;
-    ArrayList<Integer> IdWydatku, IdIncomeu;
+    ArrayList<Integer> ExpensesID, IncomeID;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setTitle(getResources().getString(R.string.str_szczeg_info));
-        setContentView(R.layout.activity_informacje);
+        setContentView(R.layout.activity_informations);
 
-        BazaDanych = new baza_danych(this);
+        database = new Database(this);
 
         Description desc = new Description();
         desc.setText(" ");
@@ -54,39 +55,37 @@ public class Informacje extends AppCompatActivity {
 
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
+        for(int i = 0; i < database.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }
 
 
 
-        RysujWykresWydatku(0);
-        Spinner SpinnerCzestotliwosc1 = (Spinner) findViewById(R.id.SpinnerCzestotliwosc1);
+        drawExpensesPie(0);
+        Spinner spnrFreq = (Spinner) findViewById(R.id.SpinnerFreq);
 
-        ArrayAdapter<CharSequence> czestotliwoscAdapter = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> freqAdapter = ArrayAdapter.createFromResource(
                 this, R.array.czestotliwosc2, R.layout.spinner_layout);
-        czestotliwoscAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        freqAdapter.setDropDownViewResource(R.layout.spinner_layout);
 
 
-        SpinnerCzestotliwosc1.setAdapter(czestotliwoscAdapter);
-        SpinnerCzestotliwosc1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnrFreq.setAdapter(freqAdapter);
+        spnrFreq.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                RysujWykresWydatku(position);
+                drawExpensesPie(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-                // sometimes you need nothing here
             }
         });
         
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                SzczegolyKategoriiWydatku(h);
+                ExpensesDetails(h);
             }
 
             @Override
@@ -104,12 +103,12 @@ public class Informacje extends AppCompatActivity {
         pieChart2.setDescription(desc);
         pieChart2.animateXY(1500, 1500);
 
-        RysujWykresIncomeu(0);
+        DrawIncomesPie(0);
 
         pieChart2.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                SzczegolyKategoriiIncomeu(h);
+                IncomesDetails(h);
             }
 
             @Override
@@ -117,18 +116,18 @@ public class Informacje extends AppCompatActivity {
 
             }
         });
-        Spinner SpinnerCzestotliwosc2 = (Spinner) findViewById(R.id.SpinnerCzestotliwosc2);
+        Spinner SpnrFreq2 = (Spinner) findViewById(R.id.SpinnerFreq2);
 
-        ArrayAdapter<CharSequence> czestotliwosc2Adapter = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> Freq2Adapter = ArrayAdapter.createFromResource(
                 this, R.array.czestotliwosc2, R.layout.spinner_layout);
-        czestotliwosc2Adapter.setDropDownViewResource(R.layout.spinner_layout);
+        Freq2Adapter.setDropDownViewResource(R.layout.spinner_layout);
 
 
-        SpinnerCzestotliwosc2.setAdapter(czestotliwosc2Adapter);
-        SpinnerCzestotliwosc2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpnrFreq2.setAdapter(Freq2Adapter);
+        SpnrFreq2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                RysujWykresIncomeu(position);
+                DrawIncomesPie(position);
             }
 
             @Override
@@ -142,44 +141,44 @@ public class Informacje extends AppCompatActivity {
 
     }
 
-    public void cofnij(View view) {
+    public void back(View view) {
        intent = new Intent(this, MainActivity.class);
        startActivity(intent);
     }
 
 
-    void SzczegolyKategoriiWydatku(Highlight he)
+    void ExpensesDetails(Highlight he)
     {
-        intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("WydatekIncome", false); // wydatek
-        int bufor =  IdWydatku.get((int)he.getX());
-        intent.putExtra("IdKategorii", bufor);
+        intent = new Intent(this, Details.class);
+        intent.putExtra("IncomeExpanse", false); // wydatek
+        int buffor =  ExpensesID.get((int)he.getX());
+        intent.putExtra("CategoryID", buffor);
         startActivity(intent);
     }
 
-    void SzczegolyKategoriiIncomeu(Highlight he)
+    void IncomesDetails(Highlight he)
     {
-        intent = new Intent(this, SzczegoloweInformacje.class);
-        intent.putExtra("WydatekDochod", true); // wydatek
-        intent.putExtra("IdKategorii", IdIncomeu.get((int)he.getX()));
+        intent = new Intent(this, Details.class);
+        intent.putExtra("IncomeExpanse", true); // wydatek
+        intent.putExtra("CategoryID", IncomeID.get((int)he.getX()));
         startActivity(intent);
     }
 
-    private void RysujWykresWydatku(int wybor)
+    private void drawExpensesPie(int x)
     {
-        boolean wszystko = false;
+        boolean var = false;
 
-        Calendar DataDzisiejsza = Calendar.getInstance();
-        int DO_DAY = DataDzisiejsza.get(Calendar.DAY_OF_MONTH);
-        int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
-        int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
+        Calendar dateNow = Calendar.getInstance();
+        int DO_DAY = dateNow.get(Calendar.DAY_OF_MONTH);
+        int DO_MONTH = dateNow.get(Calendar.MONTH) +1;
+        int DO_YEAR = dateNow.get(Calendar.YEAR);
 
 
 
-        Calendar DataOdKiedy = Calendar.getInstance();
-        int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
-        int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
-        int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
+        Calendar DateTo = Calendar.getInstance();
+        int OD_DAY = DateTo.get(Calendar.DAY_OF_MONTH);
+        int OD_MONTH = DateTo.get(Calendar.MONTH) +1;
+        int OD_YEAR = DateTo.get(Calendar.YEAR);
 
 
 
@@ -187,10 +186,10 @@ public class Informacje extends AppCompatActivity {
 
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
 
-        switch(wybor)
+        switch(x)
         {
             case 0:
-                wszystko = true;
+                var = true;
                 break;
             case 1://dziennie
                 break;
@@ -209,57 +208,57 @@ public class Informacje extends AppCompatActivity {
 
         }
 
-        String dzien = Integer.toString(DO_DAY);
-        if(DO_DAY <= 9) dzien = "0" + Integer.toString(DO_DAY);
+        String day = Integer.toString(DO_DAY);
+        if(DO_DAY <= 9) day = "0" + Integer.toString(DO_DAY);
 
-        String miesiac = Integer.toString(DO_MONTH);
-        if((DO_MONTH) <= 9) miesiac = "0" + Integer.toString(DO_MONTH);
+        String month = Integer.toString(DO_MONTH);
+        if((DO_MONTH) <= 9) month = "0" + Integer.toString(DO_MONTH);
 
-        String AktualnaData = dzien + "-" + miesiac + "-" + Integer.toString(DO_YEAR);
+        String sDateNow = day + "-" + month + "-" + Integer.toString(DO_YEAR);
 
 
-        dzien = Integer.toString(OD_DAY);
-        if(OD_DAY <= 9) dzien = "0" + Integer.toString(OD_DAY);
+        day = Integer.toString(OD_DAY);
+        if(OD_DAY <= 9) day = "0" + Integer.toString(OD_DAY);
 
-        miesiac = Integer.toString(OD_MONTH);
-        if((OD_MONTH) <= 9) miesiac = "0" + Integer.toString(OD_MONTH);
+        month = Integer.toString(OD_MONTH);
+        if((OD_MONTH) <= 9) month = "0" + Integer.toString(OD_MONTH);
 
-        String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
+        String startDate = day + "-" + month + "-" + Integer.toString(OD_YEAR);
 
-        if(wszystko)
+        if(var)
         {
-            DataOd = "33-33-3333";
-            AktualnaData = "33-33-3333";
+            startDate = "33-33-3333";
+            sDateNow = "33-33-3333";
         }
 
-        ArrayList<String> NazwyKategorii = new ArrayList<>();
-        ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        IdWydatku = BazaDanych.getCategoryIdListForExpenses(DataOd, AktualnaData);
+        ArrayList<String> CategoryNames = new ArrayList<>();
+        ArrayList<Float> Costs = new ArrayList<>();
+        ExpensesID = database.getCategoryIdListForExpenses(startDate, sDateNow);
 
 
-        for(int a = 0; a < IdWydatku.size(); a++)
+        for(int a = 0; a < ExpensesID.size(); a++)
         {
-            float bufor = BazaDanych.getHowMuchSpendInCategory(IdWydatku.get(a), DataOd, AktualnaData);
-            if(bufor > 0)
+            float buffor = database.getHowMuchSpendInCategory(ExpensesID.get(a), startDate, sDateNow);
+            if(buffor > 0)
             {
-                WydanePieniadze.add(bufor);
+                Costs.add(buffor);
 
-                if(IdWydatku.get(a) == 0)
+                if(ExpensesID.get(a) == 0)
                 {
-                    NazwyKategorii.add(getResources().getString(R.string.str_domyslna_kategoria));
+                    CategoryNames.add(getResources().getString(R.string.str_domyslna_kategoria));
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getCategoryName(IdWydatku.get(a)));
+                    CategoryNames.add(database.getCategoryName(ExpensesID.get(a)));
                 }
             }
 
         }
 
 
-        for(int i = 0; i < NazwyKategorii.size(); i++)
+        for(int i = 0; i < CategoryNames.size(); i++)
         {
-            yEntrys.add(new PieEntry(WydanePieniadze.get(i), NazwyKategorii.get(i)));
+            yEntrys.add(new PieEntry(Costs.get(i), CategoryNames.get(i)));
         }
 
 
@@ -269,7 +268,7 @@ public class Informacje extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
+        for(int i = 0; i < database.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }
@@ -289,27 +288,27 @@ public class Informacje extends AppCompatActivity {
     }
 
 
-    private void RysujWykresIncomeu(int wybor)
+    private void DrawIncomesPie(int x)
     {
-        boolean wszystko = false;
+        boolean var = false;
 
-        Calendar DataDzisiejsza = Calendar.getInstance();
-        int DO_DAY = DataDzisiejsza.get(Calendar.DAY_OF_MONTH);
-        int DO_MONTH = DataDzisiejsza.get(Calendar.MONTH) +1;
-        int DO_YEAR = DataDzisiejsza.get(Calendar.YEAR);
+        Calendar dateNow = Calendar.getInstance();
+        int DO_DAY = dateNow.get(Calendar.DAY_OF_MONTH);
+        int DO_MONTH = dateNow.get(Calendar.MONTH) +1;
+        int DO_YEAR = dateNow.get(Calendar.YEAR);
 
-        Calendar DataOdKiedy = Calendar.getInstance();
-        int OD_DAY = DataOdKiedy.get(Calendar.DAY_OF_MONTH);
-        int OD_MONTH = DataOdKiedy.get(Calendar.MONTH) +1;
-        int OD_YEAR = DataOdKiedy.get(Calendar.YEAR);
+        Calendar dateStart = Calendar.getInstance();
+        int OD_DAY = dateStart.get(Calendar.DAY_OF_MONTH);
+        int OD_MONTH = dateStart.get(Calendar.MONTH) +1;
+        int OD_YEAR = dateStart.get(Calendar.YEAR);
 
 
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
 
-        switch(wybor)
+        switch(x)
         {
             case 0:
-                wszystko = true;
+                var = true;
                 break;
             case 1://dziennie
                 break;
@@ -328,57 +327,57 @@ public class Informacje extends AppCompatActivity {
 
         }
 
-        String dzien = Integer.toString(DO_DAY);
-        if(DO_DAY <= 9) dzien = "0" + Integer.toString(DO_DAY);
+        String day = Integer.toString(DO_DAY);
+        if(DO_DAY <= 9) day = "0" + Integer.toString(DO_DAY);
 
-        String miesiac = Integer.toString(DO_MONTH);
-        if((DO_MONTH) <= 9) miesiac = "0" + Integer.toString(DO_MONTH);
+        String month = Integer.toString(DO_MONTH);
+        if((DO_MONTH) <= 9) month = "0" + Integer.toString(DO_MONTH);
 
-        String AktualnaData = dzien + "-" + miesiac + "-" + Integer.toString(DO_YEAR);
+        String sNowDate = day + "-" + month + "-" + Integer.toString(DO_YEAR);
 
 
-        dzien = Integer.toString(OD_DAY);
-        if(OD_DAY <= 9) dzien = "0" + Integer.toString(OD_DAY);
+        day = Integer.toString(OD_DAY);
+        if(OD_DAY <= 9) day = "0" + Integer.toString(OD_DAY);
 
-        miesiac = Integer.toString(OD_MONTH);
-        if((OD_MONTH) <= 9) miesiac = "0" + Integer.toString(OD_MONTH);
+        month = Integer.toString(OD_MONTH);
+        if((OD_MONTH) <= 9) month = "0" + Integer.toString(OD_MONTH);
 
-        String DataOd = dzien + "-" + miesiac + "-" + Integer.toString(OD_YEAR);
+        String DateStart = day + "-" + month + "-" + Integer.toString(OD_YEAR);
 
-        if(wszystko)
+        if(var)
         {
-            DataOd = "33-33-3333";
-            AktualnaData = "33-33-3333";
+            DateStart = "33-33-3333";
+            sNowDate = "33-33-3333";
         }
 
-        ArrayList<String> NazwyKategorii = new ArrayList<>();
-        ArrayList<Float> WydanePieniadze = new ArrayList<>();
-        IdIncomeu = BazaDanych.getCategoryIdListForIncome(DataOd, AktualnaData);
+        ArrayList<String> CategoryNames = new ArrayList<>();
+        ArrayList<Float> costs = new ArrayList<>();
+        IncomeID = database.getCategoryIdListForIncome(DateStart, sNowDate);
 
 
-        for(int a = 0; a < IdIncomeu.size(); a++)
+        for(int a = 0; a < IncomeID.size(); a++)
         {
-            float bufor = BazaDanych.getHowMuchEarnInCategory(IdIncomeu.get(a), DataOd, AktualnaData);
-            if(bufor > 0)
+            float buffor = database.getHowMuchEarnInCategory(IncomeID.get(a), DateStart, sNowDate);
+            if(buffor > 0)
             {
-                WydanePieniadze.add(bufor);
+                costs.add(buffor);
 
-                if(IdIncomeu.get(a) == 0)
+                if(IncomeID.get(a) == 0)
                 {
-                    NazwyKategorii.add(getResources().getString(R.string.str_domyslna_kategoria));
+                    CategoryNames.add(getResources().getString(R.string.str_domyslna_kategoria));
                 }
                 else
                 {
-                    NazwyKategorii.add(BazaDanych.getCategoryName(IdIncomeu.get(a)));
+                    CategoryNames.add(database.getCategoryName(IncomeID.get(a)));
                 }
             }
 
         }
 
 
-        for(int i = 0; i < NazwyKategorii.size(); i++)
+        for(int i = 0; i < CategoryNames.size(); i++)
         {
-            yEntrys.add(new PieEntry(WydanePieniadze.get(i), NazwyKategorii.get(i)));
+            yEntrys.add(new PieEntry(costs.get(i), CategoryNames.get(i)));
         }
 
 
@@ -388,7 +387,7 @@ public class Informacje extends AppCompatActivity {
         pieDataSet.setValueTextSize(8);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for(int i = 0; i < BazaDanych.getCategoryMaxId(); i++)
+        for(int i = 0; i < database.getCategoryMaxId(); i++)
         {
             colors.add(Color.rgb(r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low,r.nextInt(High-Low) + Low));
         }

@@ -9,7 +9,7 @@ import android.os.IBinder;
 public class MyService extends Service {
     private Timer timer;
     private TimerTask timerTask;
-    private baza_danych BazaDanych;
+    private Database BazaDanych;
 
     private class MyTimerTask extends TimerTask {
         @Override
@@ -23,7 +23,7 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
         timer = new Timer();
-        BazaDanych = new baza_danych(this);
+        BazaDanych = new Database(this);
 
     }
 

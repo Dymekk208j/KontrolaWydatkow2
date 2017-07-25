@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.damiandziura.kontrolawydatkow.Dodajpodkategorie">
+    tools:context="pl.damiandziura.kontrolawydatkow.addSubCategory">
 
     <EditText
-        android:id="@+id/txtPodKatName"
+        android:id="@+id/txtSubCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -20,41 +20,41 @@
         android:id="@+id/lblName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtPodKatName"
+        android:layout_alignBottom="@+id/txtSubCategoryName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="43dp"
         android:text="@string/str_nazwaa" />
 
     <Button
-        android:id="@+id/btUsun"
+        android:id="@+id/btDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/txtPodKatName"
-        android:backgroundTint="@color/RedAsFuck"
-        android:onClick="usun"
+        android:layout_below="@+id/txtSubCategoryName"
+        android:backgroundTint="@color/Red2"
+        android:onClick="delete"
         android:text="@string/str_usun"
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/btCofnij"
+        android:id="@+id/btCyclicalIncomeBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="cofnij"
+        android:onClick="back"
         android:text="@string/stre_back" />
 
     <Button
-        android:id="@+id/btDodaj"
+        android:id="@+id/btCyclicalIncomeConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btCofnij"
+        android:onClick="confirm"
+        android:text="@string/str_Zapisz"
+        android:layout_above="@+id/btCyclicalIncomeBack"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="dodaj"
-        android:text="@string/str_Zapisz" />
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
