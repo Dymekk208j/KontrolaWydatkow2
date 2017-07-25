@@ -179,10 +179,10 @@ public class addIncome extends AppCompatActivity {
             {
                 sAmount = Double.parseDouble(txtAmount.getText().toString());
                 if (sAmount > 0.0) {
-                    int ID_WYBRANEJ_KATEGORII = CategoryIdList.get(spnrListOfCategory.getSelectedItemPosition());
-                    int ID_WYBRANEJ_PODKATEGORII = SubCategoryIdList.get(spnrListOfSubCategory.getSelectedItemPosition());
+                    int Selected_category_ID = CategoryIdList.get(spnrListOfCategory.getSelectedItemPosition());
+                    int Selected_subcategory_id = SubCategoryIdList.get(spnrListOfSubCategory.getSelectedItemPosition());
 
-                    database.AddIncome(sName, sAmount, ID_WYBRANEJ_KATEGORII, ID_WYBRANEJ_PODKATEGORII, sHour, sDate);
+                    database.AddIncome(sName, sAmount, Selected_category_ID, Selected_subcategory_id, sHour, sDate);
 
                     Toast.makeText(this, getResources().getString(R.string.str_nowy_dochod) + sName + " " + Double.toString(sAmount) + getResources().getString(R.string.str_skrot_waluty), Toast.LENGTH_SHORT).show();
 
